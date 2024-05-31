@@ -27,8 +27,7 @@ Users will be able to:
 - Access personalized travel recommendations based on their preferences and past trips.
 - Review places and activities.
 - Share or download their itineraries with various levels of information tailored to different travel styles.
-- What is some additional functionality you can add/remove based on time constraints?
-
+  
 Additional functionalities could include:
 
 - Integrating social media sharing options for users to share their travel plans and experiences with friends.
