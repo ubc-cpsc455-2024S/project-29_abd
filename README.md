@@ -36,6 +36,55 @@ Additional functionalities could include:
 - Offering AI-driven travel recommendations based on user preferences and past trips.
 - Developing a community forum for solo travelers to ask questions, share tips, and interact with each other.
 
+# Task Requirements
+
+## Minimal Requirements (Will Definitely Complete)
+
+#### User Authentication and Profile Management:
+
+- user sign-up, login, and logout functionalities using JWT.
+- Develop a user profile page where users can view and edit their profile information and travel statistics.
+  Itinerary Creation and Management:
+
+#### Create a user-friendly interface for creating and managing detailed travel itineraries.
+
+- Implement CRUD operations for itineraries (Create, Read, Update, Delete).
+
+#### Mapping and Route Planning:
+
+- Integrate Google Maps API or Mapbox API to facilitate route planning.
+- Allow users to visualize their travel routes and add locations to their itineraries.
+
+## Standard Requirements (Will Most Likely Complete)
+
+#### Travel Journals:
+
+- Implement functionality for users to document their travel experiences.
+- Allow users to view and manage their travel journals.
+
+#### Responsive Design:
+
+- Ensure the web application is fully responsive and optimized for use on both desktop and mobile devices.
+
+#### Itinerary Sharing and Downloading:
+
+- Enable users to share their itineraries with others via a link.
+- Implement functionality to download itineraries in a simple format (e.g., PDF).
+
+#### Basic User Interface (UI) Enhancements:
+
+- Improve the overall look and feel of the application by implementing a clean and intuitive UI design.
+
+## Stretch Requirements (Plan to Complete at Least 1)
+
+#### Community-Based Reviews:
+
+- Develop a basic community-based review system where users can view and contribute to reviews of places and activities.
+
+#### Personalized Travel Recommendations:
+
+- Develop a basic system to provide personalized travel recommendations based on user preferences and past trips.
+
 ## Describe your topic/interest in about 150-200 words
 
 {Add your stuff here}
