@@ -8,7 +8,7 @@
 
 ## Team Members
 
-- Person 1: one sentence about you!
+- Andrew Joji: 4th Year CPSC Major, I love the outdoors!
 - Person 2: one sentence about you!
 - Person 3: one sentence about you!
 - Person 4: one sentence about you!
