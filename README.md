@@ -113,17 +113,17 @@ Additional functionalities could include:
 
 ### Develop Itinerary Management Features:
 
-###### Implement the itinerary viewing component using React (3 Story Points)
+##### Implement the itinerary viewing component using React (3 Story Points)
 
 - Create a component to display a list of existing itineraries.
 - Fetch itinerary data from the backend and display it in a list or card format.
 
-###### Implement state management for itinerary data using Redux (5 Story Points)
+##### Implement state management for itinerary data using Redux (5 Story Points)
 
 - Set up Redux actions and reducers to manage the fetched itinerary data.
 - Integrate the itinerary viewing component with Redux.
 
-###### Implement itinerary detail view (3 Story Points)
+##### Implement itinerary detail view (3 Story Points)
 
 - Create a detailed view component for individual itineraries.
 - Display all itinerary details including trip segments, activities, and notes.
@@ -133,7 +133,7 @@ Additional functionalities could include:
 
 ### Set Up User Authentication:
 
-###### Implement the user registration form using React (3 Story Points)
+##### Implement the user registration form using React (3 Story Points)
 
 - Create a form for user sign-up with fields for email, password, and confirmation.
 - Style the form to be responsive and user-friendly.
@@ -155,7 +155,7 @@ Additional functionalities could include:
 
 ### Develop User Profile Page:
 
-###### Implement the user profile page layout using React (3 Story Points)
+##### Implement the user profile page layout using React (3 Story Points)
 
 - Create a responsive layout to display user information and travel statistics.
 
