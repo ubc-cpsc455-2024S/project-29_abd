@@ -177,13 +177,17 @@ Additional functionalities could include:
 
 ## Describe your topic/interest in about 150-200 words
 
-{Add your stuff here}
+Dreaming of a multi-country adventure but overwhelmed by planning? SoloExplorer empowers travelers to ditch the chaos and craft unforgettable solo journeys.
+
+Our platform simplifies itinerary creation, letting you build detailed plans for your dream escapes.  Store travel journals, photos, and reviews alongside your personal = crafted routes. Access personalized recommendations based on your past adventures and interests.
+
+SoloExplorer goes beyond planning - it fosters connection. Share your itinerary with fellow explorers or keep it private.  Engage with a community of solo travelers, swap stories, and glean valuable insider tips.
 
 ## Team Members
 
 - Person 1: Daniel Shmidov - 6th year BUCS student avid Backcountry explorer
 - Person 2: Bhag Cheema - [TODO]
-- Person 3: Andrew Joji - [TODO]
+- Person 3: Andrew Joji - 4th Year CS Major, love trying new things and bringing ideas to reality.
 
 ## Images
 
