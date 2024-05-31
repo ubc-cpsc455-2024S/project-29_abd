@@ -177,9 +177,9 @@ Additional functionalities could include:
 
 ## Describe your topic/interest in about 150-200 words
 
-Dreaming of a multi-country adventure but overwhelmed by planning? SoloExplorer empowers travelers to ditch the chaos and craft unforgettable solo journeys.
+Are you dreaming of a multi-country adventure but are overwhelmed by planning? SoloExplorer empowers travelers to ditch the chaos and craft unforgettable solo journeys.
 
-Our platform simplifies itinerary creation, letting you build detailed plans for your dream escapes.  Store travel journals, photos, and reviews alongside your personal = crafted routes. Access personalized recommendations based on your past adventures and interests.
+Our platform simplifies itinerary creation, letting you build detailed plans for your dream escapes.  Store travel journals, photos, and reviews alongside your personally crafted routes — access personalized recommendations based on your past adventures and interests.
 
 SoloExplorer goes beyond planning - it fosters connection. Share your itinerary with fellow explorers or keep it private.  Engage with a community of solo travelers, swap stories, and glean valuable insider tips.
 
