@@ -57,10 +57,10 @@ Additional functionalities could include:
 
 ## Standard Requirements (Will Most Likely Complete)
 
-#### Travel Journals:
+#### Travel Dashboard:
 
-- Implement functionality for users to document their travel experiences.
-- Allow users to view and manage their travel journals.
+- Implement functionality for users to document their travel plans and view them in a dashboard once clicked.
+- Allow users to view and manage their trips in an interface.
 
 #### Responsive Design:
 
@@ -68,7 +68,7 @@ Additional functionalities could include:
 
 #### Itinerary Sharing and Downloading:
 
-- Enable users to share their itineraries with others via a link.
+- Enable users to share their itineraries with others via a link where other can change and modify.
 - Implement functionality to download itineraries in a simple format (e.g., PDF).
 
 #### Basic User Interface (UI) Enhancements:
@@ -77,9 +77,10 @@ Additional functionalities could include:
 
 ## Stretch Requirements (Plan to Complete at Least 1)
 
-#### Community-Based Reviews:
+#### Community-Based Planning:
 
-- Develop a basic community-based review system where users can view and contribute to reviews of places and activities.
+- having multiple users able to access and modify trip.
+- Optional to make it possible to view other people's trip plan (private vs public).
 
 #### Personalized Travel Recommendations:
 
