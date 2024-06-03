@@ -188,7 +188,7 @@ Join a thriving solo travel community where you can swap stories, ask questions,
 ## Team Members
 
 - Person 1: Daniel Shmidov - 6th year BUCS student avid Backcountry explorer
-- Person 2: Bhag Cheema - [TODO]
+- Person 2: Bhag Cheema - 6th year BUCS student! 
 - Person 3: Andrew Joji - 4th Year CS Major, love trying new things and bringing ideas to reality.
 
 ## Images
