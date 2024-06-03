@@ -192,8 +192,8 @@ Join a thriving solo travel community where you can swap stories, ask questions,
 - Person 3: Andrew Joji - 4th Year CS Major, love trying new things and bringing ideas to reality.
 
 ## Images
+<img width="348" alt="Screen Shot 2024-06-02 at 7 20 35 PM" src="https://github.com/ubc-cpsc455-2024S/project-29_abd/assets/83879383/a954b1be-8d61-4f89-9fb6-13d713f8267e">
 
-{You should use this area to add a screenshot of your app or website }
 
 <img src ="images/test.png" width="100px">
 
