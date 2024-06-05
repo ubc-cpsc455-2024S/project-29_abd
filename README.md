@@ -1,358 +1,196 @@
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,macos,windows,microsoftoffice
+# Group 29 - SoloExplorer
 
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,python,macos,windows,microsoftoffice
+- Your title can change over time.
 
-### macOS
+# Project Description:
 
-# General
+SoloExplorer is a travel site specifically designed for solo travelers, particularly those in their 20s and 30s, seeking a streamlined and engaging way to plan their individual adventures. The platform supports users in creating, managing, and sharing detailed travel itineraries for multi-country, long-term trips. SoloExplorer will store user profiles, trip itineraries, travel journals, reviews, and multimedia content such as photos and videos. Users will be able to create and manage detailed itineraries, document and share their travel experiences, access personalized travel recommendations, and review places and activities. Additional functionalities that can be added based on time constraints include integrating social media sharing options, providing real-time travel alerts, offering AI-driven travel recommendations, and developing a community forum for solo travelers.
 
-.DS_Store
-.AppleDouble
-.LSOverride
+## Who is it for?
 
-# Icon must end with two \r
+SoloExplorer is designed for solo travelers, particularly those in their 20s and 30s, who seek an efficient and enjoyable way to plan their individual trips.
 
-Icon
+## What will it do?
 
-# Thumbnails
+The platform will facilitate various aspects of solo travel planning, with a primary focus on itinerary creation. It will support users in documenting their trips, accessing travel tips, and connecting with other solo travelers.
 
-.\_\*
+## What type of data will it store?
 
-# Files that might appear in the root of a volume
+SoloExplorer will store user profiles, trip itineraries, travel journals, reviews, and multimedia content such as photos and videos.
 
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
+## What will users be able to do with this data?
 
-# Directories potentially created on remote AFP share
+Users will be able to:
 
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+- Create and manage detailed travel itineraries.
+- Document and share their travel experiences.
+- Access personalized travel recommendations based on their preferences and past trips.
+- Review places and activities.
+- Share or download their itineraries with various levels of information tailored to different travel styles.
 
-### macOS Patch
+Additional functionalities could include:
 
-# iCloud generated files
+- Integrating social media sharing options for users to share their travel plans and experiences with friends.
+- Providing real-time travel alerts and updates about weather, flight changes, and local events.
+- Offering AI-driven travel recommendations based on user preferences and past trips.
+- Developing a community forum for solo travelers to ask questions, share tips, and interact with each other.
 
-\*.icloud
+# Task Requirements
 
-### MicrosoftOffice
+## Minimal Requirements (Will Definitely Complete)
 
-\*.tmp
+#### User Authentication and Profile Management:
 
-# Word temporary
+- user sign-up, login, and logout functionalities using JWT.
+- Develop a user profile page where users can view and edit their profile information and travel statistics.
+  Itinerary Creation and Management:
 
-~$_.doc_
+#### Create a user-friendly interface for creating and managing detailed travel itineraries.
 
-# Word Auto Backup File
+- Implement CRUD operations for itineraries (Create, Read, Update, Delete).
 
-Backup of _.doc_
+#### Mapping and Route Planning:
 
-# Excel temporary
+- Integrate Google Maps API or Mapbox API to facilitate route planning.
+- Allow users to visualize their travel routes and add locations to their itineraries.
 
-~$_.xls_
+## Standard Requirements (Will Most Likely Complete)
 
-# Excel Backup File
+#### Travel Dashboard:
 
-\*.xlk
+- Implement functionality for users to document their travel plans and view them in a dashboard once clicked.
+- Allow users to view and manage their trips in an interface.
 
-# PowerPoint temporary
+#### Responsive Design:
 
-~$_.ppt_
+- Ensure the web application is fully responsive and optimized for use on both desktop and mobile devices.
 
-# Visio autosave temporary files
+#### Itinerary Sharing and Downloading:
 
-_.~vsd_
+- Enable users to share their itineraries with others via a link where other can change and modify.
+- Implement functionality to download itineraries in a simple format (e.g., PDF).
 
-### Python
+#### Basic User Interface (UI) Enhancements:
 
-# Byte-compiled / optimized / DLL files
+- Improve the overall look and feel of the application by implementing a clean and intuitive UI design.
 
-**pycache**/
-_.py[cod]
-_$py.class
+## Stretch Requirements (Plan to Complete at Least 1)
 
-# C extensions
+#### Community-Based Planning:
 
-\*.so
+- having multiple users able to access and modify trip.
+- Optional to make it possible to view other people's trip plan (private vs public).
 
-# Distribution / packaging
+#### Personalized Travel Recommendations:
 
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-_.egg-info/
-.installed.cfg
-_.egg
-MANIFEST
+- Develop a basic system to provide personalized travel recommendations based on user preferences and past trips.
 
-# PyInstaller
+# Task Breakdown
 
-# Usually these files are written by a python script from a template
+## Minimal Requirement 1: Itinerary Creation and Management
 
-# before PyInstaller builds the exe, so as to inject date/other infos into it.
+### Create Itinerary Interface:
 
-_.manifest
-_.spec
+##### Design the itinerary creation form layout using React (3 Story Points)
 
-# Installer logs
+- Design a responsive form layout with fields for trip name, dates, destinations, and activities.
+- Ensure mobile-friendly design.
 
-pip-log.txt
-pip-delete-this-directory.txt
+##### Implement state management for the form using Redux (5 Story Points)
 
-# Unit test / coverage reports
+- Set up Redux actions and reducers to handle form state.
+- Integrate the form with Redux to manage user input and state changes.
 
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage._
-.cache
-nosetests.xml
-coverage.xml
-_.cover
-\*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
+##### Connect the form to the backend for data submission (3 Story Points)
 
-# Translations
+- Use axios or fetch for API calls to submit form data.
+- Handle form submission and ensure data is sent to the backend.
 
-_.mo
-_.pot
+##### Implement validation and error handling (3 Story Points)
 
-# Django stuff:
+- Add form validation to ensure all required fields are filled.
+- Display error messages for invalid inputs or submission failures.
 
-\*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+### Develop Itinerary Management Features:
 
-# Flask stuff:
+##### Implement the itinerary viewing component using React (3 Story Points)
 
-instance/
-.webassets-cache
+- Create a component to display a list of existing itineraries.
+- Fetch itinerary data from the backend and display it in a list or card format.
 
-# Scrapy stuff:
+##### Implement state management for itinerary data using Redux (5 Story Points)
 
-.scrapy
+- Set up Redux actions and reducers to manage the fetched itinerary data.
+- Integrate the itinerary viewing component with Redux.
 
-# Sphinx documentation
+##### Implement itinerary detail view (3 Story Points)
 
-docs/\_build/
+- Create a detailed view component for individual itineraries.
+- Display all itinerary details including trip segments, activities, and notes.
+- Integrate with Redux to manage the state of the selected itinerary.
 
-# PyBuilder
+## Minimal Requirement 2: User Authentication and Profile Management
 
-.pybuilder/
-target/
+### Set Up User Authentication:
 
-# Jupyter Notebook
+##### Implement the user registration form using React (3 Story Points)
 
-.ipynb_checkpoints
+- Create a form for user sign-up with fields for email, password, and confirmation.
+- Style the form to be responsive and user-friendly.
 
-# IPython
+##### Implement state management for the registration form using Redux (5 Story Points)
 
-profile_default/
-ipython_config.py
+- Set up Redux actions and reducers to handle form state.
+- Integrate the form with Redux to manage user input and state changes.
 
-# pyenv
+##### Connect the registration form to the backend for user sign-up (3 Story Points)
 
-# For a library or package, you might want to ignore these files since the code is
+- Use axios or fetch for API calls to submit registration data.
+- Handle form submission and ensure data is sent to the backend.
 
-# intended to run in multiple environments; otherwise, check them in:
+##### Implement validation and error handling (3 Story Points)
 
-# .python-version
+- Add form validation to ensure all required fields are filled.
+- Display error messages for invalid inputs or submission failures.
 
-# pipenv
+### Develop User Profile Page:
 
-# According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+##### Implement the user profile page layout using React (3 Story Points)
 
-# However, in case of collaboration, if having platform-specific dependencies or dependencies
+- Create a responsive layout to display user information and travel statistics.
 
-# having no cross-platform support, pipenv may install dependencies that don't work, or not
+##### Implement state management for the profile page using Redux (5 Story Points)
 
-# install all needed dependencies.
+- Set up Redux actions and reducers to manage user profile data.
+- Integrate the profile page with Redux to manage state and display data.
 
-#Pipfile.lock
+##### Implement profile update functionality (3 Story Points)
 
-# poetry
+- Create a form for updating user profile information.
+- Connect the form to the backend for data submission.
+- Handle form submission and ensure updated data is sent to the backend.
 
-# Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+##### Implement validation and error handling for profile updates (3 Story Points)
 
-# This is especially recommended for binary packages to ensure reproducibility, and is more
+- Add form validation to ensure all required fields are filled.
+- Display error messages for invalid inputs or submission failures.
 
-# commonly ignored for libraries.
+## Describe your topic/interest in about 150-200 words
 
-# https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+Are you dreaming of a multi-country adventure but are overwhelmed by planning? SoloExplorer empowers travelers to ditch the chaos and craft unforgettable solo journeys.
 
-#poetry.lock
+Ditch the spreadsheets and endless travel blog rabbit holes! SoloExplorer empowers you, the intrepid solo traveler, to conquer the burdens of planning and craft unforgettable adventures.
 
-# pdm
+Our platform streamlines the process, letting you build detailed itineraries for your multi-country dream escapes. Imagine having everything in one place: meticulously crafted routes, travel journals overflowing with stories, photos capturing memories, and reviews to guide you, the most efficient ways to get from A to B - stretching your budget. Plus, SoloExplorer goes beyond planning – it fosters connection. Share your itinerary with fellow explorers or keep it private.
 
-# Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+Join a thriving solo travel community where you can swap stories, ask questions, and glean valuable insider tips – the kind that unlocks hidden gems and transforms your trip. Plan smarter, travel bolder. SoloExplorer: Your adventure awaits.
 
-#pdm.lock
+## Team Members
 
-# pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+- Person 1: Daniel Shmidov - 6th year BUCS student avid Backcountry explorer
+- Person 2: Bhag Cheema - 6th year BUCS student!
+- Person 3: Andrew Joji - 4th Year CS Major, love trying new things and bringing ideas to reality.
 
-# in version control.
+## Images
 
-# https://pdm.fming.dev/#use-with-ide
-
-.pdm.toml
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-
-**pypackages**/
-
-# Celery stuff
-
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-
-\*.sage.py
-
-# Environments
-
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-
-.spyderproject
-.spyproject
-
-# Rope project settings
-
-.ropeproject
-
-# mkdocs documentation
-
-/site
-
-# mypy
-
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-
-.pyre/
-
-# pytype static type analyzer
-
-.pytype/
-
-# Cython debug symbols
-
-cython_debug/
-
-# PyCharm
-
-# JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-
-# be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-
-# and can be added to the global gitignore or merged into this file. For a more nuclear
-
-# option (not recommended) you can uncomment the following to ignore the entire idea folder.
-
-#.idea/
-
-### Python Patch
-
-# Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
-
-poetry.toml
-
-# ruff
-
-.ruff_cache/
-
-# LSP config files
-
-pyrightconfig.json
-
-### VisualStudioCode
-
-.vscode/_
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/_.code-snippets
-
-# Local History for Visual Studio Code
-
-.history/
-
-# Built Visual Studio Code Extensions
-
-\*.vsix
-
-### VisualStudioCode Patch
-
-# Ignore all local history of files
-
-.history
-.ionide
-
-### Windows
-
-# Windows thumbnail cache files
-
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-
-# Dump file
-
-\*.stackdump
-
-# Folder config file
-
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-
-$RECYCLE.BIN/
-
-# Windows Installer files
-
-_.cab
-_.msi
-_.msix
-_.msm
-\*.msp
-
-# Windows shortcuts
-
-\*.lnk
-
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,macos,windows,microsoftoffice
+<img width="348" alt="Screen Shot 2024-06-02 at 7 20 35 PM" src="https://github.com/ubc-cpsc455-2024S/project-29_abd/assets/83879383/a954b1be-8d61-4f89-9fb6-13d713f8267e">
