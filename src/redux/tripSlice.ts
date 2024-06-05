@@ -5,7 +5,6 @@ interface Trip {
   title: string;
   description: string;
   days: number;
-  // Add other fields as needed
 }
 
 interface TripState {
