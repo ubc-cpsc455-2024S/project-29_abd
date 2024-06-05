@@ -1,10 +1,8 @@
-import React from "react";
-import TripStatistics from "./components/TripStatistics";
+//import React from "react";
 
 function App() {
   return (
     <div className="App">
-      <TripStatistics />
     </div>
   );
 }
