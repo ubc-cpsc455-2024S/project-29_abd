@@ -179,24 +179,18 @@ Additional functionalities could include:
 
 Are you dreaming of a multi-country adventure but are overwhelmed by planning? SoloExplorer empowers travelers to ditch the chaos and craft unforgettable solo journeys.
 
-Ditch the spreadsheets and endless travel blog rabbit holes! SoloExplorer empowers you, the intrepid solo traveler, to conquer the burdens of planning and craft unforgettable adventures. 
+Ditch the spreadsheets and endless travel blog rabbit holes! SoloExplorer empowers you, the intrepid solo traveler, to conquer the burdens of planning and craft unforgettable adventures.
 
-Our platform streamlines the process, letting you build detailed itineraries for your multi-country dream escapes. Imagine having everything in one place: meticulously crafted routes, travel journals overflowing with stories, photos capturing memories, and reviews to guide you, the most efficient ways to get from A to B - stretching your budget. Plus, SoloExplorer goes beyond planning – it fosters connection. Share your itinerary with fellow explorers or keep it private. 
+Our platform streamlines the process, letting you build detailed itineraries for your multi-country dream escapes. Imagine having everything in one place: meticulously crafted routes, travel journals overflowing with stories, photos capturing memories, and reviews to guide you, the most efficient ways to get from A to B - stretching your budget. Plus, SoloExplorer goes beyond planning – it fosters connection. Share your itinerary with fellow explorers or keep it private.
 
 Join a thriving solo travel community where you can swap stories, ask questions, and glean valuable insider tips – the kind that unlocks hidden gems and transforms your trip. Plan smarter, travel bolder. SoloExplorer: Your adventure awaits.
 
 ## Team Members
 
 - Person 1: Daniel Shmidov - 6th year BUCS student avid Backcountry explorer
-- Person 2: Bhag Cheema - 6th year BUCS student! 
+- Person 2: Bhag Cheema - 6th year BUCS student!
 - Person 3: Andrew Joji - 4th Year CS Major, love trying new things and bringing ideas to reality.
 
 ## Images
+
 <img width="348" alt="Screen Shot 2024-06-02 at 7 20 35 PM" src="https://github.com/ubc-cpsc455-2024S/project-29_abd/assets/83879383/a954b1be-8d61-4f89-9fb6-13d713f8267e">
-
-
-<img src ="images/test.png" width="100px">
-
-## References
-
-{Add your stuff here}
