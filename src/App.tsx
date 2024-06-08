@@ -5,6 +5,7 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import MapWithMarkers from "@/components/map-template";
 import { MapLocation } from "./types";
 import DayTimeline from "./components/ui/dayTimeline";
+import { DatePickerWithRange } from "./components/ui/dateRangePicker";
 
 function App() {
   const locations: MapLocation[] = [];
@@ -17,6 +18,7 @@ function App() {
             <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
               <div className="flex items-center justify-between space-y-2">
                 <h2 className="text-3xl font-bold tracking-tight">Plan Your Trip</h2>
+                <DatePickerWithRange></DatePickerWithRange>
               </div>
               <Tabs defaultValue="view-1" className="space-y-4">
                 <TabsList>
