@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -21,6 +21,14 @@ import {
 } from "react-beautiful-dnd";
 import styles from "./dayTimeline.module.css";
 
+const fetchCountryFlag = async (country: string) => {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/name/${country}`
+  );
+  const data = await response.json();
+  return data[0]?.flags?.svg || "";
+};
+
 const DayTimeline: React.FC = () => {
   const dispatch = useDispatch();
   const dayCards = useSelector(
@@ -29,16 +37,32 @@ const DayTimeline: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [currentCard, setCurrentCard] = useState<DayCard | null>(null);
+  const [expandedCards, setExpandedCards] = useState<number[]>([]);
+  const [flags, setFlags] = useState<{ [key: number]: string }>({});
+
+  useEffect(() => {
+    const fetchFlags = async () => {
+      const newFlags = await Promise.all(
+        dayCards.map(async (day) => {
+          const flag = await fetchCountryFlag(day.country);
+          return { [day.id]: flag };
+        })
+      );
+      setFlags(Object.assign({}, ...newFlags));
+    };
+    fetchFlags();
+  }, [dayCards]);
 
   const handleCardClick = (id: number) => {
-    const selectedCard = dayCards.find((card) => card.id === id);
-    if (selectedCard) {
-      setCurrentCard(selectedCard);
-      setIsModalOpen(true);
-    }
+    setExpandedCards((prevState) =>
+      prevState.includes(id)
+        ? prevState.filter((cardId) => cardId !== id)
+        : [...prevState, id]
+    );
   };
 
-  const handleEditClick = (day: DayCard) => {
+  const handleEditClick = (day: DayCard, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card click handler from being triggered
     setCurrentCard(day);
     setIsModalOpen(true);
   };
@@ -134,6 +158,10 @@ const DayTimeline: React.FC = () => {
                       {...provided.dragHandleProps} // Apply dragHandleProps to the handle area
                       className={`${styles.card} ${
                         snapshot.isDragging ? styles.cardDragging : ""
+                      } ${
+                        expandedCards.includes(day.id)
+                          ? styles.cardExpanded
+                          : styles.cardCollapsed
                       } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
                       style={{
                         ...provided.draggableProps.style,
@@ -141,47 +169,19 @@ const DayTimeline: React.FC = () => {
                           ? "none"
                           : "all 0.3s ease",
                       }}
+                      onClick={() => handleCardClick(day.id)}
                     >
-                      <Card onClick={() => handleCardClick(day.id)}>
-                        <CardHeader
-                          className={styles.cardHeader}
-                          {...provided.dragHandleProps}
-                        >
+                      <Card>
+                        <CardHeader className={styles.cardHeader}>
                           <CardTitle className={styles.cardTitle}>{`Day ${
                             index + 1
                           }`}</CardTitle>
-                        </CardHeader>
-                        <CardContent className={styles.cardContent}>
-                          <div>
-                            <span className={styles.location}>
-                              {day.country}
-                            </span>{" "}
-                            {/* Display country */}
-                            <span className={styles.location}>
-                              {day.city.join(", ")}
-                            </span>{" "}
-                            {/* Display cities */}
-                            <span className={styles.details}>
-                              {day.details}
-                            </span>
-                            <span className={styles.location}>
-                              {day.locations.join(", ")}
-                            </span>{" "}
-                            {/* Display locations */}
-                            <span className={styles.details}>
-                              {day.notes}
-                            </span>{" "}
-                            {/* Display notes */}
-                          </div>
                           <Tooltip.Root>
                             <Tooltip.Trigger asChild>
                               <Button
                                 variant="secondary"
-                                className={styles.button}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleEditClick(day);
-                                }}
+                                className={`${styles.button} ${styles.smallButton}`}
+                                onClick={(e) => handleEditClick(day, e)}
                               >
                                 Edit
                               </Button>
@@ -193,6 +193,44 @@ const DayTimeline: React.FC = () => {
                               </Tooltip.Content>
                             </Tooltip.Portal>
                           </Tooltip.Root>
+                        </CardHeader>
+                        <CardContent
+                          className={`${styles.cardContent} ${
+                            expandedCards.includes(day.id)
+                              ? styles.cardContentVisible
+                              : styles.cardContentHidden
+                          }`}
+                        >
+                          <div>
+                            <div className="flex items-center">
+                              {flags[day.id] && (
+                                <img
+                                  src={flags[day.id]}
+                                  alt={`${day.country} flag`}
+                                  className={styles.flag}
+                                />
+                              )}
+                              <span className={styles.location}>
+                                {day.country} {day.city.join(", ")}
+                              </span>{" "}
+                              {/* Display country and cities */}
+                            </div>
+                            {expandedCards.includes(day.id) && (
+                              <>
+                                <span className={styles.details}>
+                                  {day.details}
+                                </span>
+                                <span className={styles.location}>
+                                  {day.locations.join(", ")}
+                                </span>{" "}
+                                {/* Display locations */}
+                                <span className={styles.details}>
+                                  {day.notes}
+                                </span>{" "}
+                                {/* Display notes */}
+                              </>
+                            )}
+                          </div>
                         </CardContent>
                       </Card>
                     </div>
