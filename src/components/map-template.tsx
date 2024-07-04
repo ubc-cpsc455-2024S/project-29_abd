@@ -1,4 +1,5 @@
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import { useEffect, useState } from "react";
+import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
 import { MapLocation } from "@/types";
 
 const mapContainerStyle = {
@@ -7,38 +8,53 @@ const mapContainerStyle = {
   marginTop: "20px",
 };
 
-const center = {
-  lat: 49.2827,
-  lng: -123.1207,
-};
-
 const options = {
   disableDefaultUI: true,
   zoomControl: true,
 };
 
-export default function MapWithMarkers({
-  locations,
-}: {
-  locations: MapLocation[];
-}) {
+// Define the libraries array as mutable
+const libraries: ("places")[] = ["places"];
+
+export default function MapWithMarkers({ locations }: { locations: MapLocation[] }) {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDMK-rt59bguIRTg-uNl5Eu53GEm9bBlX0" || "",
-    libraries: ["places"],
+    googleMapsApiKey: "AIzaSyDMK-rt59bguIRTg-uNl5Eu53GEm9bBlX0",
+    libraries,
   });
 
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error("Error getting current location", error);
+        // Fallback to default center if geolocation fails
+        setCurrentLocation({
+          lat: 49.2827,
+          lng: -123.1207,
+        });
+      }
+    );
+  }, []);
+
   if (loadError) return <div>Map cannot be loaded right now, sorry.</div>;
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded || !currentLocation) return <div>Loading...</div>;
 
   return (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      center={center}
+      center={currentLocation}
       zoom={10}
       options={options}
     >
       {locations.map((location) => (
-        <Marker
+        <MarkerF
           key={location.id}
           position={{ lat: location.lat, lng: location.lng }}
         />
