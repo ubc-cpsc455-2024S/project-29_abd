@@ -1,0 +1,49 @@
+.card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s, background-color 0.3s ease;
+  }
+  
+  .card-dragging {
+    background-color: #ebf8ff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .location {
+    color: #6b7280; /* Tailwind gray-500 */
+    font-size: 0.875rem; /* Tailwind text-sm */
+    margin-bottom: 0.5rem;
+  }
+  
+  .details {
+    color: #374151; /* Tailwind gray-700 */
+  }
+  
+  .button {
+    margin-left: 1rem;
+  }
+  
+  .button-secondary {
+    background-color: #e5e7eb; /* Tailwind gray-200 */
+    color: #374151; /* Tailwind gray-700 */
+  }
+  

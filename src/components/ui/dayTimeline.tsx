@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import * as Tooltip from '@radix-ui/react-tooltip';
-import { DayCard, updateDayCard, deleteDayCard, reorderDayCards, addDayCard } from '@/redux/dayTimelineSlice';
-import Modal from '@/components/Modal';
-import ConfirmationModal from '@/components/ConfirmationModal';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/redux/store";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import {
+  DayCard,
+  updateDayCard,
+  deleteDayCard,
+  reorderDayCards,
+  addDayCard,
+} from "@/redux/dayTimelineSlice";
+import Modal from "@/components/Modal";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
+import styles from "./dayTimeline.module.css";
 
 const DayTimeline: React.FC = () => {
   const dispatch = useDispatch();
-  const dayCards = useSelector((state: RootState) => state.dayTimeline.dayCards);
+  const dayCards = useSelector(
+    (state: RootState) => state.dayTimeline.dayCards
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [currentCard, setCurrentCard] = useState<DayCard | null>(null);
 
   const handleCardClick = (id: number) => {
-    setCurrentCard(dayCards.find(card => card.id === id) || null);
-    setIsModalOpen(true);
+    const selectedCard = dayCards.find((card) => card.id === id);
+    if (selectedCard) {
+      setCurrentCard(selectedCard);
+      setIsModalOpen(true);
+    }
   };
 
   const handleEditClick = (day: DayCard) => {
@@ -28,11 +45,25 @@ const DayTimeline: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setCurrentCard(null);
   };
 
-  const handleSaveDetails = (details: string) => {
+  const handleSaveDetails = (
+    details: string,
+    country: string,
+    city: string[],
+    locations: string[],
+    notes: string
+  ) => {
     if (currentCard) {
-      const updatedDay = { ...currentCard, details };
+      const updatedDay = {
+        ...currentCard,
+        details,
+        country,
+        city,
+        locations,
+        notes,
+      };
       dispatch(updateDayCard(updatedDay));
       setIsModalOpen(false);
     }
@@ -55,11 +86,14 @@ const DayTimeline: React.FC = () => {
   };
 
   const handleAddNewDay = () => {
-    // Generate a new unique ID for the new day
     const newDay: DayCard = {
-      id: dayCards.length ? dayCards[dayCards.length - 1].id + 1 : 1,
-      title: `Day ${dayCards.length + 1}`,
-      details: `Details for Day ${dayCards.length + 1}`,
+      id: Date.now(), // Use timestamp as unique ID
+      title: "New Day", // Generic title
+      details: "Enter details here", // Generic details
+      country: "",
+      city: [""],
+      locations: [""],
+      notes: "",
     };
     dispatch(addDayCard(newDay));
   };
@@ -82,28 +116,72 @@ const DayTimeline: React.FC = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-4">
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className="space-y-4"
+            >
               {dayCards.map((day: DayCard, index: number) => (
-                <Draggable key={day.id} draggableId={String(day.id)} index={index}>
-                  {(provided) => (
+                <Draggable
+                  key={day.id}
+                  draggableId={String(day.id)}
+                  index={index}
+                >
+                  {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                      {...provided.dragHandleProps} // Apply dragHandleProps to the handle area
+                      className={`${styles.card} ${
+                        snapshot.isDragging ? styles.cardDragging : ""
+                      } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
+                      style={{
+                        ...provided.draggableProps.style,
+                        transition: snapshot.isDragging
+                          ? "none"
+                          : "all 0.3s ease",
+                      }}
                     >
                       <Card onClick={() => handleCardClick(day.id)}>
-                        <CardHeader>
-                          <CardTitle className="text-xl font-semibold">{day.title}</CardTitle>
+                        <CardHeader
+                          className={styles.cardHeader}
+                          {...provided.dragHandleProps}
+                        >
+                          <CardTitle className={styles.cardTitle}>{`Day ${
+                            index + 1
+                          }`}</CardTitle>
                         </CardHeader>
-                        <CardContent className="flex justify-between items-center">
-                          <span className="text-gray-700">{day.details}</span>
+                        <CardContent className={styles.cardContent}>
+                          <div>
+                            <span className={styles.location}>
+                              {day.country}
+                            </span>{" "}
+                            {/* Display country */}
+                            <span className={styles.location}>
+                              {day.city.join(", ")}
+                            </span>{" "}
+                            {/* Display cities */}
+                            <span className={styles.details}>
+                              {day.details}
+                            </span>
+                            <span className={styles.location}>
+                              {day.locations.join(", ")}
+                            </span>{" "}
+                            {/* Display locations */}
+                            <span className={styles.details}>
+                              {day.notes}
+                            </span>{" "}
+                            {/* Display notes */}
+                          </div>
                           <Tooltip.Root>
                             <Tooltip.Trigger asChild>
                               <Button
                                 variant="secondary"
-                                className="ml-4"
-                                onClick={(e) => { e.stopPropagation(); handleEditClick(day); }}
+                                className={styles.button}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditClick(day);
+                                }}
                               >
                                 Edit
                               </Button>
@@ -130,9 +208,15 @@ const DayTimeline: React.FC = () => {
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          onSave={handleSaveDetails}
+          onSave={(details, country, city, locations, notes) =>
+            handleSaveDetails(details, country, city, locations, notes)
+          }
           onDelete={handleDeleteClick}
           currentDetails={currentCard.details}
+          currentCountry={currentCard.country}
+          currentCity={currentCard.city}
+          currentLocations={currentCard.locations}
+          currentNotes={currentCard.notes}
         />
       )}
       <ConfirmationModal
