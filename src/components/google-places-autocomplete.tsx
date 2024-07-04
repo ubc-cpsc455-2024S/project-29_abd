@@ -12,7 +12,7 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
   onSelect,
 }) => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_PLACES_SECRET || "",
+    googleMapsApiKey: "AIzaSyDMK-rt59bguIRTg-uNl5Eu53GEm9bBlX0" || "",
     libraries,
   });
   const autoCompleteRef = useRef<HTMLInputElement | null>(null);
@@ -23,8 +23,8 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
       autoCompleteRef.current,
       {
         types: ["address"],
-        //componentRestrictions: { country: "ca" },
-      },
+        // componentRestrictions: { country: "ca" },
+      }
     );
 
     autoComplete.addListener("place_changed", () => {
@@ -51,7 +51,7 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
 
   return (
     <input
-      className="w-[280px] justify-start text-left font-normal"
+      className="w-full p-2 border border-gray-300 rounded"
       type="text"
       placeholder="Enter a location"
       ref={autoCompleteRef}

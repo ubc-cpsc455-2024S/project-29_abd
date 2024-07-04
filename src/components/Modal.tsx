@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import GooglePlacesAutocomplete from "./google-places-autocomplete";
+import { MapLocation } from "@/types";
 
 interface ModalProps {
   isOpen: boolean;
@@ -7,14 +9,14 @@ interface ModalProps {
     details: string,
     country: string,
     city: string[],
-    locations: string[],
+    locations: MapLocation[],
     notes: string
   ) => void;
   onDelete: () => void;
   currentDetails: string;
   currentCountry: string;
   currentCity: string[];
-  currentLocations: string[];
+  currentLocations: MapLocation[];
   currentNotes: string;
 }
 
@@ -49,27 +51,20 @@ const Modal: React.FC<ModalProps> = ({
     currentNotes,
   ]);
 
-  const handleCityChange = (index: number, value: string) => {
-    const newCity = [...city];
-    newCity[index] = value;
-    setCity(newCity);
-  };
-
-  const handleLocationChange = (index: number, value: string) => {
+  const handleLocationSelect = (index: number, location: MapLocation) => {
     const newLocations = [...locations];
-    newLocations[index] = value;
+    newLocations[index] = location;
     setLocations(newLocations);
   };
 
-  const addCity = () => {
-    setCity([...city, ""]);
-  };
 
   const addLocation = () => {
-    setLocations([...locations, ""]);
+
+    setLocations([...locations, { id: "", lat: 0, lng: 0 }]);
   };
 
   if (!isOpen) return null;
+
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
@@ -86,29 +81,12 @@ const Modal: React.FC<ModalProps> = ({
           onChange={(e) => setCountry(e.target.value)}
           placeholder="Country"
         />
-        {city.map((c, index) => (
-          <input
-            key={index}
-            className="w-full p-2 border border-gray-300 rounded mb-2"
-            value={c}
-            onChange={(e) => handleCityChange(index, e.target.value)}
-            placeholder="City"
-          />
-        ))}
-        <button
-          onClick={addCity}
-          className="mb-2 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add City
-        </button>
-        {locations.map((loc, index) => (
-          <input
-            key={index}
-            className="w-full p-2 border border-gray-300 rounded mb-2"
-            value={loc}
-            onChange={(e) => handleLocationChange(index, e.target.value)}
-            placeholder="Location"
-          />
+        {locations.map((_loc, index) => (
+          <div key={index} className="mb-2">
+            <GooglePlacesAutocomplete
+              onSelect={(location) => handleLocationSelect(index, location)}
+            />
+          </div>
         ))}
         <button
           onClick={addLocation}
