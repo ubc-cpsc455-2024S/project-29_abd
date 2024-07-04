@@ -7,8 +7,14 @@ import { MapLocation } from "./types";
 import DayTimeline from "./components/ui/dayTimeline";
 import { DatePickerWithRange } from "./components/ui/dateRangePicker";
 
+const sampleLocations: MapLocation[] = [
+  { id: "1", lat: 49.2827, lng: -123.1207 }, // Vancouver
+  { id: "2", lat: 49.25, lng: -123.1 },
+  { id: "3", lat: 49.2606, lng: -123.246 }, 
+  { id: "4", lat: 49.231, lng: -123.107 }, 
+];
+
 function App() {
-  const locations: MapLocation[] = [];
 
   return (
     <ScrollArea className="flex flex-col h-full w-full">
@@ -35,7 +41,7 @@ function App() {
                           <CardTitle>Map View</CardTitle>
                         </CardHeader>
                         <CardContent className="pl-2">
-                          <MapWithMarkers locations={locations} />
+                          <MapWithMarkers locations={sampleLocations} />
                         </CardContent>
                       </Card>
                     </div>
