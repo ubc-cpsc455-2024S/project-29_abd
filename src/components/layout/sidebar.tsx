@@ -1,6 +1,6 @@
-import { DashboardNav } from "@/components/ui/dashboard-nav"
-import { navItems } from "@/components/constants/data";
-import { cn } from "@/lib/utils";
+import { DashboardNav } from "../ui/dashboard-nav.tsx"
+import { navItems } from "../constants/data.ts";
+import { cn } from "../../lib/utils.ts";
 
 export default function Sidebar() {
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
-import { MapLocation } from "@/types";
+import { MapLocation } from "../types";
 
 const mapContainerStyle = {
   width: "100%",

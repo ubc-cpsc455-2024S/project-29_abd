@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import GooglePlacesAutocomplete from "./google-places-autocomplete";
-import { MapLocation } from "@/types";
+import GooglePlacesAutocomplete from "./google-places-autocomplete.tsx";
+import { MapLocation } from "../types";
 
 interface ModalProps {
   isOpen: boolean;

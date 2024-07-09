@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import { useLoadScript } from "@react-google-maps/api";
-import { MapLocation } from "@/types";
+import { MapLocation } from "../types";
 
 const libraries: "places"[] = ["places"];
 

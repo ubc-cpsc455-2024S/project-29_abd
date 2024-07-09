@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import tripReducer from "./tripSlice";
-import dayTimelineReducer from "./dayTimelineSlice";
+import tripReducer from "./tripSlice.ts";
+import dayTimelineReducer from "./dayTimelineSlice.ts";
 
 export const store = configureStore({
   reducer: {
