@@ -2,7 +2,7 @@
 
 // import { usePathname } from "next/navigation";
 
-import { NavItem } from "@/types";
+import { NavItem } from "src/types";
 import { Dispatch, SetStateAction } from "react";
 
 interface DashboardNavProps {

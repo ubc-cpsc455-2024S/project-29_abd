@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/redux/store";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { RootState } from "src/redux/store.ts";
+import { Card, CardHeader, CardTitle, CardContent } from "src/components/ui/card.tsx";
+import { Button } from "src/components/ui/button.tsx";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   DayCard,
@@ -10,9 +10,9 @@ import {
   deleteDayCard,
   reorderDayCards,
   addDayCard,
-} from "@/redux/dayTimelineSlice";
-import Modal from "@/components/Modal";
-import ConfirmationModal from "@/components/ConfirmationModal";
+} from "src/redux/dayTimelineSlice.ts";
+import Modal from "src/components/Modal.tsx";
+import ConfirmationModal from "src/components/ConfirmationModal.tsx";
 import {
   DragDropContext,
   Draggable,

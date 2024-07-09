@@ -1,11 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "src/components/ui/card.tsx";
+import { ScrollArea } from "src/components/ui/scroll-area.tsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "src/components/ui/tabs.tsx";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import MapWithMarkers from "@/components/map-template";
+import MapWithMarkers from "src/components/map-template.tsx";
 import { MapLocation } from "./types";
-import DayTimeline from "./components/ui/dayTimeline";
-import { DatePickerWithRange } from "./components/ui/dateRangePicker";
+import DayTimeline from "./components/ui/dayTimeline.tsx";
+import { DatePickerWithRange } from "./components/ui/dateRangePicker.tsx";
 
 const sampleLocations: MapLocation[] = [
   { id: "1", lat: 49.2827, lng: -123.1207 }, // Vancouver

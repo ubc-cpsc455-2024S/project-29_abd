@@ -1,4 +1,4 @@
-import { Icons } from "@/components/ui/icons";
+import { Icons } from "src/components/ui/icons.tsx";
 
 export interface NavItem {
   title: string;
