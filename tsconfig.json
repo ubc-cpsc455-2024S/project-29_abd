@@ -27,7 +27,7 @@
     }
   },
   "include": [
-    "solotravel/src"
+    "src"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
