@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -13,12 +13,9 @@ import {
 } from "@/redux/dayTimelineSlice";
 import Modal from "@/components/Modal";
 import ConfirmationModal from "@/components/ConfirmationModal";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import update from "immutability-helper";
 import styles from "./dayTimeline.module.css";
 
 const fetchCountryFlag = async (country: string) => {
@@ -110,10 +107,13 @@ const DayTimeline: React.FC = () => {
   };
 
   const handleAddNewDay = () => {
+    const nextId =
+      dayCards.length > 0 ? Math.max(...dayCards.map((day) => day.id)) + 1 : 1;
+
     const newDay: DayCard = {
-      id: Date.now(), // Use timestamp as unique ID
-      title: "New Day", // Generic title
-      details: "Enter details here", // Generic details
+      id: nextId,
+      title: `Day ${nextId}`,
+      details: "Enter details here",
       country: "",
       city: [""],
       locations: [""],
@@ -122,147 +122,167 @@ const DayTimeline: React.FC = () => {
     dispatch(addDayCard(newDay));
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    const items = Array.from(dayCards);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    dispatch(reorderDayCards(items));
+  const moveCard = (dragIndex: number, hoverIndex: number) => {
+    const draggedCard = dayCards[dragIndex];
+    const updatedCards = update(dayCards, {
+      $splice: [
+        [dragIndex, 1],
+        [hoverIndex, 0, draggedCard],
+      ],
+    });
+    dispatch(reorderDayCards(updatedCards));
   };
 
   return (
-    <div className="day-timeline space-y-4 p-4">
-      <Button onClick={handleAddNewDay} className="mb-4">
-        Add Day
-      </Button>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-4"
-            >
-              {dayCards.map((day: DayCard, index: number) => (
-                <Draggable
-                  key={day.id}
-                  draggableId={String(day.id)}
-                  index={index}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps} // Apply dragHandleProps to the handle area
-                      className={`${styles.card} ${
-                        snapshot.isDragging ? styles.cardDragging : ""
-                      } ${
-                        expandedCards.includes(day.id)
-                          ? styles.cardExpanded
-                          : styles.cardCollapsed
-                      } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
-                      style={{
-                        ...provided.draggableProps.style,
-                        transition: snapshot.isDragging
-                          ? "none"
-                          : "all 0.3s ease",
-                      }}
-                      onClick={() => handleCardClick(day.id)}
-                    >
-                      <Card>
-                        <CardHeader className={styles.cardHeader}>
-                          <CardTitle className={styles.cardTitle}>{`Day ${
-                            index + 1
-                          }`}</CardTitle>
-                          <Tooltip.Root>
-                            <Tooltip.Trigger asChild>
-                              <Button
-                                variant="secondary"
-                                className={`${styles.button} ${styles.smallButton}`}
-                                onClick={(e) => handleEditClick(day, e)}
-                              >
-                                Edit
-                              </Button>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                              <Tooltip.Content className="bg-black text-white p-2 rounded shadow-lg">
-                                Edit details
-                                <Tooltip.Arrow className="fill-black" />
-                              </Tooltip.Content>
-                            </Tooltip.Portal>
-                          </Tooltip.Root>
-                        </CardHeader>
-                        <CardContent
-                          className={`${styles.cardContent} ${
-                            expandedCards.includes(day.id)
-                              ? styles.cardContentVisible
-                              : styles.cardContentHidden
-                          }`}
-                        >
-                          <div>
-                            <div className="flex items-center">
-                              {flags[day.id] && (
-                                <img
-                                  src={flags[day.id]}
-                                  alt={`${day.country} flag`}
-                                  className={styles.flag}
-                                />
-                              )}
-                              <span className={styles.location}>
-                                {day.country} {day.city.join(", ")}
-                              </span>{" "}
-                              {/* Display country and cities */}
-                            </div>
-                            {expandedCards.includes(day.id) && (
-                              <>
-                                <span className={styles.details}>
-                                  {day.details}
-                                </span>
-                                <span className={styles.location}>
-                                  {day.locations.join(", ")}
-                                </span>{" "}
-                                {/* Display locations */}
-                                <span className={styles.details}>
-                                  {day.notes}
-                                </span>{" "}
-                                {/* Display notes */}
-                              </>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {currentCard && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSave={(details, country, city, locations, notes) =>
-            handleSaveDetails(details, country, city, locations, notes)
-          }
-          onDelete={handleDeleteClick}
-          currentDetails={currentCard.details}
-          currentCountry={currentCard.country}
-          currentCity={currentCard.city}
-          currentLocations={currentCard.locations}
-          currentNotes={currentCard.notes}
+    <DndProvider backend={HTML5Backend}>
+      <div className="day-timeline space-y-4 p-4">
+        <Button onClick={handleAddNewDay} className="mb-4">
+          Add Day
+        </Button>
+        <div className="space-y-4">
+          {dayCards.map((day, index) => (
+            <DayCardComponent
+              key={day.id}
+              index={index}
+              day={day}
+              moveCard={moveCard}
+              handleCardClick={handleCardClick}
+              handleEditClick={handleEditClick}
+              expandedCards={expandedCards}
+              flags={flags}
+            />
+          ))}
+        </div>
+        {currentCard && (
+          <Modal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSave={(details, country, city, locations, notes) =>
+              handleSaveDetails(details, country, city, locations, notes)
+            }
+            onDelete={handleDeleteClick}
+            currentDetails={currentCard.details}
+            currentCountry={currentCard.country}
+            currentCity={currentCard.city}
+            currentLocations={currentCard.locations}
+            currentNotes={currentCard.notes}
+          />
+        )}
+        <ConfirmationModal
+          isOpen={isConfirmationModalOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          message="Are you sure you want to delete this card?"
         />
-      )}
-      <ConfirmationModal
-        isOpen={isConfirmationModalOpen}
-        onClose={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-        message="Are you sure you want to delete this card?"
-      />
+      </div>
+    </DndProvider>
+  );
+};
+
+const DayCardComponent: React.FC<{
+  index: number;
+  day: DayCard;
+  moveCard: (dragIndex: number, hoverIndex: number) => void;
+  handleCardClick: (id: number) => void;
+  handleEditClick: (day: DayCard, e: React.MouseEvent) => void;
+  expandedCards: number[];
+  flags: { [key: number]: string };
+}> = ({
+  index,
+  day,
+  moveCard,
+  handleCardClick,
+  handleEditClick,
+  expandedCards,
+  flags,
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [, drop] = useDrop({
+    accept: "DAY_CARD",
+    hover(item: { index: number }) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      moveCard(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "DAY_CARD",
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  drag(drop(ref));
+
+  return (
+    <div
+      ref={ref}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      className={`${styles.card} ${
+        expandedCards.includes(day.id)
+          ? styles.cardExpanded
+          : styles.cardCollapsed
+      } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
+      onClick={() => handleCardClick(day.id)}
+    >
+      <Card>
+        <CardHeader className={styles.cardHeader}>
+          <CardTitle className={styles.cardTitle}>{`Day ${
+            index + 1
+          }`}</CardTitle>
+          <Tooltip.Root>
+            <Tooltip.Trigger asChild>
+              <Button
+                variant="secondary"
+                className={`${styles.button} ${styles.smallButton}`}
+                onClick={(e) => handleEditClick(day, e)}
+              >
+                Edit
+              </Button>
+            </Tooltip.Trigger>
+            <Tooltip.Portal>
+              <Tooltip.Content className="bg-black text-white p-2 rounded shadow-lg">
+                Edit details
+                <Tooltip.Arrow className="fill-black" />
+              </Tooltip.Content>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+        </CardHeader>
+        <CardContent className={styles.cardContent}>
+          <div>
+            <div className="flex items-center">
+              {flags[day.id] && (
+                <img
+                  src={flags[day.id]}
+                  alt={`${day.country} flag`}
+                  className={styles.flag}
+                />
+              )}
+              <span className={styles.location}>
+                {day.country} {day.city.join(", ")}
+              </span>
+            </div>
+            {expandedCards.includes(day.id) && (
+              <>
+                <span className={styles.details}>{day.details}</span>
+                <span className={styles.location}>
+                  {day.locations.join(", ")}
+                </span>
+                <span className={styles.details}>{day.notes}</span>
+              </>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
