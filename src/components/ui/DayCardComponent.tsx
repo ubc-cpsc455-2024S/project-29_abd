@@ -103,9 +103,7 @@ const DayCardComponent: React.FC<DayCardProps> = ({
     >
       <Card>
         <CardHeader className={styles.cardHeader}>
-          <CardTitle className={styles.cardTitle}>{`Day ${
-            index + 1
-          }`}</CardTitle>
+          <CardTitle className={styles.cardTitle}>{`Day ${index + 1}`}</CardTitle>
           <div className={styles.cardInfo}>
             {flags[day.id] && (
               <img

@@ -11,6 +11,10 @@ const fetchCountryFlag = async (country: string) => {
   const response = await fetch(
     `https://restcountries.com/v3.1/name/${country}`
   );
+  if (!response.ok) {
+    console.error(`Failed to fetch flag for country: ${country}`);
+    return "";
+  }
   const data = await response.json();
   return data[0]?.flags?.svg || "";
 };
@@ -46,7 +50,7 @@ const DayTimeline: React.FC = () => {
 
   const handleAddNewDay = () => {
     const newDay: DayCard = {
-      id: dayCards.length + 1,
+      id: dayCards.length ? Math.max(...dayCards.map((day) => day.id)) + 1 : 1,
       title: `Day ${dayCards.length + 1}`,
       details: "",
       country: "",
@@ -68,13 +72,18 @@ const DayTimeline: React.FC = () => {
     [dayCards, dispatch]
   );
 
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+    moveCard(result.source.index, result.destination.index);
+  };
+
   return (
     <div className="day-timeline space-y-4 p-4">
       <Button onClick={handleAddNewDay} className="mb-4">
         Add Day
       </Button>
-      <DragDropContext onDragEnd={() => {}}>
-        <Droppable droppableId="droppable">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="day-timeline-droppable">
           {(provided) => (
             <div
               {...provided.droppableProps}
@@ -82,12 +91,17 @@ const DayTimeline: React.FC = () => {
               className="space-y-4"
             >
               {dayCards.map((day, index) => (
-                <Draggable key={day.id} draggableId={`${day.id}`} index={index}>
+                <Draggable
+                  key={day.id}
+                  draggableId={`draggable-${day.id}`}
+                  index={index}
+                >
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
+                      className={`draggable-${day.id}`}
                     >
                       <DayCardComponent
                         index={index}
