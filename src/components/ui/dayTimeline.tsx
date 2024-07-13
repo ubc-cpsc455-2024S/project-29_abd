@@ -1,30 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../redux/store.ts";
-import { Card, CardHeader, CardTitle, CardContent } from "./card.tsx";
-import { Button } from "./button.tsx";
-import * as Tooltip from "@radix-ui/react-tooltip";
-import {
-  DayCard,
-  updateDayCard,
-  deleteDayCard,
-  reorderDayCards,
-  addDayCard,
-} from "../../redux/dayTimelineSlice.ts";
-import Modal from "../Modal.tsx";
-import ConfirmationModal from "../ConfirmationModal.tsx";
+import { RootState } from "@/redux/store";
+import { Button } from "@/components/ui/button";
+import { DayCard, addDayCard, reorderDayCards } from "@/redux/dayTimelineSlice";
 import {
   DragDropContext,
-  Draggable,
   Droppable,
+  Draggable,
   DropResult,
 } from "react-beautiful-dnd";
 import styles from "./dayTimeline.module.css";
+import DayCardComponent from "./DayCardComponent";
 
 const fetchCountryFlag = async (country: string) => {
   const response = await fetch(
     `https://restcountries.com/v3.1/name/${country}`
   );
+  if (!response.ok) {
+    console.error(`Failed to fetch flag for country: ${country}`);
+    return "";
+  }
   const data = await response.json();
   return data[0]?.flags?.svg || "";
 };
@@ -34,9 +29,6 @@ const DayTimeline: React.FC = () => {
   const dayCards = useSelector(
     (state: RootState) => state.dayTimeline.dayCards
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [currentCard, setCurrentCard] = useState<DayCard | null>(null);
   const [expandedCards, setExpandedCards] = useState<number[]>([]);
   const [flags, setFlags] = useState<{ [key: number]: string }>({});
 
@@ -61,59 +53,14 @@ const DayTimeline: React.FC = () => {
     );
   };
 
-  const handleEditClick = (day: DayCard, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the card click handler from being triggered
-    setCurrentCard(day);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setCurrentCard(null);
-  };
-
-  const handleSaveDetails = (
-    details: string,
-    country: string,
-    city: string[],
-    locations: string[],
-    notes: string
-  ) => {
-    if (currentCard) {
-      const updatedDay = {
-        ...currentCard,
-        details,
-        country,
-        city,
-        locations,
-        notes,
-      };
-      dispatch(updateDayCard(updatedDay));
-      setIsModalOpen(false);
-    }
-  };
-
-  const handleDeleteClick = () => {
-    setIsConfirmationModalOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    if (currentCard) {
-      dispatch(deleteDayCard(currentCard.id));
-      setIsModalOpen(false);
-      setIsConfirmationModalOpen(false);
-    }
-  };
-
-  const handleCancelDelete = () => {
-    setIsConfirmationModalOpen(false);
-  };
-
   const handleAddNewDay = () => {
+    const newId = dayCards.length
+      ? Math.max(...dayCards.map((day) => day.id)) + 1
+      : 1;
     const newDay: DayCard = {
-      id: Date.now(), // Use timestamp as unique ID
-      title: "New Day", // Generic title
-      details: "Enter details here", // Generic details
+      id: newId,
+      title: `Day ${dayCards.length + 1}`,
+      details: "",
       country: "",
       city: [""],
       locations: [""],
@@ -122,14 +69,20 @@ const DayTimeline: React.FC = () => {
     dispatch(addDayCard(newDay));
   };
 
+  const moveCard = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const dragCard = dayCards[dragIndex];
+      const newCards = [...dayCards];
+      newCards.splice(dragIndex, 1);
+      newCards.splice(hoverIndex, 0, dragCard);
+      dispatch(reorderDayCards(newCards));
+    },
+    [dayCards, dispatch]
+  );
+
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-    const items = Array.from(dayCards);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    dispatch(reorderDayCards(items));
+    if (!result.destination) return;
+    moveCard(result.source.index, result.destination.index);
   };
 
   return (
@@ -138,131 +91,43 @@ const DayTimeline: React.FC = () => {
         Add Day
       </Button>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-4"
-            >
-              {dayCards.map((day: DayCard, index: number) => (
+        {dayCards.map((day, index) => (
+          <Droppable key={day.id} droppableId={day.id.toString()}>
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="space-y-4"
+              >
                 <Draggable
                   key={day.id}
-                  draggableId={String(day.id)}
+                  draggableId={day.id.toString()}
                   index={index}
                 >
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      {...provided.dragHandleProps} // Apply dragHandleProps to the handle area
-                      className={`${styles.card} ${
-                        snapshot.isDragging ? styles.cardDragging : ""
-                      } ${
-                        expandedCards.includes(day.id)
-                          ? styles.cardExpanded
-                          : styles.cardCollapsed
-                      } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
-                      style={{
-                        ...provided.draggableProps.style,
-                        transition: snapshot.isDragging
-                          ? "none"
-                          : "all 0.3s ease",
-                      }}
-                      onClick={() => handleCardClick(day.id)}
+                      {...provided.dragHandleProps}
+                      className={`draggable-${day.id}`}
                     >
-                      <Card>
-                        <CardHeader className={styles.cardHeader}>
-                          <CardTitle className={styles.cardTitle}>{`Day ${
-                            index + 1
-                          }`}</CardTitle>
-                          <Tooltip.Root>
-                            <Tooltip.Trigger asChild>
-                              <Button
-                                variant="secondary"
-                                className={`${styles.button} ${styles.smallButton}`}
-                                onClick={(e) => handleEditClick(day, e)}
-                              >
-                                Edit
-                              </Button>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                              <Tooltip.Content className="bg-black text-white p-2 rounded shadow-lg">
-                                Edit details
-                                <Tooltip.Arrow className="fill-black" />
-                              </Tooltip.Content>
-                            </Tooltip.Portal>
-                          </Tooltip.Root>
-                        </CardHeader>
-                        <CardContent
-                          className={`${styles.cardContent} ${
-                            expandedCards.includes(day.id)
-                              ? styles.cardContentVisible
-                              : styles.cardContentHidden
-                          }`}
-                        >
-                          <div>
-                            <div className="flex items-center">
-                              {flags[day.id] && (
-                                <img
-                                  src={flags[day.id]}
-                                  alt={`${day.country} flag`}
-                                  className={styles.flag}
-                                />
-                              )}
-                              <span className={styles.location}>
-                                {day.country} {day.city.join(", ")}
-                              </span>{" "}
-                              {/* Display country and cities */}
-                            </div>
-                            {expandedCards.includes(day.id) && (
-                              <>
-                                <span className={styles.details}>
-                                  {day.details}
-                                </span>
-                                <span className={styles.location}>
-                                  {day.locations.join(", ")}
-                                </span>{" "}
-                                {/* Display locations */}
-                                <span className={styles.details}>
-                                  {day.notes}
-                                </span>{" "}
-                                {/* Display notes */}
-                              </>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <DayCardComponent
+                        index={index}
+                        day={day}
+                        moveCard={moveCard}
+                        handleCardClick={handleCardClick}
+                        expandedCards={expandedCards}
+                        flags={flags}
+                      />
                     </div>
                   )}
                 </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        ))}
       </DragDropContext>
-      {currentCard && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSave={(details, country, city, locations, notes) =>
-            handleSaveDetails(details, country, city, locations, notes)
-          }
-          onDelete={handleDeleteClick}
-          currentDetails={currentCard.details}
-          currentCountry={currentCard.country}
-          currentCity={currentCard.city}
-          currentLocations={currentCard.locations}
-          currentNotes={currentCard.notes}
-        />
-      )}
-      <ConfirmationModal
-        isOpen={isConfirmationModalOpen}
-        onClose={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
-        message="Are you sure you want to delete this card?"
-      />
     </div>
   );
 };

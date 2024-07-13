@@ -5,7 +5,7 @@ import dayTimelineReducer from "./dayTimelineSlice.ts";
 export const store = configureStore({
   reducer: {
     trip: tripReducer,
-    dayTimeline: dayTimelineReducer, 
+    dayTimeline: dayTimelineReducer,
   },
 });
 
