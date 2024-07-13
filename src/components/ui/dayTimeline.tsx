@@ -3,7 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { Button } from "@/components/ui/button";
 import { DayCard, addDayCard, reorderDayCards } from "@/redux/dayTimelineSlice";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 import styles from "./dayTimeline.module.css";
 import DayCardComponent from "./DayCardComponent";
 
@@ -49,8 +54,11 @@ const DayTimeline: React.FC = () => {
   };
 
   const handleAddNewDay = () => {
+    const newId = dayCards.length
+      ? Math.max(...dayCards.map((day) => day.id)) + 1
+      : 1;
     const newDay: DayCard = {
-      id: dayCards.length ? Math.max(...dayCards.map((day) => day.id)) + 1 : 1,
+      id: newId,
       title: `Day ${dayCards.length + 1}`,
       details: "",
       country: "",
@@ -72,7 +80,7 @@ const DayTimeline: React.FC = () => {
     [dayCards, dispatch]
   );
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     moveCard(result.source.index, result.destination.index);
   };
@@ -83,17 +91,17 @@ const DayTimeline: React.FC = () => {
         Add Day
       </Button>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="day-timeline-droppable">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-4"
-            >
-              {dayCards.map((day, index) => (
+        {dayCards.map((day, index) => (
+          <Droppable key={day.id} droppableId={day.id.toString()}>
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="space-y-4"
+              >
                 <Draggable
                   key={day.id}
-                  draggableId={`draggable-${day.id}`}
+                  draggableId={day.id.toString()}
                   index={index}
                 >
                   {(provided) => (
@@ -114,11 +122,11 @@ const DayTimeline: React.FC = () => {
                     </div>
                   )}
                 </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        ))}
       </DragDropContext>
     </div>
   );

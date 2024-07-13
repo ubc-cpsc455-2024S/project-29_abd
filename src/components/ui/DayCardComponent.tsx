@@ -6,6 +6,7 @@ import { DayCard, updateDayCard } from "@/redux/dayTimelineSlice";
 import { useDispatch } from "react-redux";
 import styles from "./dayTimeline.module.css";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import { SingleValue } from "react-select";
 
 interface DayCardProps {
   index: number;
@@ -14,6 +15,11 @@ interface DayCardProps {
   handleCardClick: (id: number) => void;
   expandedCards: number[];
   flags: { [key: number]: string };
+}
+
+interface Option {
+  label: string;
+  value: string;
 }
 
 const DayCardComponent: React.FC<DayCardProps> = ({
@@ -86,9 +92,9 @@ const DayCardComponent: React.FC<DayCardProps> = ({
     setLocations(newLocations);
   };
 
-  const handleLocationChange = (index: number, value: string) => {
+  const handleLocationChange = (index: number, value: SingleValue<Option>) => {
     const newLocations = [...locations];
-    newLocations[index] = value;
+    newLocations[index] = value ? value.label : "";
     setLocations(newLocations);
   };
 
@@ -103,7 +109,9 @@ const DayCardComponent: React.FC<DayCardProps> = ({
     >
       <Card>
         <CardHeader className={styles.cardHeader}>
-          <CardTitle className={styles.cardTitle}>{`Day ${index + 1}`}</CardTitle>
+          <CardTitle className={styles.cardTitle}>{`Day ${
+            index + 1
+          }`}</CardTitle>
           <div className={styles.cardInfo}>
             {flags[day.id] && (
               <img
@@ -148,7 +156,12 @@ const DayCardComponent: React.FC<DayCardProps> = ({
                     type="text"
                     name="city"
                     value={editedDay.city.join(", ")}
-                    onChange={(e) => handleLocationChange(0, e.target.value)}
+                    onChange={(e) =>
+                      handleLocationChange(0, {
+                        label: e.target.value,
+                        value: "",
+                      })
+                    }
                     className={styles.input}
                     onClick={handleInputClick}
                   />
@@ -174,12 +187,15 @@ const DayCardComponent: React.FC<DayCardProps> = ({
                       <GooglePlacesAutocomplete
                         apiKey="YOUR_GOOGLE_PLACES_API_KEY"
                         selectProps={{
-                          value: location,
+                          value: location
+                            ? { label: location, value: location }
+                            : null,
                           onChange: (val) =>
-                            handleLocationChange(idx, val.value),
+                            handleLocationChange(
+                              idx,
+                              val as SingleValue<Option>
+                            ),
                         }}
-                        className={styles.locationInput}
-                        onClick={handleInputClick}
                       />
                       <Button
                         variant="secondary"
@@ -198,7 +214,7 @@ const DayCardComponent: React.FC<DayCardProps> = ({
                     Add Location
                   </Button>
                   <Button
-                    variant="primary"
+                    variant="default"
                     className={styles.saveButton}
                     onClick={handleSaveClick}
                   >
