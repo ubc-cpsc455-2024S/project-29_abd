@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "@/contexts/authcontext";
-import Login from "@/components/ui/Login";
+import Login from "@/login";
 
 const AuthCheck: React.FC = ({ children }) => {
   const { isAuthenticated } = useAuth();
