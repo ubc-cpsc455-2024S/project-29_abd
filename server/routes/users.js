@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+const userSchema = new Schema({
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
 });
 
-module.exports = router;
+module.exports = mongoose.model("User", userSchema);
