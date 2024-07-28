@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@shadcn/ui";
-import { Input } from "@shadcn/ui";
-import { Button } from "@shadcn/ui";
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const Register: React.FC = () => {
   const { register } = useAuth();
