@@ -80,7 +80,7 @@ import AddTrip from './pages/AddTrip';
 const App = () => {
     return (
         <Router>
-            <div className="flex flex-col h-screen">
+            <div className="flex flex-col h-screen w-screen">
                 <NavBar />
                 <div className="flex-1 flex overflow-hidden">
                     <Routes>

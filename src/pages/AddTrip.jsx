@@ -1,4 +1,3 @@
-// src/pages/AddTrip.jsx
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { ScrollArea } from "../components/ui/scroll-area";
@@ -22,19 +21,19 @@ const AddTrip = () => {
             <TooltipProvider>
                 <div className="App flex h-screen overflow-hidden">
                     <div className="flex-1 flex flex-col overflow-y-auto">
-                        <div className="flex-1 flex flex-col p-4 md:p-8 pt-6">
+                        <div className="flex-1 flex flex-col p-4 md:p-8 pt-6 h-full w-full">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-3xl font-bold tracking-tight">Plan Your Trip</h2>
                                 <DatePickerWithRange />
                             </div>
-                            <Tabs defaultValue="view-1" className="flex-1 flex flex-col">
+                            <Tabs defaultValue="view-1" className="flex-1 flex flex-col h-full">
                                 <TabsList>
                                     <TabsTrigger value="view-1">View 1</TabsTrigger>
                                     <TabsTrigger value="view-2" disabled>View 2</TabsTrigger>
                                     <TabsTrigger value="view-3" disabled>View 3</TabsTrigger>
                                     <TabsTrigger value="view-4" disabled>View 4</TabsTrigger>
                                 </TabsList>
-                                <TabsContent value="view-1" className="flex-1 flex">
+                                <TabsContent value="view-1" className="flex-1 flex h-full">
                                     <div className="w-full md:w-2/3 flex flex-col h-full pr-4">
                                         <Card className="flex-1 flex flex-col h-full">
                                             <CardHeader>
@@ -45,8 +44,8 @@ const AddTrip = () => {
                                             </CardContent>
                                         </Card>
                                     </div>
-                                    <div className="w-1/3">
-                                        <DayTimeline />
+                                    <div className="w-full md:w-1/3 h-full">
+                                        <DayTimeline className="h-full" />
                                     </div>
                                 </TabsContent>
                             </Tabs>
