@@ -1,62 +1,58 @@
 const express = require('express');
 const router = express.Router();
+const DayCard = require('../models/dayCard');
 
-// Sample data
-let dayCards = [
-    {
-        id: 1,
-        title: "Day 1",
-        details: "Spain - Go to the Tomatina Festival.",
-        country: "Spain",
-        city: ["Buñol"],
-        locations: ["Tomatina Festival Site"],
-        notes: "Be prepared for a lot of tomatoes!",
-    },
-    {
-        id: 2,
-        title: "Day 2",
-        details: "Paris - Find Love.",
-        country: "France",
-        city: ["Paris"],
-        locations: ["Eiffel Tower", "Louvre Museum"],
-        notes: "Visit the Louvre early to avoid crowds.",
-    },
-    {
-        id: 3,
-        title: "Day 3",
-        details: "London - Find the best tea and take a picture with the King's Guard.",
-        country: "UK",
-        city: ["London"],
-        locations: ["Buckingham Palace", "Tea Houses"],
-        notes: "The guards do not move!",
-    },
-];
+
+// Get all day cards for a specific trip
+router.get('/trip/:tripId', async (req, res) => {
+    try {
+        const dayCards = await DayCard.find({ tripId: req.params.tripId });
+        res.json(dayCards);
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
+});
 
 // Get all day cards
-router.get('/', (req, res) => {
-    res.json(dayCards);
+router.get('/', async (req, res) => {
+    try {
+        const dayCards = await DayCard.find();
+        res.json(dayCards);
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
 });
 
 // Add a new day card
-router.post('/', (req, res) => {
-    const newDayCard = req.body;
-    dayCards.push(newDayCard);
-    res.json(newDayCard);
+router.post('/', async (req, res) => {
+    try {
+        const newDayCard = new DayCard(req.body);
+        const dayCard = await newDayCard.save();
+        res.json(dayCard);
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).send(error);
+    }
 });
 
 // Update a day card
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const updatedDayCard = req.body;
-    dayCards = dayCards.map(card => card.id === parseInt(id) ? updatedDayCard : card);
-    res.json(updatedDayCard);
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedDayCard = await DayCard.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(updatedDayCard);
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
 });
 
 // Delete a day card
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    dayCards = dayCards.filter(card => card.id !== parseInt(id));
-    res.json({ message: 'Day card deleted' });
+router.delete('/:id', async (req, res) => {
+    try {
+        await DayCard.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Day card deleted' });
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
 });
 
 module.exports = router;
