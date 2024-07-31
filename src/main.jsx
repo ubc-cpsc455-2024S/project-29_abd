@@ -12,7 +12,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <>
       <Header />
       <div className="flex h-screen overflow-hidden">
-        <Sidebar />
         <Provider store={store}>
           <App />
         </Provider>
