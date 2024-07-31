@@ -1,21 +1,15 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import { useLoadScript } from "@react-google-maps/api";
-import { MapLocation } from "../types";
 
-const libraries: "places"[] = ["places"];
+// Define the libraries array as mutable
+const libraries = ["places"];
 
-interface GooglePlacesAutocompleteProps {
-  onSelect: (location: MapLocation) => void;
-}
-
-const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
-  onSelect,
-}) => {
+const GooglePlacesAutocomplete = ({ onSelect }) => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDMK-rt59bguIRTg-uNl5Eu53GEm9bBlX0" || "",
+    googleMapsApiKey: import.meta.env.VITE_REACT_APP_MAPS_KEY || "",
     libraries,
   });
-  const autoCompleteRef = useRef<HTMLInputElement | null>(null);
+  const autoCompleteRef = useRef(null);
 
   const onPlaceChanged = useCallback(() => {
     if (!autoCompleteRef.current) return;
@@ -30,7 +24,7 @@ const GooglePlacesAutocomplete: React.FC<GooglePlacesAutocompleteProps> = ({
     autoComplete.addListener("place_changed", () => {
       const place = autoComplete.getPlace();
       if (place.geometry && place.geometry.location) {
-        const location: MapLocation = {
+        const location = {
           id: place.place_id || "unknown",
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),

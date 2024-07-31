@@ -1,11 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { ScrollArea } from "../components/ui/scroll-area";
+import {ScrollArea} from "../components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import MapWithMarkers from "../components/map-template";
 import DayTimeline from "../components/ui/dayTimeline";
-import { DatePickerWithRange } from "../components/ui/dateRangePicker";
 
 // Sample locations array
 const sampleLocations = [
@@ -24,7 +23,6 @@ const AddTrip = () => {
                         <div className="flex-1 flex flex-col p-4 md:p-8 pt-6 h-full w-full">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-3xl font-bold tracking-tight">Plan Your Trip</h2>
-                                <DatePickerWithRange />
                             </div>
                             <Tabs defaultValue="view-1" className="flex-1 flex flex-col h-full">
                                 <TabsList>

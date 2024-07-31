@@ -1,20 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-export interface DayCard {
-  id: number;
-  title: string;
-  details: string;
-  country: string;
-  city: string[];
-  locations: string[];
-  notes: string;
-}
-
-interface DayTimelineState {
-  dayCards: DayCard[];
-}
-
-const initialState: DayTimelineState = {
+const initialState = {
   dayCards: [
     {
       id: 1,
@@ -51,7 +37,7 @@ const dayTimelineSlice = createSlice({
   name: "dayTimeline",
   initialState,
   reducers: {
-    updateDayCard: (state, action: PayloadAction<DayCard>) => {
+    updateDayCard: (state, action) => {
       const index = state.dayCards.findIndex(
         (card) => card.id === action.payload.id
       );
@@ -59,15 +45,15 @@ const dayTimelineSlice = createSlice({
         state.dayCards[index] = action.payload;
       }
     },
-    deleteDayCard: (state, action: PayloadAction<number>) => {
+    deleteDayCard: (state, action) => {
       state.dayCards = state.dayCards.filter(
         (card) => card.id !== action.payload
       );
     },
-    addDayCard: (state, action: PayloadAction<DayCard>) => {
+    addDayCard: (state, action) => {
       state.dayCards.push(action.payload);
     },
-    reorderDayCards: (state, action: PayloadAction<DayCard[]>) => {
+    reorderDayCards: (state, action) => {
       state.dayCards = action.payload;
     },
   },

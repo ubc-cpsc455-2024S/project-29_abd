@@ -1,26 +1,7 @@
 import React, { useState, useEffect } from "react";
-import GooglePlacesAutocomplete from "./google-places-autocomplete.tsx";
-import { MapLocation } from "../types";
+import GooglePlacesAutocomplete from "./google-places-autocomplete";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (
-    details: string,
-    country: string,
-    city: string[],
-    locations: MapLocation[],
-    notes: string
-  ) => void;
-  onDelete: () => void;
-  currentDetails: string;
-  currentCountry: string;
-  currentCity: string[];
-  currentLocations: MapLocation[];
-  currentNotes: string;
-}
-
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   isOpen,
   onClose,
   onSave,
@@ -43,28 +24,19 @@ const Modal: React.FC<ModalProps> = ({
     setCity(currentCity);
     setLocations(currentLocations);
     setNotes(currentNotes);
-  }, [
-    currentDetails,
-    currentCountry,
-    currentCity,
-    currentLocations,
-    currentNotes,
-  ]);
+  }, [currentDetails, currentCountry, currentCity, currentLocations, currentNotes]);
 
-  const handleLocationSelect = (index: number, location: MapLocation) => {
+  const handleLocationSelect = (index, location) => {
     const newLocations = [...locations];
     newLocations[index] = location;
     setLocations(newLocations);
   };
 
-
   const addLocation = () => {
-
     setLocations([...locations, { id: "", lat: 0, lng: 0 }]);
   };
 
   if (!isOpen) return null;
-
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">

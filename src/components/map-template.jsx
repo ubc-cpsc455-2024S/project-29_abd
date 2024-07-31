@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
-import { MapLocation } from "../types";
 
 const mapContainerStyle = {
   width: "100%",
@@ -14,15 +13,15 @@ const options = {
 };
 
 // Define the libraries array as mutable
-const libraries: ("places")[] = ["places"];
+const libraries = ["places"];
 
-export default function MapWithMarkers({ locations }: { locations: MapLocation[] }) {
+export default function MapWithMarkers({ locations }) {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDMK-rt59bguIRTg-uNl5Eu53GEm9bBlX0",
+    googleMapsApiKey: import.meta.env.VITE_REACT_APP_MAPS_KEY,
     libraries,
   });
 
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
