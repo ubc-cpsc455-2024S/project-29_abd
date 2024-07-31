@@ -1,32 +1,29 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
+// app.js
+const express = require('express');
+const connectDB = require('./db');
+const path = require('path');
+const logger = require('morgan');
+const cors = require('cors');
 
-// Import routers
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var dayCardsRouter = require('./routes/dayCards');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const dayCardsRouter = require('./routes/dayCards');
+const tripsRouter = require('./routes/trips');
 
-// Ensure the database connection is established
-require('./db');
+const app = express();
 
-var app = express();
+connectDB();
 
-// Middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL
-}));
 
-// Routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/dayCards', dayCardsRouter);
+app.use('/api/day-cards', dayCardsRouter);
+app.use('/api/trips', tripsRouter);
 
-module.exports = app;
+
+module.exports = app; 
