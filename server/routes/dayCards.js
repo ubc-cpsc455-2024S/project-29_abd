@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const DayCard = require('../models/dayCard');
 
+
+// Get all day cards for a specific trip
+router.get('/trip/:tripId', async (req, res) => {
+    try {
+        const dayCards = await DayCard.find({ tripId: req.params.tripId });
+        res.json(dayCards);
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
+});
+
 // Get all day cards
 router.get('/', async (req, res) => {
     try {

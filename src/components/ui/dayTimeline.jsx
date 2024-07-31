@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardHeader, CardTitle, CardContent } from "./card";
-import {Button} from "./button"; 
-import * as Tooltip from "@radix-ui/react-tooltip";
+import { Button } from "./button";
+import { Input } from "./input";
+import { Textarea } from "./textarea";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; 
+import Showdown from "showdown";
 import {
   updateDayCard,
   deleteDayCard,
   reorderDayCards,
   addDayCard,
+  fetchDayCards
 } from "../../redux/dayTimelineSlice";
 import Modal from "../Modal";
 import ConfirmationModal from "../ConfirmationModal";
@@ -16,7 +21,10 @@ import {
   Draggable,
   Droppable,
 } from "react-beautiful-dnd";
-import styles from "./dayTimeline.module.css";
+import DayCard from "./dayCard";
+import "./dayTimeline.module.css";
+
+const converter = new Showdown.Converter();
 
 const fetchCountryFlag = async (country) => {
   if (!country) return "";
@@ -27,23 +35,36 @@ const fetchCountryFlag = async (country) => {
   return data[0]?.flags?.svg || "";
 };
 
-const DayTimeline = () => {
+const DayTimeline = ({ tripId }) => {
   const dispatch = useDispatch();
-  const dayCards = useSelector(
-    (state) => state.dayTimeline.dayCards
-  );
+  const dayCards = useSelector((state) => state.dayTimeline.dayCards);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [currentCard, setCurrentCard] = useState(null);
   const [expandedCards, setExpandedCards] = useState([]);
   const [flags, setFlags] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("write");
+  const [newDay, setNewDay] = useState({
+    title: "",
+    details: "",
+    country: "",
+    city: [""],
+    locations: [""],
+    notes: "",
+    date: new Date().toISOString().split('T')[0] // Initialize with today's date in YYYY-MM-DD format
+  });
+
+  useEffect(() => {
+    dispatch(fetchDayCards(tripId));
+  }, [dispatch, tripId]);
 
   useEffect(() => {
     const fetchFlags = async () => {
       const newFlags = await Promise.all(
         dayCards.map(async (day) => {
           const flag = await fetchCountryFlag(day.country);
-          return { [day.id]: flag };
+          return { [day._id]: flag };
         })
       );
       setFlags(Object.assign({}, ...newFlags));
@@ -70,7 +91,7 @@ const DayTimeline = () => {
     setCurrentCard(null);
   };
 
-  const handleSaveDetails = async (details, country, city, locations, notes) => {
+  const handleSaveDetails = async (details, country, city, locations, notes, date) => {
     if (currentCard) {
       const updatedDay = {
         ...currentCard,
@@ -79,9 +100,10 @@ const DayTimeline = () => {
         city,
         locations,
         notes,
+        date
       };
       try {
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -109,7 +131,7 @@ const DayTimeline = () => {
   const handleConfirmDelete = async () => {
     if (currentCard) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
           method: 'DELETE'
         });
 
@@ -117,7 +139,7 @@ const DayTimeline = () => {
           throw new Error('Failed to delete day card');
         }
 
-        dispatch(deleteDayCard(currentCard.id));
+        dispatch(deleteDayCard(currentCard._id));
         setIsModalOpen(false);
         setIsConfirmationModalOpen(false);
       } catch (error) {
@@ -130,18 +152,28 @@ const DayTimeline = () => {
     setIsConfirmationModalOpen(false);
   };
 
-  const handleAddNewDay = async () => {
-    const newDay = {
+  const handleAddNewDay = () => {
+    setIsAdding(true);
+  };
+
+  const handleNewDayChange = (e) => {
+    const { name, value } = e.target;
+    setNewDay((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveNewDay = async () => {
+    if (!newDay.title || !newDay.details || !newDay.country || !newDay.city[0] || !newDay.locations[0]) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    const dayToSave = {
+      ...newDay,
+      tripId,
       id: Date.now(), // Use timestamp as unique ID
-      title: "New Day", // Generic title
-      details: "Enter details here", // Generic details
-      country: "Country",
-      city: ["City1", "City2"],
-      locations: ["Location1", "Location2"],
-      notes: "Notes",
     };
-    console.log(JSON.stringify(newDay));
-    dispatch(addDayCard(newDay));
+
+    dispatch(addDayCard(dayToSave));
 
     try {
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards`, {
@@ -149,21 +181,27 @@ const DayTimeline = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newDay)
+        body: JSON.stringify(dayToSave)
       });
 
-      console.log("Error:  ", response);
       if (!response.ok) {
-        console.log("ERROR!!!:   " ,`${process.env.REACT_APP_API_URL}/day-cards`)
         throw new Error('Failed to save day card');
       }
 
       const result = await response.json();
       console.log('Day card saved:', result);
+      setIsAdding(false);
+      setNewDay({
+        title: "",
+        details: "",
+        country: "",
+        city: [""],
+        locations: [""],
+        notes: "",
+        date: new Date().toISOString().split('T')[0] // Reset to today's date
+      });
     } catch (error) {
       console.error('Error saving day card:', error);
-      
-
     }
   };
 
@@ -179,9 +217,73 @@ const DayTimeline = () => {
 
   return (
     <div className="day-timeline space-y-4 p-4">
-      <Button onClick={handleAddNewDay} className="mb-4">
-        Add Day
-      </Button>
+      {isAdding ? (
+        <div className="space-y-4 p-4 border rounded shadow-lg">
+          <Input
+            type="text"
+            name="title"
+            value={newDay.title}
+            onChange={handleNewDayChange}
+            placeholder="Title"
+            className="input"
+            required
+          />
+          <ReactQuill
+            value={newDay.details}
+            onChange={(value) => setNewDay((prev) => ({ ...prev, details: value }))}
+          />
+          <Input
+            type="text"
+            name="country"
+            value={newDay.country}
+            onChange={handleNewDayChange}
+            placeholder="Country"
+            className="input"
+            required
+          />
+          <Input
+            type="text"
+            name="city"
+            value={newDay.city}
+            onChange={(e) => setNewDay((prev) => ({ ...prev, city: [e.target.value] }))}
+            placeholder="City"
+            className="input"
+            required
+          />
+          <Input
+            type="text"
+            name="locations"
+            value={newDay.locations}
+            onChange={(e) => setNewDay((prev) => ({ ...prev, locations: [e.target.value] }))}
+            placeholder="Locations"
+            className="input"
+            required
+          />
+          <Textarea
+            name="notes"
+            value={newDay.notes}
+            onChange={handleNewDayChange}
+            placeholder="Notes"
+            className="input"
+          />
+          <Input
+            type="date"
+            name="date"
+            value={newDay.date}
+            onChange={handleNewDayChange}
+            className="input"
+            required
+          />
+          <div className="flex justify-end space-x-2">
+            <Button onClick={() => setIsAdding(false)}>Cancel</Button>
+            <Button onClick={handleSaveNewDay}>Save</Button>
+          </div>
+        </div>
+      ) : (
+        <Button onClick={handleAddNewDay} className="mb-4">
+          Add Day
+        </Button>
+      )}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
@@ -190,98 +292,28 @@ const DayTimeline = () => {
               ref={provided.innerRef}
               className="space-y-4"
             >
-              {dayCards.map((day, index) => (
-                <Draggable
-                  key={day.id}
-                  draggableId={String(day.id)}
-                  index={index}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps} // Apply dragHandleProps to the handle area
-                      className={`${styles.card} ${
-                        snapshot.isDragging ? styles.cardDragging : ""
-                      } ${
-                        expandedCards.includes(day.id)
-                          ? styles.cardExpanded
-                          : styles.cardCollapsed
-                      } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
-                      style={{
-                        ...provided.draggableProps.style,
-                        transition: snapshot.isDragging
-                          ? "none"
-                          : "all 0.3s ease",
-                      }}
-                      onClick={() => handleCardClick(day.id)}
-                    >
-                      <Card>
-                        <CardHeader className={styles.cardHeader}>
-                          <CardTitle className={styles.cardTitle}>{`Day ${
-                            index + 1
-                          }`}</CardTitle>
-                          <Tooltip.Root>
-                            <Tooltip.Trigger asChild>
-                              <Button
-                                variant="secondary"
-                                className={`${styles.button} ${styles.smallButton}`}
-                                onClick={(e) => handleEditClick(day, e)}
-                              >
-                                Edit
-                              </Button>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                              <Tooltip.Content className="bg-black text-white p-2 rounded shadow-lg">
-                                Edit details
-                                <Tooltip.Arrow className="fill-black" />
-                              </Tooltip.Content>
-                            </Tooltip.Portal>
-                          </Tooltip.Root>
-                        </CardHeader>
-                        <CardContent
-                          className={`${styles.cardContent} ${
-                            expandedCards.includes(day.id)
-                              ? styles.cardContentVisible
-                              : styles.cardContentHidden
-                          }`}
-                        >
-                          <div>
-                            <div className="flex items-center">
-                              {flags[day.id] && (
-                                <img
-                                  src={flags[day.id]}
-                                  alt={`${day.country} flag`}
-                                  className={styles.flag}
-                                />
-                              )}
-                              <span className={styles.location}>
-                                {day.country} {day.city.join(", ")}
-                              </span>{" "}
-                              {/* Display country and cities */}
-                            </div>
-                            {expandedCards.includes(day.id) && (
-                              <>
-                                <span className={styles.details}>
-                                  {day.details}
-                                </span>
-                                <span className={styles.location}>
-                                  {day.locations.join(", ")}
-                                </span>{" "}
-                                {/* Display locations */}
-                                <span className={styles.details}>
-                                  {day.notes}
-                                </span>{" "}
-                                {/* Display notes */}
-                              </>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {Array.from(dayCards)
+                .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date
+                .map((day, index) => (
+                  <Draggable
+                    key={day._id}
+                    draggableId={String(day._id)}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <DayCard
+                        day={day}
+                        index={index}
+                        flags={flags}
+                        expandedCards={expandedCards}
+                        handleCardClick={handleCardClick}
+                        handleEditClick={handleEditClick}
+                        provided={provided}
+                        snapshot={snapshot}
+                      />
+                    )}
+                  </Draggable>
+                ))}
               {provided.placeholder}
             </div>
           )}
@@ -291,8 +323,8 @@ const DayTimeline = () => {
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          onSave={(details, country, city, locations, notes) =>
-            handleSaveDetails(details, country, city, locations, notes)
+          onSave={(details, country, city, locations, notes, date) =>
+            handleSaveDetails(details, country, city, locations, notes, date)
           }
           onDelete={handleDeleteClick}
           currentDetails={currentCard.details}
@@ -300,6 +332,7 @@ const DayTimeline = () => {
           currentCity={currentCard.city}
           currentLocations={currentCard.locations}
           currentNotes={currentCard.notes}
+          currentDate={currentCard.date}
         />
       )}
       <ConfirmationModal

@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import MapWithMarkers from "../components/map-template";
 import DayTimeline from "../components/ui/dayTimeline";
+import { useParams } from 'react-router-dom';
 
 // Sample locations array
 const sampleLocations = [
@@ -15,6 +16,9 @@ const sampleLocations = [
 ];
 
 const AddTrip = () => {
+
+    const { tripId } = useParams();
+
     return (
         <ScrollArea className="flex flex-col h-full w-full">
             <TooltipProvider>
@@ -43,7 +47,7 @@ const AddTrip = () => {
                                         </Card>
                                     </div>
                                     <div className="w-full md:w-1/3 h-full">
-                                        <DayTimeline className="h-full" />
+                                        <DayTimeline className="h-full" tripId={tripId}/>
                                     </div>
                                 </TabsContent>
                             </Tabs>

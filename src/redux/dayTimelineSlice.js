@@ -1,65 +1,54 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const initialState = {
-  dayCards: [
-    {
-      id: 1,
-      title: "Day 1",
-      details: "Spain - Go to the Tomatina Festival.",
-      country: "Spain",
-      city: ["Buñol"],
-      locations: ["Tomatina Festival Site"],
-      notes: "Be prepared for a lot of tomatoes!",
-    },
-    {
-      id: 2,
-      title: "Day 2",
-      details: "Paris - Find Love.",
-      country: "France",
-      city: ["Paris"],
-      locations: ["Eiffel Tower", "Louvre Museum"],
-      notes: "Visit the Louvre early to avoid crowds.",
-    },
-    {
-      id: 3,
-      title: "Day 3",
-      details:
-        "London - Find the best tea and take a picture with the King's Guard.",
-      country: "UK",
-      city: ["London"],
-      locations: ["Buckingham Palace", "Tea Houses"],
-      notes: "The guards do not move!",
-    },
-  ],
-};
+export const fetchDayCards = createAsyncThunk(
+  'dayTimeline/fetchDayCards',
+  async (tripId) => {
+    const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/trip/${tripId}`);
+    const data = await response.json();
+    return data;
+  }
+);
 
-const dayTimelineSlice = createSlice({
-  name: "dayTimeline",
-  initialState,
+export const dayTimelineSlice = createSlice({
+  name: 'dayTimeline',
+  initialState: {
+    dayCards: [],
+    status: 'idle',
+    error: null
+  },
   reducers: {
     updateDayCard: (state, action) => {
-      const index = state.dayCards.findIndex(
-        (card) => card.id === action.payload.id
-      );
+      const index = state.dayCards.findIndex(day => day._id === action.payload._id);
       if (index !== -1) {
         state.dayCards[index] = action.payload;
       }
     },
-    deleteDayCard: (state, action) => {
-      state.dayCards = state.dayCards.filter(
-        (card) => card.id !== action.payload
-      );
-    },
     addDayCard: (state, action) => {
       state.dayCards.push(action.payload);
     },
+    deleteDayCard: (state, action) => {
+      state.dayCards = state.dayCards.filter(day => day._id !== action.payload);
+    },
     reorderDayCards: (state, action) => {
       state.dayCards = action.payload;
-    },
+    }
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchDayCards.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchDayCards.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.dayCards = action.payload;
+      })
+      .addCase(fetchDayCards.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  }
 });
 
-export const { updateDayCard, deleteDayCard, addDayCard, reorderDayCards } =
-  dayTimelineSlice.actions;
+export const { updateDayCard, addDayCard, deleteDayCard, reorderDayCards } = dayTimelineSlice.actions;
 
 export default dayTimelineSlice.reducer;
