@@ -47,6 +47,7 @@ const TripsTable = ({ userID }) => {
     const [trips, setTrips] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
+    const [refreshTrips, setRefreshTrips] = useState(false); // State to trigger refresh
     const navigate = useNavigate(); // Use useNavigate hook
 
     useEffect(() => {
@@ -86,6 +87,9 @@ const TripsTable = ({ userID }) => {
         setTripToDelete(null);
     };
 
+    const handleRefreshTrips = () => {
+        setRefreshTrips(prevState => !prevState); // Toggle state to trigger useEffect in TripsTable
+    };
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Current Trips</h1>
@@ -105,23 +109,18 @@ const TripsTable = ({ userID }) => {
                     {trips.map((trip) => (
                         <TableRow key={trip._id} className="hover:bg-gray-50">
                             <TableCell className="px-4 py-2">
-                                <div className="text-sm font-medium text-gray-900">Trip Name</div>
                                 <div className="text-sm text-gray-500">{trip.name}</div>
                             </TableCell>
                             <TableCell className="px-4 py-2">
-                                <div className="text-sm font-medium text-gray-900">Description</div>
                                 <div className="text-sm text-gray-500">{trip.description}</div>
                             </TableCell>
                             <TableCell className="px-4 py-2">
-                                <div className="text-sm font-medium text-gray-900">Start Date</div>
                                 <div className="text-sm text-gray-500">{new Date(trip.startDate).toLocaleDateString()}</div>
                             </TableCell>
                             <TableCell className="px-4 py-2">
-                                <div className="text-sm font-medium text-gray-900">End Date</div>
                                 <div className="text-sm text-gray-500">{new Date(trip.endDate).toLocaleDateString()}</div>
                             </TableCell>
                             <TableCell className="px-4 py-2">
-                                <div className="text-sm font-medium text-gray-900">Public</div>
                                 <div className="text-sm text-gray-500">{trip.public ? "Yes" : "No"}</div>
                             </TableCell>
                             <TableCell className="px-4 py-2 space-x-2">

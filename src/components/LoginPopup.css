@@ -1,3 +1,4 @@
+/* ChatGPT used to adjust styling
 /* src/components/LoginPopup.css */
 .login-popup {
     position: fixed;
@@ -13,7 +14,7 @@
 }
 
 .login-popup-content {
-    background: darkolivegreen;
+    background: #2d3748; /* Darker background to match theme */
     padding: 20px;
     border-radius: 8px;
     position: relative;
@@ -28,6 +29,7 @@
     background: none;
     border: none;
     font-size: 1.5rem;
+    color: #ffffff; /* White color for better contrast */
     cursor: pointer;
 }
 
@@ -38,34 +40,46 @@
 .form-group label {
     display: block;
     margin-bottom: 5px;
+    color: #e2e8f0; /* Light gray color */
 }
 
 .form-group input {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    background-color: #edf2f7; /* Light background color */
+    border: 1px solid #cbd5e0; /* Light border color */
+    border-radius: 4px;
+    color: #2d3748; /* Dark text color */
 }
 
 button {
     width: 100%;
     padding: 10px;
-    background-color: whitesmoke;
-    color: black;
+    background-color: #38a169; /* Matching green color */
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+button:hover {
+    background-color: #2f855a; /* Darker green on hover */
+}
+
 button:disabled {
     background-color: #ccc;
+    cursor: not-allowed;
 }
 
 .error {
-    color: red;
+    color: #e53e3e; /* Red color for errors */
     margin-top: 10px;
 }
 
 .success {
-    color: green;
+    color: #38a169; /* Green color for success messages */
     margin-top: 10px;
+    text-align: center; /* Centered text */
 }
-

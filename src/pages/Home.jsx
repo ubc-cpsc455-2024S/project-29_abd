@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice";
+import { Button } from '../components/ui/button';
 import ImageCarousel from "../components/ImageCarousel";
 import LoginPopup from "../components/LoginPopup";
 import "./Home.css";
@@ -22,17 +23,17 @@ const Home = () => {
                 <p>Find your new adventure!</p>
                 <div className="button-container">
                     {user ? (
-                        <button className="logout-button" onClick={handleLogout}>
+                        <Button className="logout-button" onClick={handleLogout}>
                             Logout
-                        </button>
+                        </Button>
                     ) : (
                         <>
-                            <button
+                            <Button
                                 className="login-button"
                                 onClick={() => setShowLoginPopup(true)}
                             >
                                 Login
-                            </button>
+                            </Button>
                         </>
                     )}
                 </div>

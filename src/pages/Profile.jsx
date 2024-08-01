@@ -34,7 +34,7 @@ const Profile = () => {
                             {
                             // TODO Uncomment when auth is working, show message if not logged in
                             //user && 
-                            <TripsTable userID={user.id} />}
+                            <TripsTable/>}
                         </div>
                     </div>
                 </div>
