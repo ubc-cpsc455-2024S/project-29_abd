@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.15.1'
+          node-version: '16'
 
       # Remove node_modules
       - name: Remove node_modules
@@ -26,6 +26,8 @@ jobs:
 
       # Install dependencies and build the front-end
       - name: Install dependencies and build front-end
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
           npm install
           npm run build
@@ -48,6 +50,8 @@ jobs:
       # Install dependencies and start back-end
       - name: Install dependencies and start back-end
         working-directory: ./server
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
           npm install
           npm start
