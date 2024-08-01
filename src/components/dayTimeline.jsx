@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Card, CardHeader, CardTitle, CardContent } from "./card";
-import { Button } from "./button";
-import { Input } from "./input";
-import { Textarea } from "./textarea";
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 import Showdown from "showdown";
@@ -13,16 +13,15 @@ import {
   reorderDayCards,
   addDayCard,
   fetchDayCards
-} from "../../redux/dayTimelineSlice";
-import Modal from "../Modal";
-import ConfirmationModal from "../ConfirmationModal";
+} from "./../redux/dayTimelineSlice";
+import Modal from "./Modal";
+import ConfirmationModal from "./ConfirmationModal";
 import {
   DragDropContext,
   Draggable,
   Droppable,
 } from "react-beautiful-dnd";
-import DayCard from "./dayCard";
-import "./dayTimeline.module.css";
+import DayCard from "./ui/dayCard";
 
 const converter = new Showdown.Converter();
 

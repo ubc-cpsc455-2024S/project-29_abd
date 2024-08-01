@@ -10,6 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import ConfirmationModal from "./ConfirmationModal";
 
 const fetchTrips = async () => {
     try {
@@ -26,8 +27,25 @@ const fetchTrips = async () => {
     }
 };
 
+const deleteTrip = async (tripId) => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips/${tripId}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete trip');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error deleting trip:', error);
+        throw error;
+    }
+};
+
 const TripsTable = () => {
     const [trips, setTrips] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [tripToDelete, setTripToDelete] = useState(null);
     const navigate = useNavigate(); // Use useNavigate hook
 
     useEffect(() => {
@@ -41,6 +59,30 @@ const TripsTable = () => {
 
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId
+    };
+
+    const handleDeleteClick = (tripId) => {
+        setTripToDelete(tripId);
+        setIsModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (tripToDelete) {
+            try {
+                await deleteTrip(tripToDelete);
+                setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
+                setIsModalOpen(false);
+                setTripToDelete(null);
+            } catch (error) {
+                console.error('Failed to delete trip:', error);
+                // Optionally show a user-friendly error message
+            }
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setIsModalOpen(false);
+        setTripToDelete(null);
     };
 
     return (
@@ -70,7 +112,7 @@ const TripsTable = () => {
                                 <Button variant="secondary" onClick={() => handleViewClick(trip._id)}>
                                     View
                                 </Button>
-                                <Button variant="destructive" onClick={() => console.log(`Deleting trip ${trip._id}`)}>
+                                <Button variant="destructive" onClick={() => handleDeleteClick(trip._id)}>
                                     Delete
                                 </Button>
                             </TableCell>
@@ -78,6 +120,12 @@ const TripsTable = () => {
                     ))}
                 </TableBody>
             </Table>
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                message="Are you sure you want to delete this trip?"
+            />
         </div>
     );
 };

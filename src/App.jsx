@@ -2,9 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/layout/NavBar';
 import Home from './pages/Home';
-import Profile from './pages/Profile';
+import Dashboard from './pages/Dashboard.jsx';
 import Explore from './pages/Explore';
 import AddTrip from './pages/AddTrip';
+import SignUP from './components/SignUp.jsx';
 
 const App = () => {
     return (
@@ -14,7 +15,7 @@ const App = () => {
                 <div className="flex-1 flex overflow-hidden">
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/add-trip" element={<AddTrip />} />
                         <Route path="/trips/:tripId" element={<AddTrip />} /> {/* New Route */}

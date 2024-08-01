@@ -67,6 +67,7 @@
 
   html, body {
     @apply h-full w-full m-0 p-0;
+    font-family: 'Helvetica', 'Arial', sans-serif;
   }
 
   #root {

@@ -39,7 +39,7 @@ Additional functionalities could include:
 
 ## Minimal Requirements (Will Definitely Complete)
 
-#### User Authentication and Profile Management:
+#### User Authentication and Dashboard Management:
 
 - user sign-up, login, and logout functionalities using JWT.
 - Develop a user profile page where users can view and edit their profile information and travel statistics.
@@ -129,7 +129,7 @@ Additional functionalities could include:
 - Display all itinerary details including trip segments, activities, and notes.
 - Integrate with Redux to manage the state of the selected itinerary.
 
-## Minimal Requirement 2: User Authentication and Profile Management
+## Minimal Requirement 2: User Authentication and Dashboard Management
 
 ### Set Up User Authentication:
 
@@ -153,7 +153,7 @@ Additional functionalities could include:
 - Add form validation to ensure all required fields are filled.
 - Display error messages for invalid inputs or submission failures.
 
-### Develop User Profile Page:
+### Develop User Dashboard Page:
 
 ##### Implement the user profile page layout using React (3 Story Points)
 
