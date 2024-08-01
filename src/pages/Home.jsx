@@ -1,26 +1,3 @@
-// import React from 'react';
-// import ImageCarousel from '../components/ImageCarousel';
-// import './Home.css';
-//
-//
-// const Home = () => {
-//     return (
-//         <div className="home-page">
-//             <ImageCarousel />
-//             <div className="home-content">
-//                 <h1>Solo Explorer </h1>
-//                 <p>find your new adventure</p>
-//                 <div className="button-container">
-//                     <button className="login-button">Login</button>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-//
-// export default Home;
-
-// src/pages/Home.jsx
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice";

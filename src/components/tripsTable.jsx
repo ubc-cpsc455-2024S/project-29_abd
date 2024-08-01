@@ -12,10 +12,11 @@ import {
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "./ConfirmationModal";
 
-const fetchTrips = async () => {
+const fetchTrips = async (userID) => {
     try {
-        const userID = "66a58ee1b47d270c9f82ea6e";
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips/user/${userID}`);
+        //console.log(userID);
+        //TODO make it show only current user's trip /trips/user/{userID}
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`);
         if (!response.ok) {
             console.error("Error fetching trips:", response);
             throw new Error("Failed to fetch trips");
@@ -42,7 +43,7 @@ const deleteTrip = async (tripId) => {
     }
 };
 
-const TripsTable = () => {
+const TripsTable = ({ userID }) => {
     const [trips, setTrips] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
@@ -50,12 +51,12 @@ const TripsTable = () => {
 
     useEffect(() => {
         const getTrips = async () => {
-            const tripsList = await fetchTrips();
+            const tripsList = await fetchTrips(userID);
             setTrips(tripsList);
         };
 
         getTrips();
-    }, []);
+    }, [userID]);
 
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId
@@ -102,13 +103,28 @@ const TripsTable = () => {
                 </TableHeader>
                 <TableBody>
                     {trips.map((trip) => (
-                        <TableRow key={trip._id}>
-                            <TableCell>{trip.name}</TableCell>
-                            <TableCell>{trip.description}</TableCell>
-                            <TableCell>{new Date(trip.startDate).toLocaleDateString()}</TableCell>
-                            <TableCell>{new Date(trip.endDate).toLocaleDateString()}</TableCell>
-                            <TableCell>{trip.public ? "Yes" : "No"}</TableCell>
-                            <TableCell>
+                        <TableRow key={trip._id} className="hover:bg-gray-50">
+                            <TableCell className="px-4 py-2">
+                                <div className="text-sm font-medium text-gray-900">Trip Name</div>
+                                <div className="text-sm text-gray-500">{trip.name}</div>
+                            </TableCell>
+                            <TableCell className="px-4 py-2">
+                                <div className="text-sm font-medium text-gray-900">Description</div>
+                                <div className="text-sm text-gray-500">{trip.description}</div>
+                            </TableCell>
+                            <TableCell className="px-4 py-2">
+                                <div className="text-sm font-medium text-gray-900">Start Date</div>
+                                <div className="text-sm text-gray-500">{new Date(trip.startDate).toLocaleDateString()}</div>
+                            </TableCell>
+                            <TableCell className="px-4 py-2">
+                                <div className="text-sm font-medium text-gray-900">End Date</div>
+                                <div className="text-sm text-gray-500">{new Date(trip.endDate).toLocaleDateString()}</div>
+                            </TableCell>
+                            <TableCell className="px-4 py-2">
+                                <div className="text-sm font-medium text-gray-900">Public</div>
+                                <div className="text-sm text-gray-500">{trip.public ? "Yes" : "No"}</div>
+                            </TableCell>
+                            <TableCell className="px-4 py-2 space-x-2">
                                 <Button variant="secondary" onClick={() => handleViewClick(trip._id)}>
                                     View
                                 </Button>
