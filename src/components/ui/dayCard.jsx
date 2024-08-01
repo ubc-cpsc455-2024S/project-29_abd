@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "./card";
 import { Button } from "./button";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import Showdown from "showdown";
-import styles from "./dayTimeline.module.css";
+import styles from "../dayTimeline.module.css";
 
 const converter = new Showdown.Converter();
 

@@ -8,7 +8,7 @@
 //         <nav className="navbar">
 //             <ul className="navbar-list">
 //                 <li className="navbar-item"><Link to="/">Home</Link></li>
-//                 <li className="navbar-item"><Link to="/profile">Profile</Link></li>
+//                 <li className="navbar-item"><Link to="/profile">Dashboard</Link></li>
 //                 <li className="navbar-item"><Link to="/add-trip">Add New Trip</Link></li>
 //                 <li className="navbar-item"><Link to="/explore">Explore</Link></li>
 //             </ul>
