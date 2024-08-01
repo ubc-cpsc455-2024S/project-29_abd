@@ -76,7 +76,6 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard.jsx';
 import Explore from './pages/Explore';
 import AddTrip from './pages/AddTrip';
-import SignUP from './components/SignUp.jsx';
 
 const App = () => {
     return (
