@@ -32,6 +32,8 @@
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "lucide-react": "^0.383.0",
     "mongoose": "^8.5.1",
     "next-themes": "^0.3.0",
