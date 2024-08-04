@@ -20,6 +20,28 @@ export const loginUser = createAsyncThunk(
     }
 );
 
+export const registerUser = createAsyncThunk(
+    "auth/registerUser",
+    async ({ email, password }, thunkAPI) => {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            return data.user;
+        } else {
+            return thunkAPI.rejectWithValue(data.message);
+        }
+    }
+);
+
+
+
 const authSlice = createSlice({
     name: "auth",
     initialState: {
@@ -43,6 +65,18 @@ const authSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(loginUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(registerUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+            })
+            .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
