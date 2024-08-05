@@ -1,6 +1,7 @@
 // src/redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
-import tripReducer from "./tripSlice";
+// import tripReducer from "./tripSlice";
+import tripReducer from "./tripSlice"
 import dayTimelineReducer from "./dayTimelineSlice";
 import authReducer from "./authSlice";
 
