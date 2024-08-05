@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/authSlice";
 import { Input } from "./ui/input";
 import { Form } from "./ui/form";
@@ -10,6 +11,7 @@ const LoginPopup = ({ onClose }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user, loading, error } = useSelector((state) => state.auth);
     const [loginSuccess, setLoginSuccess] = useState(false);
 
@@ -24,6 +26,7 @@ const LoginPopup = ({ onClose }) => {
             setTimeout(() => {
                 setLoginSuccess(false);
                 onClose();
+                navigate('/profile')
             }, 2000); // Close the popup after 2 seconds
         }
     }, [user, onClose]);
