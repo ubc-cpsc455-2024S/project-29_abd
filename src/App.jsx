@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/layout/NavBar';
 import Home from './pages/Home';
-import Profile from './pages/Profile.jsx';
+import Profile from './pages/Profile';
 import Explore from './pages/Explore';
 import AddTrip from './pages/AddTrip';
 
@@ -17,7 +17,6 @@ const App = () => {
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/add-trip" element={<AddTrip />} />
-                        <Route path="/trips/:tripId" element={<AddTrip />} /> {/* New Route */}
                     </Routes>
                 </div>
             </div>

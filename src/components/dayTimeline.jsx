@@ -34,7 +34,7 @@ const fetchCountryFlag = async (country) => {
   return data[0]?.flags?.svg || "";
 };
 
-const DayTimeline = ({ tripId }) => {
+const DayTimeline = ({ tripId, onDaysUpdated }) => {
   const dispatch = useDispatch();
   const dayCards = useSelector((state) => state.dayTimeline.dayCards);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -117,6 +117,7 @@ const DayTimeline = ({ tripId }) => {
         const result = await response.json();
         dispatch(updateDayCard(result));
         setIsModalOpen(false);
+        onDaysUpdated(); // Trigger re-fetching of days data
       } catch (error) {
         console.error('Error updating day card:', error);
       }
@@ -141,6 +142,7 @@ const DayTimeline = ({ tripId }) => {
         dispatch(deleteDayCard(currentCard._id));
         setIsModalOpen(false);
         setIsConfirmationModalOpen(false);
+        onDaysUpdated(); // Trigger re-fetching of days data
       } catch (error) {
         console.error('Error deleting day card:', error);
       }
@@ -199,6 +201,7 @@ const DayTimeline = ({ tripId }) => {
         notes: "",
         date: new Date().toISOString().split('T')[0] // Reset to today's date
       });
+      onDaysUpdated(); // Trigger re-fetching of days data
     } catch (error) {
       console.error('Error saving day card:', error);
     }
@@ -212,6 +215,7 @@ const DayTimeline = ({ tripId }) => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     dispatch(reorderDayCards(items));
+    onDaysUpdated(); // Trigger re-fetching of days data
   };
 
   return (

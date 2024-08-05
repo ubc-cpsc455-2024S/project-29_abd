@@ -43,11 +43,10 @@ const deleteTrip = async (tripId) => {
     }
 };
 
-const TripsTable = ({ userID }) => {
+const TripsTable = ({ userID, refreshTrips }) => {
     const [trips, setTrips] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
-    const [refreshTrips, setRefreshTrips] = useState(false); // State to trigger refresh
     const navigate = useNavigate(); // Use useNavigate hook
 
     useEffect(() => {
@@ -57,7 +56,7 @@ const TripsTable = ({ userID }) => {
         };
 
         getTrips();
-    }, [userID]);
+    }, [userID, refreshTrips]);
 
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId
@@ -87,9 +86,6 @@ const TripsTable = ({ userID }) => {
         setTripToDelete(null);
     };
 
-    const handleRefreshTrips = () => {
-        setRefreshTrips(prevState => !prevState); // Toggle state to trigger useEffect in TripsTable
-    };
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Current Trips</h1>
