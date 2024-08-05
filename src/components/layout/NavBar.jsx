@@ -17,9 +17,6 @@ const NavBar = () => {
             <Link to="/profile" className={navigationMenuTriggerStyle()}>Profile</Link>
           </NavigationMenuLink>
           <NavigationMenuLink asChild>
-            <Link to="/add-trip" className={navigationMenuTriggerStyle()}>Add New Trip</Link>
-          </NavigationMenuLink>
-          <NavigationMenuLink asChild>
             <Link to="/explore" className={navigationMenuTriggerStyle()}>Explore</Link>
           </NavigationMenuLink>
       </NavigationMenu>
