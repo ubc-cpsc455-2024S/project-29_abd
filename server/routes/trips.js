@@ -50,5 +50,16 @@ router.delete('/:id', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/public', async (req, res) => {
+  try {
+    const publicTrips = await Trip.find({ public: true });
+    res.json(publicTrips);
+  } catch (error) {
+    res.status(500).send('Server Error');
+  }
+});
+
+
+
 module.exports = router;
 
