@@ -174,7 +174,7 @@ router.post('/', authMiddleware, async (req, res) => {
     const trip = await newTrip.save();
     res.json(trip);
   } catch (error) {
-    console.error(error);
+    console.error("Error adding new trip:", error);
     res.status(500).send('Server Error');
   }
 });

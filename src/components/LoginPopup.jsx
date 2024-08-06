@@ -83,17 +83,31 @@ const LoginPopup = ({ onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("Login form submitted with email:", email);
         dispatch(loginUser({ email, password }));
     };
 
     // Close popup if login is successful
+    // useEffect(() => {
+    //     console.log("useEffect called with user:", user);
+    //     if (successMessage) {
+    //         setTimeout(() => {
+    //             onClose();
+    //         }, 2000); // Close the popup after 2 seconds
+    //     }
+    // }, [successMessage, onClose]);
+
     useEffect(() => {
-        if (successMessage) {
+        console.log("useEffect called with user:", user);
+        if (user && user._id) {
+            console.log("User state detected with ID:", user._id);
+            setLoginSuccess(true);
             setTimeout(() => {
+                setLoginSuccess(false);
                 onClose();
             }, 2000); // Close the popup after 2 seconds
         }
-    }, [successMessage, onClose]);
+    }, [user, onClose]);
 
     return (
         <div className="login-popup fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
