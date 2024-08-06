@@ -1,11 +1,21 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import {ScrollArea} from "../components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import MapWithMarkers from "../components/map-template";
-import DayTimeline from "../components/dayTimeline";
+// import React from 'react';
+// import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+// import {ScrollArea} from "../components/ui/scroll-area";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+// import { TooltipProvider } from "@radix-ui/react-tooltip";
+// import MapWithMarkers from "../components/map-template";
+// import DayTimeline from "../components/dayTimeline";
+// import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { ScrollArea } from "../components/ui/scroll-area";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import MapWithMarkers from "../components/map-template";
+import DayTimeline from '../components/dayTimeline';
+import { fetchDayCards } from '../redux/dayTimelineSlice';
 
 // Sample locations array
 const sampleLocations = [
@@ -18,6 +28,15 @@ const sampleLocations = [
 const AddTrip = () => {
 
     const { tripId } = useParams();
+    const dispatch = useDispatch();
+    const token = useSelector((state) => state.auth.token);
+
+    useEffect(() => {
+        if (tripId && token) {
+            dispatch(fetchDayCards({ tripId, token }));
+        }
+    }, [dispatch, tripId, token]);
+
 
     return (
         <ScrollArea className="flex flex-col h-full w-full">

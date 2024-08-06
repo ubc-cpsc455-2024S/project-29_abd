@@ -129,19 +129,21 @@ router.get('/trip/:tripId', authMiddleware, async (req, res) => {
         const dayCards = await DayCard.find({ tripId: req.params.tripId, userId });
         res.json(dayCards);
     } catch (error) {
-        res.status(500).send('Server Error');
+        console.error('Error fetching day cards:', error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 
 // Add a new day card
 router.post('/', authMiddleware, async (req, res) => {
     try {
+        console.log('Request body:', req.body);
         const newDayCard = new DayCard({ ...req.body, userId: req.user.id });
         const dayCard = await newDayCard.save();
         res.json(dayCard);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server Error');
+        console.error('Error saving day card:', error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 

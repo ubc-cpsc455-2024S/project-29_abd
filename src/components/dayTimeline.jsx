@@ -457,6 +457,7 @@ const DayTimeline = ({ tripId }) => {
             'Content-Type': 'application/json',
             'x-auth-token': token // Include token in request headers
           },
+          credentials: 'include',
           body: JSON.stringify(updatedDay)
         });
 
@@ -484,7 +485,7 @@ const DayTimeline = ({ tripId }) => {
           method: 'DELETE',
           headers: {
             'x-auth-token': token // Include token in request headers
-          }
+          }, credentials: 'include'
         });
 
         if (!response.ok) {
@@ -534,6 +535,7 @@ const DayTimeline = ({ tripId }) => {
           'Content-Type': 'application/json',
           'x-auth-token': token // Include token in request headers
         },
+        credentials: 'include',
         body: JSON.stringify(dayToSave)
       });
 
