@@ -1,11 +1,3 @@
-// import React from 'react';
-// import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-// import {ScrollArea} from "../components/ui/scroll-area";
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-// import { TooltipProvider } from "@radix-ui/react-tooltip";
-// import MapWithMarkers from "../components/map-template";
-// import DayTimeline from "../components/dayTimeline";
-// import { useParams } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

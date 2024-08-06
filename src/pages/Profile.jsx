@@ -19,6 +19,10 @@ const Profile = () => {
         setIsModalOpen(false);
     };
 
+    if (!user) {
+        return <p>Please log in to view your trips.</p>; // Show this message if the user is not logged in
+    }
+
     return (
         <ScrollArea className="flex flex-col h-full w-full">
             <TooltipProvider>
