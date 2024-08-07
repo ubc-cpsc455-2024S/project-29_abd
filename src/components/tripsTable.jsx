@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
     Table,
     TableBody,
@@ -12,15 +13,21 @@ import {
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "./ConfirmationModal";
 
-const fetchTrips = async (userID) => {
+const fetchTrips = async (token) => {
     try {
-        //console.log(userID);
-        //TODO make it show only current user's trip /trips/user/{userID}
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`);
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`, {
+            method: 'GET',
+            headers: {
+                'x-auth-token': token, // Include token in request headers
+            },
+            credentials: 'include', // Include credentials
+        });
+
         if (!response.ok) {
             console.error("Error fetching trips:", response);
             throw new Error("Failed to fetch trips");
         }
+
         return await response.json();
     } catch (error) {
         console.error("Error fetching trips:", error);
@@ -28,14 +35,20 @@ const fetchTrips = async (userID) => {
     }
 };
 
-const deleteTrip = async (tripId) => {
+const deleteTrip = async (tripId, token) => {
     try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips/${tripId}`, {
             method: 'DELETE',
+            headers: {
+                'x-auth-token': token, // Include token in request headers
+            },
+            credentials: 'include', // Include credentials
         });
+
         if (!response.ok) {
             throw new Error('Failed to delete trip');
         }
+
         return await response.json();
     } catch (error) {
         console.error('Error deleting trip:', error);
@@ -47,16 +60,19 @@ const TripsTable = ({ userID, refreshTrips }) => {
     const [trips, setTrips] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
+    const token = useSelector((state) => state.auth.token); // Get token from state
     const navigate = useNavigate(); // Use useNavigate hook
+
 
     useEffect(() => {
         const getTrips = async () => {
-            const tripsList = await fetchTrips(userID);
+            const tripsList = await fetchTrips(token);
             setTrips(tripsList);
         };
 
         getTrips();
-    }, [userID, refreshTrips]);
+        
+    }, [token, userID, refreshTrips]);
 
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId
@@ -70,13 +86,12 @@ const TripsTable = ({ userID, refreshTrips }) => {
     const handleConfirmDelete = async () => {
         if (tripToDelete) {
             try {
-                await deleteTrip(tripToDelete);
+                await deleteTrip(tripToDelete, token);
                 setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
                 setIsModalOpen(false);
                 setTripToDelete(null);
             } catch (error) {
                 console.error('Failed to delete trip:', error);
-                // Optionally show a user-friendly error message
             }
         }
     };
@@ -142,3 +157,4 @@ const TripsTable = ({ userID, refreshTrips }) => {
 };
 
 export default TripsTable;
+

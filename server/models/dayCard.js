@@ -31,6 +31,11 @@ const dayCardSchema = new Schema({
         ref: 'Trip',
         required: true
     },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     date: {
         type: Date,
         required: true
@@ -38,3 +43,4 @@ const dayCardSchema = new Schema({
 });
 
 module.exports = mongoose.model('DayCard', dayCardSchema);
+

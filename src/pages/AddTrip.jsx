@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { ScrollArea } from "../components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-import MapWithMarkers from "../services/api/map-template";
-import DayTimeline from "../components/dayTimeline";
+import React, { useState, useEffect }, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {  ScrollArea  } from "../components/ui/scroll-area";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import MapWithMarkers from "../services/api/map-template";
+import DayTimeline from '../components/dayTimeline';
+import { fetchDayCards } from '../redux/dayTimelineSlice';
 
 const AddTrip = () => {
     const { tripId } = useParams();

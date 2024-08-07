@@ -1,31 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const DayCard = require('../models/dayCard');
+const DayCard = require('../models/DayCard');
+const authMiddleware = require('../middleware/auth');
 
-
-// Get all day cards for a specific trip
-router.get('/trip/:tripId', async (req, res) => {
+// Get all day cards for a specific trip of the authenticated user
+router.get('/trip/:tripId', authMiddleware, async (req, res) => {
     try {
-        const dayCards = await DayCard.find({ tripId: req.params.tripId });
+        const userId = req.user.id;
+        const dayCards = await DayCard.find({ tripId: req.params.tripId, userId });
         res.json(dayCards);
     } catch (error) {
-        res.status(500).send('Server Error');
-    }
-});
-
-  
-// Get all day cards
-router.get('/', async (req, res) => {
-    try {
-        const dayCards = await DayCard.find();
-        res.json(dayCards);
-    } catch (error) {
-        res.status(500).send('Server Error');
+        console.error('Error fetching day cards:', error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 
 // Add a new day card for a trip with tripID
-router.post('/:tripId', async (req, res) => {
+router.post('/:tripId', authMiddleware, async (req, res) => {
     try {
         const { tripId } = req.params;
         const newDayCard = new DayCard({
@@ -43,23 +34,30 @@ router.post('/:tripId', async (req, res) => {
 });
 
 // Update a day card
-router.put('/:tripid', async (req, res) => {
+router.put('/:tripid', authMiddleware, async (req, res) => {
     try {
         const updatedDayCard = await DayCard.findByIdAndUpdate(req.params.tripid, req.body, { new: true });
         res.json(updatedDayCard);
     } catch (error) {
-        res.status(500).send('Server Error');
+        console.error("Error updating day card:", error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 
 // Delete a day card
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        await DayCard.findByIdAndDelete(req.params.id);
+        const dayCard = await DayCard.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+        if (!dayCard) {
+            return res.status(404).json({ msg: 'Day card not found' });
+        }
         res.json({ message: 'Day card deleted' });
     } catch (error) {
-        res.status(500).send('Server Error');
+        console.error("Error deleting day card:", error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 
 module.exports = router;
+
+

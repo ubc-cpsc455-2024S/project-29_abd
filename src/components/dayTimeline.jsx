@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Showdown from "showdown";
 import {
   updateDayCard,
   deleteDayCard,
@@ -23,7 +24,7 @@ const converter = new Showdown.Converter();
 const fetchCountryFlag = async (country) => {
   if (!country) return "";
   const response = await fetch(
-    `https://restcountries.com/v3.1/name/${country}`
+      `https://restcountries.com/v3.1/name/${country}`
   );
   const data = await response.json();
   return data[0]?.flags?.svg || "";
@@ -32,6 +33,7 @@ const fetchCountryFlag = async (country) => {
 const DayTimeline = ({ tripId }) => {
   const dispatch = useDispatch();
   const dayCards = useSelector((state) => state.dayTimeline.dayCards);
+  const token = useSelector((state) => state.auth.token); // Get token from state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [currentCard, setCurrentCard] = useState(null);
@@ -49,16 +51,16 @@ const DayTimeline = ({ tripId }) => {
   });
 
   useEffect(() => {
-    dispatch(fetchDayCards(tripId));
-  }, [dispatch, tripId]);
+    dispatch(fetchDayCards({ tripId, token })); // Pass token to thunk
+  }, [dispatch, tripId, token]);
 
   useEffect(() => {
     const fetchFlags = async () => {
       const newFlags = await Promise.all(
-        dayCards.map(async (day) => {
-          const flag = await fetchCountryFlag(day.country[0]);
-          return { [day._id]: flag };
-        })
+          dayCards.map(async (day) => {
+            const flag = await fetchCountryFlag(day.country);
+            return { [day._id]: flag };
+          })
       );
       setFlags(Object.assign({}, ...newFlags));
     };
@@ -67,9 +69,9 @@ const DayTimeline = ({ tripId }) => {
 
   const handleCardClick = (id) => {
     setExpandedCards((prevState) =>
-      prevState.includes(id)
-        ? prevState.filter((cardId) => cardId !== id)
-        : [...prevState, id]
+        prevState.includes(id)
+            ? prevState.filter((cardId) => cardId !== id)
+            : [...prevState, id]
     );
   };
 
@@ -84,6 +86,47 @@ const DayTimeline = ({ tripId }) => {
     setCurrentCard(null);
   };
 
+  // const handleSaveDetails = async (details, country, city, locations, notes, date) => {
+  //   if (currentCard) {
+  //     const updatedDay = {
+  //       ...currentCard,
+  //       details,
+  //       country,
+  //       city,
+  //       locations,
+  //       notes,
+  //       date
+  //     };
+  //     try {
+  //       console.log("Updating day card:", updatedDay);
+  //       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
+  //         method: 'PUT',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'x-auth-token': token // Include token in request headers
+  //         },
+  //         credentials: 'include',
+  //         body: JSON.stringify(updatedDay)
+  //       });
+  //
+  //       const responseText = await response.text();
+  //       if (!response.ok) {
+  //         console.error("Response status:", response.status);
+  //         console.error("Response text:", responseText);
+  //         const errorData = await response.json();
+  //         console.error("Failed to update day card:", errorData);
+  //         throw new Error('Failed to update day card');
+  //       }
+  //
+  //       const result = await response.json();
+  //       dispatch(updateDayCard(result));
+  //       setIsModalOpen(false);
+  //     } catch (error) {
+  //       console.error('Error updating day card:', error);
+  //     }
+  //   }
+  // };
+
   const handleSaveDetails = async (details, country, city, locations, notes, date) => {
     if (currentCard) {
       const updatedDay = {
@@ -96,19 +139,32 @@ const DayTimeline = ({ tripId }) => {
         date
       };
       try {
+        console.log("Updating day card:", updatedDay);
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-auth-token': token // Include token in request headers
           },
+          credentials: 'include',
           body: JSON.stringify(updatedDay)
         });
 
+        const responseText = await response.text();
         if (!response.ok) {
+          console.error("Response status:", response.status);
+          console.error("Response text:", responseText);
+          let errorData;
+          try {
+            errorData = JSON.parse(responseText);
+          } catch (e) {
+            throw new Error(responseText);
+          }
+          console.error("Failed to update day card:", errorData);
           throw new Error('Failed to update day card');
         }
 
-        const result = await response.json();
+        const result = JSON.parse(responseText);
         dispatch(updateDayCard(result));
         setIsModalOpen(false);
       } catch (error) {
@@ -125,7 +181,10 @@ const DayTimeline = ({ tripId }) => {
     if (currentCard) {
       try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            'x-auth-token': token // Include token in request headers
+          }, credentials: 'include'
         });
 
         if (!response.ok) {
@@ -208,8 +267,10 @@ const DayTimeline = ({ tripId }) => {
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${tripId}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-auth-token': token // Include token in request headers
         },
+        credentials: 'include',
         body: JSON.stringify(dayToSave)
       });
 
@@ -353,3 +414,5 @@ const DayTimeline = ({ tripId }) => {
 };
 
 export default DayTimeline;
+
+
