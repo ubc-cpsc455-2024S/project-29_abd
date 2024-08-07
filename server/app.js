@@ -1,4 +1,4 @@
-// app.js
+require('dotenv').config();
 const express = require('express');
 const connectDB = require('./db');
 const path = require('path');
@@ -21,14 +21,21 @@ connectDB();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cookieParser());
+// app.use(cors());
+app.use(cors({
+    origin: 'https://project-29-abd-frontend.onrender.com', // frontend's origin
+    credentials: true // Enable sending cookies with CORS requests
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/day-cards', dayCardsRouter);
+app.use('/api/day-cards/locations', dayCardsRouter);
 app.use('/api/trips', tripsRouter);
-app.use('/api/auth', authRouter); // Add the auth route
+app.use('/api/trips/user', tripsRouter);
+app.use('/api/auth', authRouter); 
 
 
 module.exports = app;

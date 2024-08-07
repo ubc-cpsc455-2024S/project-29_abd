@@ -11,7 +11,7 @@ const dayCardSchema = new Schema({
         required: true
     },
     country: {
-        type: String,
+        type: [String],
         required: true
     },
     city: {
@@ -19,7 +19,7 @@ const dayCardSchema = new Schema({
         required: true
     },
     locations: {
-        type: [String],
+        type: [Object],
         required: true
     },
     notes: {
@@ -31,6 +31,11 @@ const dayCardSchema = new Schema({
         ref: 'Trip',
         required: true
     },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     date: {
         type: Date,
         required: true
@@ -38,3 +43,4 @@ const dayCardSchema = new Schema({
 });
 
 module.exports = mongoose.model('DayCard', dayCardSchema);
+

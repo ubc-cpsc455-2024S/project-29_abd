@@ -5,10 +5,11 @@ import { ScrollArea } from "../components/ui/scroll-area";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import CreateTripModal from '../components/createTripModal';
 import { Button } from '../components/ui/button';
-import { Pencil2Icon } from '@radix-ui/react-icons'
+import { Pencil2Icon } from '@radix-ui/react-icons';
 
 const Profile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [refreshTrips, setRefreshTrips] = useState(false);
     const { user } = useSelector((state) => state.auth);
 
     const handleOpenModal = () => {
@@ -17,7 +18,14 @@ const Profile = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setRefreshTrips(prevState => !prevState); // Toggle state to refresh trips
     };
+
+    if (!user) {
+        return <p>Please log in to view your trips.</p>; // Show this message if the user is not logged in
+    }
+
+    console.log(user._id);
 
     return (
         <ScrollArea className="flex flex-col h-full w-full">
@@ -34,7 +42,7 @@ const Profile = () => {
                             {
                             // TODO Uncomment when auth is working, show message if not logged in
                             //user && 
-                            <TripsTable/>}
+                            <TripsTable refreshTrips={refreshTrips} userId={user._id} />}
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { GoogleMap, useLoadScript, MarkerF } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 
 const mapContainerStyle = {
   width: "100%",
@@ -12,15 +12,13 @@ const options = {
   zoomControl: true,
 };
 
-// Define the libraries array as mutable
 const libraries = ["places"];
 
-export default function MapWithMarkers({ locations }) {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_REACT_APP_MAPS_KEY,
+const MapWithMarkers = ({ locations }) => {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_REACT_APP_MAPS_KEY || "",
     libraries,
   });
-
   const [currentLocation, setCurrentLocation] = useState(null);
 
   useEffect(() => {
@@ -33,7 +31,6 @@ export default function MapWithMarkers({ locations }) {
       },
       (error) => {
         console.error("Error getting current location", error);
-        // Fallback to default center if geolocation fails
         setCurrentLocation({
           lat: 49.2827,
           lng: -123.1207,
@@ -42,7 +39,6 @@ export default function MapWithMarkers({ locations }) {
     );
   }, []);
 
-  if (loadError) return <div>Map cannot be loaded right now, sorry.</div>;
   if (!isLoaded || !currentLocation) return <div>Loading...</div>;
 
   return (
@@ -52,12 +48,14 @@ export default function MapWithMarkers({ locations }) {
       zoom={10}
       options={options}
     >
-      {locations.map((location) => (
+      {locations.map((location, index) => (
         <MarkerF
-          key={location.id}
+          key={index}
           position={{ lat: location.lat, lng: location.lng }}
         />
       ))}
     </GoogleMap>
   );
-}
+};
+
+export default MapWithMarkers;

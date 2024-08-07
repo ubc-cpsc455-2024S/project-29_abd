@@ -1,22 +1,61 @@
-/* src/components/layout/NavBar.css */
+/* CHAT GPT Used to help with styling */
 .navbar {
-    width: 100%;
-    background-color: #333;
-    padding: 1rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent background */
+  z-index: 1000;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.navbar-list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+/* Styles for the logo */
+.logo a {
+  color: white; /* Make the logo text white */
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.navbar-item {
-    margin-right: 1rem;
+/* Ensure list styling is removed */
+.navbar .nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
 }
 
-.navbar-item a {
-    color: white;
-    text-decoration: none;
+.navbar .nav-menu li {
+  list-style: none; /* Remove default list markers */
+  margin: 0 10px;
+}
+
+/* General link styles */
+.navbar a {
+  color: white; /* Make the navbar links white */
+  text-decoration: none;
+  margin: 0 15px;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #ddd; /* Slightly lighter on hover */
+}
+
+/* Additional styles for navigation menu links */
+.group.inline-flex.h-9.w-max.items-center.justify-center.rounded-md {
+  background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white */
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.group.inline-flex.h-9.w-max.items-center.justify-center.rounded-md:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly lighter on hover */
+}
+
+.group.inline-flex.h-9.w-max.items-center.justify-center.rounded-md:focus {
+  background-color: rgba(255, 255, 255, 0.2); /* Slightly lighter on focus */
 }
