@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import { useLoadScript } from "@react-google-maps/api";
+import { Input } from "../../components/ui/input";
 
 // Define the libraries array as mutable
 const libraries = ["places"];
 
-const GooglePlacesAutocomplete = ({ onSelect }) => {
+const GooglePlacesAutocomplete = ({ onSelect, defaultValue = "" }) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_REACT_APP_MAPS_KEY || "",
     libraries,
@@ -28,7 +29,10 @@ const GooglePlacesAutocomplete = ({ onSelect }) => {
           id: place.place_id || "unknown",
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
+          address: place.formatted_address || "",
+          name: place.name || ""
         };
+        console.log(location);
         onSelect(location);
       } else {
         console.error("Place has no geometry");
@@ -44,11 +48,12 @@ const GooglePlacesAutocomplete = ({ onSelect }) => {
   }, [isLoaded, onPlaceChanged]);
 
   return (
-    <input
+    <Input
       className="w-full p-2 border border-gray-300 rounded"
       type="text"
       placeholder="Enter a location"
       ref={autoCompleteRef}
+      defaultValue={defaultValue}
     />
   );
 };

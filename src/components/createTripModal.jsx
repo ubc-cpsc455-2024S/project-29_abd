@@ -108,6 +108,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { Label } from '@radix-ui/react-label';
 import { addTrip } from '../redux/tripSlice';
 
 const CreateTripModal = ({ isOpen, onClose }) => {
@@ -166,6 +167,8 @@ const CreateTripModal = ({ isOpen, onClose }) => {
                         className="input mb-4"
                         required
                     />
+                    <Label>Start Date</Label>
+
                     <Input
                         type="date"
                         name="startDate"
@@ -174,6 +177,8 @@ const CreateTripModal = ({ isOpen, onClose }) => {
                         className="input mb-4"
                         required
                     />
+                    <Label>End Date</Label>
+
                     <Input
                         type="date"
                         name="endDate"

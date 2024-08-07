@@ -5,10 +5,11 @@ import { ScrollArea } from "../components/ui/scroll-area";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import CreateTripModal from '../components/createTripModal';
 import { Button } from '../components/ui/button';
-import { Pencil2Icon } from '@radix-ui/react-icons'
+import { Pencil2Icon } from '@radix-ui/react-icons';
 
 const Profile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [refreshTrips, setRefreshTrips] = useState(false);
     const { user } = useSelector((state) => state.auth);
 
     const handleOpenModal = () => {
@@ -17,6 +18,7 @@ const Profile = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setRefreshTrips(prevState => !prevState); // Toggle state to refresh trips
     };
 
     if (!user) {

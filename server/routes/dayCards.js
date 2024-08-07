@@ -21,7 +21,7 @@ router.post('/', authMiddleware, async (req, res) => {
         console.log('Request body:', req.body);
         const newDayCard = new DayCard({ ...req.body, userId: req.user.id });
         const dayCard = await newDayCard.save();
-        res.json(dayCard);
+        res.status(201).json(dayCard);
     } catch (error) {
         console.error('Error saving day card:', error);
         res.status(500).json({ msg: 'Server Error' });

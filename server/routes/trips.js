@@ -14,6 +14,7 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
+
 // Add a new trip
 router.post('/', authMiddleware, async (req, res) => {
   try {

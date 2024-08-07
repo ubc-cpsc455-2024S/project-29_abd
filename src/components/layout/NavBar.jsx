@@ -1,40 +1,27 @@
-// src/components/layout/NavBar.tsx
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-// import './NavBar.css'; // Add CSS file for styling
-//
-// const NavBar: React.FC = () => {
-//     return (
-//         <nav className="navbar">
-//             <ul className="navbar-list">
-//                 <li className="navbar-item"><Link to="/">Home</Link></li>
-//                 <li className="navbar-item"><Link to="/profile">Dashboard</Link></li>
-//                 <li className="navbar-item"><Link to="/add-trip">Add New Trip</Link></li>
-//                 <li className="navbar-item"><Link to="/explore">Explore</Link></li>
-//             </ul>
-//         </nav>
-//     );
-// };
-//
-// export default NavBar;
-
-// src/components/layout/NavBar.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './NavBar.css'; // Add CSS file for styling
+import { NavigationMenu, NavigationMenuLink, navigationMenuTriggerStyle } from '../ui/navigaion-menu';
+import './NavBar.css';
 
 const NavBar = () => {
-    return (
-        <nav className="navbar">
-            <ul className="navbar-list">
-                <li className="navbar-item"><Link to="/">Home</Link></li>
-                <li className="navbar-item"><Link to="/profile">Profile</Link></li>
-                <li className="navbar-item"><Link to="/add-trip">Add New Trip</Link></li>
-                <li className="navbar-item"><Link to="/explore">Explore</Link></li>
-            </ul>
-        </nav>
-    );
+  return (
+    <nav className="navbar">
+      <div className="logo">
+        <Link to="/">Solo Explorer</Link>
+      </div>
+      <NavigationMenu>
+          <NavigationMenuLink asChild>
+            <Link to="/" className={navigationMenuTriggerStyle()}>Home</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/profile" className={navigationMenuTriggerStyle()}>Profile</Link>
+          </NavigationMenuLink>
+          <NavigationMenuLink asChild>
+            <Link to="/explore" className={navigationMenuTriggerStyle()}>Explore</Link>
+          </NavigationMenuLink>
+      </NavigationMenu>
+    </nav>
+  );
 };
 
 export default NavBar;
-

@@ -106,37 +106,37 @@ const TripsTable = () => {
                 <TableCaption>List of your current trips</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Trip Name</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Start Date</TableHead>
-                        <TableHead>End Date</TableHead>
-                        <TableHead>Public</TableHead>
-                        <TableHead>Actions</TableHead>
+                        <TableHead className="text-left px-4 py-2">Trip Name</TableHead>
+                        <TableHead className="text-left px-4 py-2">Description</TableHead>
+                        <TableHead className="text-left px-4 py-2">Start Date</TableHead>
+                        <TableHead className="text-left px-4 py-2">End Date</TableHead>
+                        <TableHead className="text-left px-4 py-2">Public</TableHead>
+                        <TableHead className="text-left px-4 py-2">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {trips.map((trip) => (
                         <TableRow key={trip._id} className="hover:bg-gray-50">
-                            <TableCell className="px-4 py-2">
+                            <TableCell className="text-left px-4 py-2">
                                 <div className="text-sm text-gray-500">{trip.name}</div>
                             </TableCell>
-                            <TableCell className="px-4 py-2">
+                            <TableCell className="text-left px-4 py-2">
                                 <div className="text-sm text-gray-500">{trip.description}</div>
                             </TableCell>
-                            <TableCell className="px-4 py-2">
+                            <TableCell className="text-left px-4 py-2">
                                 <div className="text-sm text-gray-500">{new Date(trip.startDate).toLocaleDateString()}</div>
                             </TableCell>
-                            <TableCell className="px-4 py-2">
+                            <TableCell className="text-left px-4 py-2">
                                 <div className="text-sm text-gray-500">{new Date(trip.endDate).toLocaleDateString()}</div>
                             </TableCell>
-                            <TableCell className="px-4 py-2">
+                            <TableCell className="text-left px-4 py-2">
                                 <div className="text-sm text-gray-500">{trip.public ? "Yes" : "No"}</div>
                             </TableCell>
-                            <TableCell className="px-4 py-2 space-x-2">
-                                <Button variant="secondary" onClick={() => handleViewClick(trip._id)}>
+                            <TableCell className="text-left px-4 py-2 space-x-2 flex items-center">
+                                <Button variant="secondary" size="sm" onClick={() => handleViewClick(trip._id)}>
                                     View
                                 </Button>
-                                <Button variant="destructive" onClick={() => handleDeleteClick(trip._id)}>
+                                <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(trip._id)}>
                                     Delete
                                 </Button>
                             </TableCell>

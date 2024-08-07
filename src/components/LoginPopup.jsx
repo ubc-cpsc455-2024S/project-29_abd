@@ -70,10 +70,12 @@
 // export default LoginPopup;
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/authSlice";
 import { Input } from "./ui/input";
 import { Form } from "./ui/form";
 import { Button } from "./ui/button";
+import './LoginPopup.css';
 
 const LoginPopup = ({ onClose }) => {
     const [email, setEmail] = useState("");
@@ -87,16 +89,6 @@ const LoginPopup = ({ onClose }) => {
         dispatch(loginUser({ email, password }));
     };
 
-    // Close popup if login is successful
-    // useEffect(() => {
-    //     console.log("useEffect called with user:", user);
-    //     if (successMessage) {
-    //         setTimeout(() => {
-    //             onClose();
-    //         }, 2000); // Close the popup after 2 seconds
-    //     }
-    // }, [successMessage, onClose]);
-
     useEffect(() => {
         console.log("useEffect called with user:", user);
         if (user && user._id) {
@@ -105,6 +97,7 @@ const LoginPopup = ({ onClose }) => {
             setTimeout(() => {
                 setLoginSuccess(false);
                 onClose();
+                navigate('/profile')
             }, 2000); // Close the popup after 2 seconds
         }
     }, [user, onClose]);
@@ -112,7 +105,7 @@ const LoginPopup = ({ onClose }) => {
     return (
         <div className="login-popup fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
             <div className="login-popup-content bg-white p-6 rounded shadow-lg relative">
-                <Button className="close-button absolute top-2 right-2" onClick={onClose}>
+                <Button className="close-button" onClick={onClose}>
                     &times;
                 </Button>
                 <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
