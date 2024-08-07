@@ -13,7 +13,7 @@ const AddTrip = () => {
     const { tripId } = useParams();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
-    const dayCards = useSelector((state) => state.dayTimeline.dayCards); // Assuming dayCards are stored in state.dayTimeline.dayCards
+    const dayCards = useSelector((state) => state.dayTimeline.dayCards); 
 
     const [allLocations, setAllLocations] = useState([]);
 
