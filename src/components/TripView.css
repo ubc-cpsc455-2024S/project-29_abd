@@ -1,0 +1,28 @@
+/* TripView.css */
+.pdf-print {
+    font-size: 10px; /* Reduce the font size for printing */
+  }
+  
+  .pdf-print h1 {
+    font-size: 16px;
+  }
+  
+  .pdf-print h2 {
+    font-size: 14px;
+  }
+  
+  .pdf-print p,
+  .pdf-print ul {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .pdf-print ul {
+    list-style: none;
+  }
+  
+  .no-print {
+    display: none;
+  }
+  
