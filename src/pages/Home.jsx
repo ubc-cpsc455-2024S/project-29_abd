@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/authSlice";
 import { Button } from '../components/ui/button';
 import ImageCarousel from "../components/ImageCarousel";
@@ -12,9 +13,14 @@ const Home = () => {
     const [showRegisterPopup, setShowRegisterPopup] = useState(false);
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         dispatch(logout());
+    };
+
+    const handleSuccess = () => {
+        navigate('/profile');
     };
 
     return (
@@ -47,10 +53,10 @@ const Home = () => {
                 </div>
             </div>
             {showLoginPopup && (
-                <LoginPopup onClose={() => setShowLoginPopup(false)} />
+                <LoginPopup onClose={() => setShowLoginPopup(false)} onSuccess={handleSuccess} />
             )}
             {showRegisterPopup && (
-                <RegisterPopup onClose={() => setShowRegisterPopup(false)} />
+                <RegisterPopup onClose={() => setShowRegisterPopup(false)} onSuccess={handleSuccess} />
             )}
         </div>
     );
