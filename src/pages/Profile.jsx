@@ -29,19 +29,17 @@ const Profile = () => {
         <ScrollArea className="flex flex-col h-full w-full">
             <TooltipProvider>
                 <div className="App flex h-screen overflow-hidden">
-                    <div className="flex-1 flex flex-col overflow-y-auto">
-                        <div className="flex-1 flex flex-col p-4 md:p-8 pt-6 h-full w-full">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-3xl font-bold tracking-tight">Your Trips</h2>
-                                <Button onClick={handleOpenModal}>
-                                    <Pencil2Icon className="mr-2 h-4 w-4" />Create New Trip
-                                </Button>
-                            </div>
-                            {
-                            // TODO Uncomment when auth is working, show message if not logged in
-                            // user &&
-                            <TripsTable/>}
+                    <div className="flex-1 flex flex-col overflow-y-auto p-4 md:p-8 pt-6 h-full w-full">
+                        <div className="flex items-center justify-center mb-4">
+                            <h2 className="text-3xl font-bold tracking-tight text-center">Your Trips</h2>
                         </div>
+                        <div className="flex items-center justify-between mb-4">
+                            <Button onClick={handleOpenModal}>
+                                <Pencil2Icon className="mr-2 h-4 w-4" />Create New Trip
+                            </Button>
+                        </div>
+
+                        <TripsTable refresh={refreshTrips} />
                     </div>
                 </div>
             </TooltipProvider>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -56,21 +56,21 @@ const deleteTrip = async (tripId, token) => {
     }
 };
 
-const TripsTable = () => {
+const TripsTable = ({ refresh }) => {
     const [trips, setTrips] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
     const token = useSelector((state) => state.auth.token); // Get token from state
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getTrips = async () => {
-            const tripsList = await fetchTrips(token);
-            setTrips(tripsList);
-        };
-
-        getTrips();
+    const getTrips = useCallback(async () => {
+        const tripsList = await fetchTrips(token);
+        setTrips(tripsList);
     }, [token]);
+
+    useEffect(() => {
+        getTrips();
+    }, [getTrips, refresh]);
 
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId
@@ -85,7 +85,7 @@ const TripsTable = () => {
         if (tripToDelete) {
             try {
                 await deleteTrip(tripToDelete, token);
-                setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
+                await getTrips(); // Refresh the trips list
                 setIsModalOpen(false);
                 setTripToDelete(null);
             } catch (error) {
@@ -100,50 +100,50 @@ const TripsTable = () => {
     };
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Current Trips</h1>
-            <Table>
-                <TableCaption>List of your current trips</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="text-left px-4 py-2">Trip Name</TableHead>
-                        <TableHead className="text-left px-4 py-2">Description</TableHead>
-                        <TableHead className="text-left px-4 py-2">Start Date</TableHead>
-                        <TableHead className="text-left px-4 py-2">End Date</TableHead>
-                        <TableHead className="text-left px-4 py-2">Public</TableHead>
-                        <TableHead className="text-left px-4 py-2">Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {trips.map((trip) => (
-                        <TableRow key={trip._id} className="hover:bg-gray-50">
-                            <TableCell className="text-left px-4 py-2">
-                                <div className="text-sm text-gray-500">{trip.name}</div>
-                            </TableCell>
-                            <TableCell className="text-left px-4 py-2">
-                                <div className="text-sm text-gray-500">{trip.description}</div>
-                            </TableCell>
-                            <TableCell className="text-left px-4 py-2">
-                                <div className="text-sm text-gray-500">{new Date(trip.startDate).toLocaleDateString()}</div>
-                            </TableCell>
-                            <TableCell className="text-left px-4 py-2">
-                                <div className="text-sm text-gray-500">{new Date(trip.endDate).toLocaleDateString()}</div>
-                            </TableCell>
-                            <TableCell className="text-left px-4 py-2">
-                                <div className="text-sm text-gray-500">{trip.public ? "Yes" : "No"}</div>
-                            </TableCell>
-                            <TableCell className="text-left px-4 py-2 space-x-2 flex items-center">
-                                <Button variant="secondary" size="sm" onClick={() => handleViewClick(trip._id)}>
-                                    View
-                                </Button>
-                                <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(trip._id)}>
-                                    Delete
-                                </Button>
-                            </TableCell>
+        <div className="p-4 w-full">
+            <div className="overflow-x-auto w-full">
+                <Table className="w-full">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="text-left px-4 py-2">Trip Name</TableHead>
+                            <TableHead className="text-left px-4 py-2">Description</TableHead>
+                            <TableHead className="text-left px-4 py-2">Start Date</TableHead>
+                            <TableHead className="text-left px-4 py-2">End Date</TableHead>
+                            <TableHead className="text-left px-4 py-2">Public</TableHead>
+                            <TableHead className="text-left px-4 py-2">Actions</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                        {trips.map((trip) => (
+                            <TableRow key={trip._id} className="hover:bg-gray-50">
+                                <TableCell className="text-left px-4 py-2">
+                                    <div className="text-sm text-gray-500">{trip.name}</div>
+                                </TableCell>
+                                <TableCell className="text-left px-4 py-2">
+                                    <div className="text-sm text-gray-500">{trip.description}</div>
+                                </TableCell>
+                                <TableCell className="text-left px-4 py-2">
+                                    <div className="text-sm text-gray-500">{new Date(trip.startDate).toLocaleDateString()}</div>
+                                </TableCell>
+                                <TableCell className="text-left px-4 py-2">
+                                    <div className="text-sm text-gray-500">{new Date(trip.endDate).toLocaleDateString()}</div>
+                                </TableCell>
+                                <TableCell className="text-left px-4 py-2">
+                                    <div className="text-sm text-gray-500">{trip.public ? "Yes" : "No"}</div>
+                                </TableCell>
+                                <TableCell className="text-left px-4 py-2 space-x-2 flex items-center">
+                                    <Button variant="secondary" size="sm" onClick={() => handleViewClick(trip._id)}>
+                                        View
+                                    </Button>
+                                    <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(trip._id)}>
+                                        Delete
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
             <ConfirmationModal
                 isOpen={isModalOpen}
                 onClose={handleCancelDelete}
@@ -155,4 +155,3 @@ const TripsTable = () => {
 };
 
 export default TripsTable;
-

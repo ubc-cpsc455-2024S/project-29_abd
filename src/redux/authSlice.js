@@ -1,5 +1,43 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+export const registerUser = createAsyncThunk(
+    'auth/registerUser',
+    async ({ email, password }, thunkAPI) => {
+        console.log("Dispatching registerUser with email:", email);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            console.log("Received response from server:", response);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Registration failed with response:", errorData);
+                return thunkAPI.rejectWithValue(errorData.message || 'Registration failed');
+            }
+
+            const data = await response.json();
+            console.log("Response data from server:", data);
+
+            if (data.success) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                return { user: data.user, token: data.token };
+            } else {
+                return thunkAPI.rejectWithValue(data.message || 'Registration failed');
+            }
+        } catch (error) {
+            console.error("Registration error:", error);
+            return thunkAPI.rejectWithValue(error.message || 'Registration failed');
+        }
+    }
+);
+
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async ({ email, password }, thunkAPI) => {
@@ -19,7 +57,7 @@ export const loginUser = createAsyncThunk(
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error("Login failed with response:", errorData);
-                return thunkAPI.rejectWithValue(errorData.msg || 'Login failed');
+                return thunkAPI.rejectWithValue(errorData.message || 'Login failed');
             }
 
             const data = await response.json();
@@ -30,7 +68,7 @@ export const loginUser = createAsyncThunk(
                 localStorage.setItem('user', JSON.stringify(data.user));
                 return { user: data.user, token: data.token };
             } else {
-                return thunkAPI.rejectWithValue(data.msg || 'Login failed');
+                return thunkAPI.rejectWithValue(data.message || 'Login failed');
             }
         } catch (error) {
             console.error("Login error:", error);
@@ -39,48 +77,18 @@ export const loginUser = createAsyncThunk(
     }
 );
 
-export const registerUser = createAsyncThunk(
-    'auth/registerUser',
-    async ({ email, password }, thunkAPI) => {
-        console.log("Dispatching registerUser with email:", email);
-        try {
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/auth/register`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-
-            console.log("Received response from server:", response);
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Registration failed with response:", errorData);
-                return thunkAPI.rejectWithValue(errorData.msg || 'Registration failed');
-            }
-
-            const data = await response.json();
-            console.log("Response data from server:", data);
-
-            if (data.success) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                return { user: data.user, token: data.token};
-            } else {
-                return thunkAPI.rejectWithValue(data.msg || 'Registration failed');
-            }
-        } catch (error) {
-            console.error("Registration error:", error);
-            return thunkAPI.rejectWithValue(error.message || 'Registration failed');
-        }
-    }
-);
 
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        user: JSON.parse(localStorage.getItem('user')) || null,
+        user: (() => {
+            try {
+                const user = localStorage.getItem('user');
+                return user ? JSON.parse(user) : null;
+            } catch {
+                return null;
+            }
+        })(),
         token: localStorage.getItem('token') || null,
         loading: false,
         error: null,
@@ -140,11 +148,3 @@ const authSlice = createSlice({
 
 export const { logout, setUser } = authSlice.actions;
 export default authSlice.reducer;
-
-
-
-
-
-
-
-

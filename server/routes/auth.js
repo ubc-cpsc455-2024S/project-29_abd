@@ -4,7 +4,6 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
 // Register a new user
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
@@ -19,12 +18,14 @@ router.post('/register', async (req, res) => {
 
         user = new User({ email, password });
         await user.save();
+        console.log("this is the user:", user);
+        const payload = { user: { id: user._id } };
+        console.log("this is the payload:", payload);
 
-        const payload = { user: { id: user.id } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        //res.status(201).json({ success: true, token, user: { id: user.id, email: user.email } });
-        res.status(201).json({ success: true, message: 'Registration successful. Please log in.', token });
+        // Include the user object in the response
+        res.status(201).json({ success: true, message: 'Registration successful. Please log in.', token, user: { id: user._id, email: user.email } });
     } catch (err) {
         console.error('Register Server error:', err.message);
         res.status(500).send('Server Error');
@@ -50,20 +51,18 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ msg: 'Invalid credentials' });
         }
 
-        const payload = { user: { id: user.id } };
+        const payload = { user: { id: user._id } };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         console.log("User authenticated successfully, generating token");
 
         // Set the token as a cookie
-        res.cookie('token', token, { httpOnly: true }).json({ success: true, user, token });
+        res.cookie('token', token, { httpOnly: true }).json({ success: true, user: { id: user._id, email: user.email }, token });
     } catch (err) {
         console.error('Login Server error:', err.message);
         res.status(500).send('Server Error');
     }
 });
 
+
 module.exports = router;
-
-
-
