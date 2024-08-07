@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GooglePlacesAutocomplete from "../services/api/google-places-autocomplete";
 import { Button } from "./ui/button";
@@ -29,7 +29,7 @@ const fetchCountryFlag = async (country) => {
   return data[0]?.flags?.svg || "";
 };
 
-const DayTimeline = ({ tripId }) => {
+const DayTimeline = ({ tripId, onDaysUpdated }) => {
   const dispatch = useDispatch();
   const dayCards = useSelector((state) => state.dayTimeline.dayCards);
   const token = useSelector((state) => state.auth.token); // Get token from state
@@ -50,7 +50,9 @@ const DayTimeline = ({ tripId }) => {
   });
 
   useEffect(() => {
-    dispatch(fetchDayCards({ tripId, token })); // Pass token to thunk
+    if (tripId && token) {
+      dispatch(fetchDayCards({ tripId, token }));
+    }
   }, [dispatch, tripId, token]);
 
   useEffect(() => {
@@ -84,47 +86,6 @@ const DayTimeline = ({ tripId }) => {
     setIsModalOpen(false);
     setCurrentCard(null);
   };
-
-  // const handleSaveDetails = async (details, country, city, locations, notes, date) => {
-  //   if (currentCard) {
-  //     const updatedDay = {
-  //       ...currentCard,
-  //       details,
-  //       country,
-  //       city,
-  //       locations,
-  //       notes,
-  //       date
-  //     };
-  //     try {
-  //       console.log("Updating day card:", updatedDay);
-  //       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
-  //         method: 'PUT',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'x-auth-token': token // Include token in request headers
-  //         },
-  //         credentials: 'include',
-  //         body: JSON.stringify(updatedDay)
-  //       });
-  //
-  //       const responseText = await response.text();
-  //       if (!response.ok) {
-  //         console.error("Response status:", response.status);
-  //         console.error("Response text:", responseText);
-  //         const errorData = await response.json();
-  //         console.error("Failed to update day card:", errorData);
-  //         throw new Error('Failed to update day card');
-  //       }
-  //
-  //       const result = await response.json();
-  //       dispatch(updateDayCard(result));
-  //       setIsModalOpen(false);
-  //     } catch (error) {
-  //       console.error('Error updating day card:', error);
-  //     }
-  //   }
-  // };
 
   const handleSaveDetails = async (details, country, city, locations, notes, date) => {
     if (currentCard) {
@@ -166,6 +127,7 @@ const DayTimeline = ({ tripId }) => {
         const result = JSON.parse(responseText);
         dispatch(updateDayCard(result));
         setIsModalOpen(false);
+        if (onDaysUpdated) onDaysUpdated();
       } catch (error) {
         console.error('Error updating day card:', error);
       }
@@ -193,6 +155,7 @@ const DayTimeline = ({ tripId }) => {
         dispatch(deleteDayCard(currentCard._id));
         setIsModalOpen(false);
         setIsConfirmationModalOpen(false);
+        if (onDaysUpdated) onDaysUpdated();
       } catch (error) {
         console.error('Error deleting day card:', error);
       }
@@ -289,6 +252,7 @@ const DayTimeline = ({ tripId }) => {
         notes: "",
         date: new Date().toISOString().split('T')[0]
       });
+      if (onDaysUpdated) onDaysUpdated();
     } catch (error) {
       console.error('Error saving day card:', error);
     }
@@ -413,5 +377,3 @@ const DayTimeline = ({ tripId }) => {
 };
 
 export default DayTimeline;
-
-

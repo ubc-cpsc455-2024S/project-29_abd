@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {  ScrollArea  } from "../components/ui/scroll-area";
+import { ScrollArea } from "../components/ui/scroll-area";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
@@ -13,6 +13,9 @@ const AddTrip = () => {
     const { tripId } = useParams();
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.token);
+    const dayCards = useSelector((state) => state.dayTimeline.dayCards); // Assuming dayCards are stored in state.dayTimeline.dayCards
+
+    const [allLocations, setAllLocations] = useState([]);
 
     useEffect(() => {
         if (tripId && token) {
@@ -20,6 +23,14 @@ const AddTrip = () => {
         }
     }, [dispatch, tripId, token]);
 
+    useEffect(() => {
+        if (dayCards.length > 0) {
+            const locations = dayCards.reduce((acc, day) => {
+                return [...acc, ...day.locations];
+            }, []);
+            setAllLocations(locations);
+        }
+    }, [dayCards]);
 
     return (
         <ScrollArea className="flex flex-col h-full w-full">
@@ -33,7 +44,7 @@ const AddTrip = () => {
                             <Tabs defaultValue="overview" className="flex-1 flex flex-col h-full">
                                 <TabsList>
                                     <TabsTrigger value="overview">Overview</TabsTrigger>
-                                    {days.map((day, index) => (
+                                    {dayCards.map((day, index) => (
                                         <TabsTrigger key={day._id} value={`day-${index + 1}`}>
                                             Day {index + 1}
                                         </TabsTrigger>
@@ -51,10 +62,10 @@ const AddTrip = () => {
                                         </Card>
                                     </div>
                                     <div className="w-full md:w-1/3 h-full">
-                                        <DayTimeline className="h-full" tripId={tripId} onDaysUpdated={fetchTripData} />
+                                        <DayTimeline className="h-full" tripId={tripId} onDaysUpdated={() => dispatch(fetchDayCards({ tripId, token }))} />
                                     </div>
                                 </TabsContent>
-                                {days.map((day, index) => (
+                                {dayCards.map((day, index) => (
                                     <TabsContent key={day._id} value={`day-${index + 1}`} className="flex-1 flex h-full">
                                         <div className="w-full md:w-2/3 flex flex-col h-full pr-4">
                                             <Card className="flex-1 flex flex-col h-full">
@@ -67,7 +78,7 @@ const AddTrip = () => {
                                             </Card>
                                         </div>
                                         <div className="w-full md:w-1/3 h-full">
-                                            <DayTimeline className="h-full" tripId={tripId} dayId={day._id} onDaysUpdated={fetchTripData} />
+                                            <DayTimeline className="h-full" tripId={tripId} dayId={day._id} onDaysUpdated={() => dispatch(fetchDayCards({ tripId, token }))} />
                                         </div>
                                     </TabsContent>
                                 ))}
