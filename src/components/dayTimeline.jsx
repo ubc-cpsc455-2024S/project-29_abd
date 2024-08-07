@@ -17,7 +17,6 @@ import ConfirmationModal from "./ConfirmationModal";
 import DayCard from "./ui/dayCard";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import Showdown from "showdown";
 
 const converter = new Showdown.Converter();
 
