@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { useDispatch, useSelector } from "react-redux";
+import GooglePlacesAutocomplete from "../services/api/google-places-autocomplete";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Badge } from "./ui/badge";
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
-import Showdown from "showdown";
+import 'react-quill/dist/quill.snow.css';
 import {
   updateDayCard,
   deleteDayCard,
-  reorderDayCards,
   addDayCard,
-  fetchDayCards
-} from "./../redux/dayTimelineSlice";
+  fetchDayCards,
+} from "../redux/dayTimelineSlice";
 import Modal from "./Modal";
 import ConfirmationModal from "./ConfirmationModal";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-} from "react-beautiful-dnd";
 import DayCard from "./ui/dayCard";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import Showdown from "showdown";
 
 const converter = new Showdown.Converter();
 
@@ -34,24 +29,23 @@ const fetchCountryFlag = async (country) => {
   return data[0]?.flags?.svg || "";
 };
 
-const DayTimeline = ({ tripId, onDaysUpdated }) => {
+const DayTimeline = ({ tripId }) => {
   const dispatch = useDispatch();
   const dayCards = useSelector((state) => state.dayTimeline.dayCards);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [currentCard, setCurrentCard] = useState(null);
   const [expandedCards, setExpandedCards] = useState([]);
-  const [flags, setFlags] = useState({});
   const [isAdding, setIsAdding] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("write");
+  const [flags, setFlags] = useState({});
   const [newDay, setNewDay] = useState({
     title: "",
     details: "",
-    country: "",
-    city: [""],
-    locations: [""],
+    country: [],
+    city: [],
+    locations: [],
     notes: "",
-    date: new Date().toISOString().split('T')[0] // Initialize with today's date in YYYY-MM-DD format
+    date: new Date().toISOString().split('T')[0]
   });
 
   useEffect(() => {
@@ -62,7 +56,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     const fetchFlags = async () => {
       const newFlags = await Promise.all(
         dayCards.map(async (day) => {
-          const flag = await fetchCountryFlag(day.country);
+          const flag = await fetchCountryFlag(day.country[0]);
           return { [day._id]: flag };
         })
       );
@@ -80,7 +74,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
   };
 
   const handleEditClick = (day, e) => {
-    e.stopPropagation(); // Prevent the card click handler from being triggered
+    e.stopPropagation();
     setCurrentCard(day);
     setIsModalOpen(true);
   };
@@ -99,7 +93,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
         city,
         locations,
         notes,
-        date
+        date: new Date(date).toISOString(), // Convert date back to ISO string for saving
       };
       try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
@@ -117,7 +111,6 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
         const result = await response.json();
         dispatch(updateDayCard(result));
         setIsModalOpen(false);
-        onDaysUpdated(); // Trigger re-fetching of days data
       } catch (error) {
         console.error('Error updating day card:', error);
       }
@@ -142,7 +135,6 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
         dispatch(deleteDayCard(currentCard._id));
         setIsModalOpen(false);
         setIsConfirmationModalOpen(false);
-        onDaysUpdated(); // Trigger re-fetching of days data
       } catch (error) {
         console.error('Error deleting day card:', error);
       }
@@ -162,8 +154,44 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     setNewDay((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleLocationSelect = (location, index) => {
+    setNewDay((prev) => {
+      const newLocations = [...prev.locations];
+      newLocations[index] = location;
+      const newCountry = Array.from(new Set(newLocations.map((loc) => loc.country)));
+      const newCity = Array.from(new Set(newLocations.map((loc) => loc.city)));
+      return {
+        ...prev,
+        locations: newLocations,
+        country: newCountry,
+        city: newCity,
+      };
+    });
+  };
+
+  const handleAddLocation = () => {
+    setNewDay((prev) => ({
+      ...prev,
+      locations: [...prev.locations, { address: "", lat: 0, lng: 0, name: "" }]
+    }));
+  };
+
+  const handleRemoveLocation = (index) => {
+    setNewDay((prev) => {
+      const updatedLocations = prev.locations.filter((_, i) => i !== index);
+      const updatedCountry = [...new Set(updatedLocations.map(loc => loc.country))];
+      const updatedCity = [...new Set(updatedLocations.map(loc => loc.city))];
+      return {
+        ...prev,
+        locations: updatedLocations,
+        country: updatedCountry,
+        city: updatedCity,
+      };
+    });
+  };
+
   const handleSaveNewDay = async () => {
-    if (!newDay.title || !newDay.details || !newDay.country || !newDay.city[0] || !newDay.locations[0]) {
+    if (!newDay.title || !newDay.details || !newDay.locations.length) {
       alert("Please fill in all required fields");
       return;
     }
@@ -171,11 +199,11 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     const dayToSave = {
       ...newDay,
       tripId,
-      id: Date.now(), // Use timestamp as unique ID
+      id: Date.now(),
     };
 
     dispatch(addDayCard(dayToSave));
-
+    
     try {
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards`, {
         method: 'POST',
@@ -195,27 +223,15 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
       setNewDay({
         title: "",
         details: "",
-        country: "",
-        city: [""],
-        locations: [""],
+        country: [],
+        city: [],
+        locations: [],
         notes: "",
-        date: new Date().toISOString().split('T')[0] // Reset to today's date
+        date: new Date().toISOString().split('T')[0]
       });
-      onDaysUpdated(); // Trigger re-fetching of days data
     } catch (error) {
       console.error('Error saving day card:', error);
     }
-  };
-
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-    const items = Array.from(dayCards);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    dispatch(reorderDayCards(items));
-    onDaysUpdated(); // Trigger re-fetching of days data
   };
 
   return (
@@ -235,33 +251,21 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
             value={newDay.details}
             onChange={(value) => setNewDay((prev) => ({ ...prev, details: value }))}
           />
-          <Input
-            type="text"
-            name="country"
-            value={newDay.country}
-            onChange={handleNewDayChange}
-            placeholder="Country"
-            className="input"
-            required
-          />
-          <Input
-            type="text"
-            name="city"
-            value={newDay.city}
-            onChange={(e) => setNewDay((prev) => ({ ...prev, city: [e.target.value] }))}
-            placeholder="City"
-            className="input"
-            required
-          />
-          <Input
-            type="text"
-            name="locations"
-            value={newDay.locations}
-            onChange={(e) => setNewDay((prev) => ({ ...prev, locations: [e.target.value] }))}
-            placeholder="Locations"
-            className="input"
-            required
-          />
+          {newDay.locations.map((location, index) => (
+            <div key={index} className="flex items-center space-x-2 mt-2">
+              <GooglePlacesAutocomplete
+                onSelect={(location) => handleLocationSelect(location, index)}
+              />
+              <Button variant="destructive" size="sm" onClick={() => handleRemoveLocation(index)}>
+                Remove
+              </Button>
+            </div>
+          ))}
+          <div className="flex items-center space-x-2 mt-2">
+            <Button variant="secondary" onClick={handleAddLocation}>
+              Add New Location
+            </Button>
+          </div>
           <Textarea
             name="notes"
             value={newDay.notes}
@@ -281,47 +285,47 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
             <Button onClick={() => setIsAdding(false)}>Cancel</Button>
             <Button onClick={handleSaveNewDay}>Save</Button>
           </div>
+          <div className="mt-4">
+            <h4>Countries</h4>
+            <div className="flex flex-wrap gap-2">
+              {newDay.country.map((country) => (
+                <Badge key={country} variant="outline">
+                  {country}
+                </Badge>
+              ))}
+            </div>
+          </div>
+          <div className="mt-4">
+            <h4>Cities</h4>
+            <div className="flex flex-wrap gap-2">
+              {newDay.city.map((city) => (
+                <Badge key={city} variant="outline">
+                  {city}
+                </Badge>
+              ))}
+            </div>
+          </div>
         </div>
       ) : (
         <Button onClick={handleAddNewDay} className="mb-4">
           Add Day
         </Button>
       )}
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="space-y-4"
-            >
-              {Array.from(dayCards)
-                .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date
-                .map((day, index) => (
-                  <Draggable
-                    key={day._id}
-                    draggableId={String(day._id)}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <DayCard
-                        day={day}
-                        index={index}
-                        flags={flags}
-                        expandedCards={expandedCards}
-                        handleCardClick={handleCardClick}
-                        handleEditClick={handleEditClick}
-                        provided={provided}
-                        snapshot={snapshot}
-                      />
-                    )}
-                  </Draggable>
-                ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div className="space-y-4">
+        {Array.from(dayCards)
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
+          .map((day, index) => (
+            <DayCard
+              key={day._id}
+              day={day}
+              index={index}
+              flags={flags}
+              expandedCards={expandedCards}
+              handleCardClick={handleCardClick}
+              handleEditClick={handleEditClick}
+            />
+          ))}
+      </div>
       {currentCard && (
         <Modal
           isOpen={isModalOpen}

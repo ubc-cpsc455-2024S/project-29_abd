@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { Label } from '@radix-ui/react-label';
 
 const CreateTripModal = ({ isOpen, onClose }) => {
     const [tripDetails, setTripDetails] = useState({
@@ -66,6 +67,8 @@ const CreateTripModal = ({ isOpen, onClose }) => {
                         className="input mb-4"
                         required
                     />
+                    <Label>Start Date</Label>
+
                     <Input
                         type="date"
                         name="startDate"
@@ -74,6 +77,8 @@ const CreateTripModal = ({ isOpen, onClose }) => {
                         className="input mb-4"
                         required
                     />
+                    <Label>End Date</Label>
+
                     <Input
                         type="date"
                         name="endDate"

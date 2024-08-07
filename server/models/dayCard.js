@@ -11,7 +11,7 @@ const dayCardSchema = new Schema({
         required: true
     },
     country: {
-        type: String,
+        type: [String],
         required: true
     },
     city: {
@@ -19,7 +19,7 @@ const dayCardSchema = new Schema({
         required: true
     },
     locations: {
-        type: [String],
+        type: [Object],
         required: true
     },
     notes: {

@@ -13,6 +13,7 @@ router.get('/trip/:tripId', async (req, res) => {
     }
 });
 
+  
 // Get all day cards
 router.get('/', async (req, res) => {
     try {
@@ -23,22 +24,28 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Add a new day card
-router.post('/', async (req, res) => {
+// Add a new day card for a trip with tripID
+router.post('/:tripId', async (req, res) => {
     try {
-        const newDayCard = new DayCard(req.body);
+        const { tripId } = req.params;
+        const newDayCard = new DayCard({
+            ...req.body,
+            tripId // Ensure the tripId from the route is used
+        });
+
+        // Save the new day card
         const dayCard = await newDayCard.save();
-        res.json(dayCard);
+        res.status(201).json(dayCard);
     } catch (error) {
-        console.error(error); // Log the error for debugging
-        res.status(500).send(error);
+        console.error('Error saving new day card:', error); // Log the error for debugging
+        res.status(500).json({ error: 'Failed to save new day card' });
     }
 });
 
 // Update a day card
-router.put('/:id', async (req, res) => {
+router.put('/:tripid', async (req, res) => {
     try {
-        const updatedDayCard = await DayCard.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedDayCard = await DayCard.findByIdAndUpdate(req.params.tripid, req.body, { new: true });
         res.json(updatedDayCard);
     } catch (error) {
         res.status(500).send('Server Error');

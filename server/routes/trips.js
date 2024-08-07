@@ -23,6 +23,7 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
+
 // Add a new trip
 router.post('/', async (req, res) => {
   try {

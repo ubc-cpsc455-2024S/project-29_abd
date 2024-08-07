@@ -27,8 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/day-cards', dayCardsRouter);
+app.use('/api/day-cards/locations', dayCardsRouter);
 app.use('/api/trips', tripsRouter);
-app.use('/api/auth', authRouter); // Add the auth route
+app.use('/api/auth', authRouter); 
 
 
 module.exports = app;

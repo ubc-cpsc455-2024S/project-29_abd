@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { ScrollArea } from "../components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import MapWithMarkers from "../components/map-template";
+import MapWithMarkers from "../services/api/map-template";
 import DayTimeline from "../components/dayTimeline";
 import { useParams } from 'react-router-dom';
 
@@ -14,21 +14,21 @@ const AddTrip = () => {
 
     const fetchTripData = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips/${tripId}`);
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/trip/${tripId}`);
             const data = await response.json();
             
-            setDays(data.days);
-
-            const locations = data.days.reduce((acc, day) => {
+            setDays(data);
+            
+            const locations = data.reduce((acc, day) => {
                 return [...acc, ...day.locations];
             }, []);
             
             setAllLocations(locations);
-
         } catch (error) {
             console.error("Error fetching trip data:", error);
         }
     };
+
 
     useEffect(() => {
         fetchTripData();
