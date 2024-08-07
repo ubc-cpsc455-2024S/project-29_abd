@@ -19,7 +19,7 @@ SoloExplorer is a travel site specifically designed for travallers in their 20s 
 
 #### Mapping and Route Planning: (Done) 
 
-- Integrate Google Maps API or Mapbox API to facilitate route planning. (Done) 
+- Integrate Google Maps API or Mapbox API to facilitate route planning. (Working on) 
 - Allow users to visualize their travel routes and add locations to their itineraries. (Done)
 
 
@@ -74,8 +74,7 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 
 # Above and Beyond 
 
-- Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done
-- NEED TO ADD HERE, how did we do this, why is it important to our team
+- Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done. 
 
 
 # Next Steps 
@@ -86,6 +85,9 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 # List of Contributions 
 
 ## Andrew 
+- Implemented Google maps API
+- Working on Front end set up
+- Designed and integrated restful API's specifically for the login and sign up components 
 
 ## Bhag 
 - From the begining of the project, I helped out with the design of the front end in order to allow for seamless integration for our components
