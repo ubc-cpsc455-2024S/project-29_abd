@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const DayCard = require('../models/DayCard');
+// const DayCard = require('../models/DayCard');
+const DayCard = require("../models/dayCard")
 const authMiddleware = require('../middleware/auth');
 
 // Get all day cards for a specific trip of the authenticated user
