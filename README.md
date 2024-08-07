@@ -88,7 +88,7 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 ## Andrew 
 
 ## Bhag 
-- From the begining of the project, I helped out with the design of the front end 
+- From the begining of the project, I helped out with the design of the front end
 
 ## Daniel 
 
