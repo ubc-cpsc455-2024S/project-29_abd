@@ -72,23 +72,27 @@ We implemented secure user authentication and authorization mechanisms using JSO
 Our project integrates the full MERN stack, adhering to best practices and utilizing each technology to its full potential. From configuring a solid development environment and building a dynamic front-end with React, to developing a robust back-end with NodeJS and Express, managing data with MongoDB, and deploying seamlessly on Render, our application showcases a comprehensive understanding of modern web development techniques. This technical depth ensures our application is performant, secure, and scalable.
 
 
-#Above and Beyond 
+# Above and Beyond 
 
 - Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done
 - NEED TO ADD HERE, how did we do this, why is it important to our team
 
 
-#Next Steps 
+# Next Steps 
 - Moving forward, we would like to complete our last stretch requirnment which is to create personlised travel reccomendations for each user. These would be based on user prefernces that the user would set up in their profile. We would furhter like to develope this and create a general AI bot which would suggest places to travel to any user in certain countries.
 - The step after this would be to make sure the application is completely mobile friendly, allowing travallers to access the trip itinerary on their phone. This is important to us as it will allow users to access the app when they are on the go.
 
 
-#List of Contributions 
+# List of Contributions 
 
 ## Andrew 
 
 ## Bhag 
-- From the begining of the project, I helped out with the design of the front end
+- From the begining of the project, I helped out with the design of the front end in order to allow for seamless integration for our components
+- Worked on routing for each page and refactoring code to allow for this
+- Designed and Integrated Restful API's specifically for the login and sign up components
+- Integrated JWT to allow for user login and token storage across pages, allowing the user to have access to their trips on their profile
+- Debugged application for deploymnet
 
 ## Daniel 
 
