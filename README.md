@@ -85,9 +85,11 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 # List of Contributions 
 
 ## Andrew 
-- Worked on google maps API integration
-- Worked on designing and integrating restful API's specifically for the add, edit, update componenets of the project
-- Worked on cleaning up the front end API 
+- Worked on Google Maps API integration
+- Worked on designing and integrating restful APIs specifically for the add, edit, and update components for Trips and Days within a Trip
+- Worked on cleaning up the front-end API
+- Worked on setting up MongoDB and resolving conflicts in database design decisions
+- 
 
 ## Bhag 
 - From the begining of the project, I helped out with the design of the front end in order to allow for seamless integration for our components
