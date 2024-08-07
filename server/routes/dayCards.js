@@ -41,7 +41,8 @@ router.put('/:id', authMiddleware, async (req, res) => {
         }
         res.json(updatedDayCard);
     } catch (error) {
-        res.status(500).send('Server Error');
+        console.error("Error updating day card:", error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 
@@ -54,7 +55,8 @@ router.delete('/:id', authMiddleware, async (req, res) => {
         }
         res.json({ message: 'Day card deleted' });
     } catch (error) {
-        res.status(500).send('Server Error');
+        console.error("Error deleting day card:", error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 

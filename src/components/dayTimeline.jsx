@@ -91,6 +91,47 @@ const DayTimeline = ({ tripId }) => {
     setCurrentCard(null);
   };
 
+  // const handleSaveDetails = async (details, country, city, locations, notes, date) => {
+  //   if (currentCard) {
+  //     const updatedDay = {
+  //       ...currentCard,
+  //       details,
+  //       country,
+  //       city,
+  //       locations,
+  //       notes,
+  //       date
+  //     };
+  //     try {
+  //       console.log("Updating day card:", updatedDay);
+  //       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
+  //         method: 'PUT',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'x-auth-token': token // Include token in request headers
+  //         },
+  //         credentials: 'include',
+  //         body: JSON.stringify(updatedDay)
+  //       });
+  //
+  //       const responseText = await response.text();
+  //       if (!response.ok) {
+  //         console.error("Response status:", response.status);
+  //         console.error("Response text:", responseText);
+  //         const errorData = await response.json();
+  //         console.error("Failed to update day card:", errorData);
+  //         throw new Error('Failed to update day card');
+  //       }
+  //
+  //       const result = await response.json();
+  //       dispatch(updateDayCard(result));
+  //       setIsModalOpen(false);
+  //     } catch (error) {
+  //       console.error('Error updating day card:', error);
+  //     }
+  //   }
+  // };
+
   const handleSaveDetails = async (details, country, city, locations, notes, date) => {
     if (currentCard) {
       const updatedDay = {
@@ -103,6 +144,7 @@ const DayTimeline = ({ tripId }) => {
         date
       };
       try {
+        console.log("Updating day card:", updatedDay);
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
           method: 'PUT',
           headers: {
@@ -113,11 +155,21 @@ const DayTimeline = ({ tripId }) => {
           body: JSON.stringify(updatedDay)
         });
 
+        const responseText = await response.text();
         if (!response.ok) {
+          console.error("Response status:", response.status);
+          console.error("Response text:", responseText);
+          let errorData;
+          try {
+            errorData = JSON.parse(responseText);
+          } catch (e) {
+            throw new Error(responseText);
+          }
+          console.error("Failed to update day card:", errorData);
           throw new Error('Failed to update day card');
         }
 
-        const result = await response.json();
+        const result = JSON.parse(responseText);
         dispatch(updateDayCard(result));
         setIsModalOpen(false);
       } catch (error) {
