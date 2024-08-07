@@ -1,10 +1,101 @@
 # Group 29 - SoloExplorer
 
-- Your title can change over time.
-
 # Project Description:
 
-SoloExplorer is a travel site specifically designed for solo travelers, particularly those in their 20s and 30s, seeking a streamlined and engaging way to plan their individual adventures. The platform supports users in creating, managing, and sharing detailed travel itineraries for multi-country, long-term trips. SoloExplorer will store user profiles, trip itineraries, travel journals, reviews, and multimedia content such as photos and videos. Users will be able to create and manage detailed itineraries, document and share their travel experiences, access personalized travel recommendations, and review places and activities. Additional functionalities that can be added based on time constraints include integrating social media sharing options, providing real-time travel alerts, offering AI-driven travel recommendations, and developing a community forum for solo travelers.
+SoloExplorer is a travel site specifically designed for travallers in their 20s and 30s, seeking a streamlined and engaging way to plan their adventures. The platform supports users in creating, managing, and sharing detailed travel itineraries for multi-country, long-term trips. SoloExplorer stores user profiles, trip itineraries. Users can create and manage detailed itineraries, document and share their travel experiences.
+
+#GOALS: 
+
+## Minimal Requirements
+
+#### User Authentication and Dashboard Management: (Done) 
+
+- user sign-up, login, and logout functionalities using JWT. (Done) 
+- Develop a user profile page where users can view and edit their profile information and travel statistics. (Done) 
+
+#### Create a user-friendly interface for creating and managing detailed travel itineraries. (Done) 
+
+- Implement CRUD operations for itineraries (Create, Read, Update, Delete). (Done) 
+
+#### Mapping and Route Planning: (Done) 
+
+- Integrate Google Maps API or Mapbox API to facilitate route planning. (Done) 
+- Allow users to visualize their travel routes and add locations to their itineraries. (Done)
+
+
+## Standard Requirements 
+
+#### Travel Dashboard: (Done) 
+
+- Implement functionality for users to document their travel plans and view them in a dashboard once clicked. (Done) 
+- Allow users to view and manage their trips in an interface. (Done) 
+
+#### Responsive Design: (Working on complete mobile) 
+
+- Ensure the web application is fully responsive and optimized for use on both desktop and mobile devices.
+
+#### Itinerary Sharing and Downloading: (Done) 
+
+- Enable users to share their itineraries with others via a link where other can change and modify. (Not complete) 
+- Implement functionality to download itineraries in a simple format (e.g., PDF). (Done) 
+
+#### Basic User Interface (UI) Enhancements: (Done) 
+
+- Improve the overall look and feel of the application by implementing a clean and intuitive UI design. (Done) 
+
+## Stretch Requirements 
+
+#### Community-Based Planning: (done)
+
+- having multiple users able to access and modify trip. (Not Complete) 
+- Optional to make it possible to view other people's trip plan (private vs public). (Done) 
+
+#### Personalized Travel Recommendations: (not complete) 
+
+- Develop a basic system to provide personalized travel recommendations based on user preferences and past trips. (Done)
+
+#Tech used 
+
+### Setting Up the Development Environment
+Our project initiated by configuring a robust development environment. We utilized Git for version control, enabling efficient collaboration and tracking changes across our codebase. Command-line tools were essential for managing project dependencies and running scripts, ensuring our setup aligned with best practices from the initial workshops and labs.
+### Building a Dynamic UI with React
+We leveraged React to build the front-end of our trip management application. React’s component-based architecture allowed us to create reusable and maintainable UI components. We utilized `useState` and `useEffect` hooks for state management and side effects, respectively. React Router facilitated seamless navigation between different views, providing a dynamic user experience. This approach mirrors the techniques and principles covered in the React workshops and assignments.
+### Developing the Back-End with NodeJS and Express
+The server-side logic of our application is powered by NodeJS, with Express as the web application framework. We developed a RESTful API to handle CRUD operations for trips and day cards. Middleware functions were implemented for authentication, request validation, and error handling, ensuring a robust and secure back-end. Asynchronous programming with `async/await` enabled efficient handling of I/O operations, as emphasized in the NodeJS workshops.
+### Utilizing MongoDB for Data Management
+MongoDB was chosen as our database due to its flexible schema and scalability. We used Mongoose to define schemas, enforce data validation, and manage relationships between documents. Collections were created for users, trips, and day cards, with appropriate indexing to optimize query performance. This setup aligns with the MongoDB workshops, which highlight the advantages of NoSQL databases for managing hierarchical and dynamic data.
+### Streamlined Deployment with Render
+Our application is deployed on Render, a cloud platform that automates the CI/CD pipeline. We configured Render to handle automatic builds and deployments for both the front-end and back-end. Environment variables are securely managed within Render’s dashboard, ensuring sensitive information is protected. This deployment strategy reflects the best practices discussed in the release engineering workshop, ensuring our application remains up-to-date and scalable.
+### Ensuring Security with Networking Practices
+We implemented secure user authentication and authorization mechanisms using JSON Web Tokens (JWT). Middleware functions were added to verify tokens and protect routes, ensuring only authenticated users can access certain endpoints. This approach aligns with the networking workshop’s guidelines on securing APIs and managing user sessions, providing a secure and reliable application.
+### Conclusion
+Our project integrates the full MERN stack, adhering to best practices and utilizing each technology to its full potential. From configuring a solid development environment and building a dynamic front-end with React, to developing a robust back-end with NodeJS and Express, managing data with MongoDB, and deploying seamlessly on Render, our application showcases a comprehensive understanding of modern web development techniques. This technical depth ensures our application is performant, secure, and scalable.
+
+
+#Above and Beyond 
+
+- Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done
+- NEED TO ADD HERE, how did we do this, why is it important to our team
+
+
+#Next Steps 
+- Moving forward, we would like to complete our last stretch requirnment which is to create personlised travel reccomendations for each user. These would be based on user prefernces that the user would set up in their profile. We would furhter like to develope this and create a general AI bot which would suggest places to travel to any user in certain countries.
+- The step after this would be to make sure the application is completely mobile friendly, allowing travallers to access the trip itinerary on their phone. This is important to us as it will allow users to access the app when they are on the go.
+
+
+#List of Contributions 
+
+## Andrew 
+
+## Bhag 
+- From the begining of the project, I helped out with the design of the front end 
+
+## Daniel 
+
+
+
+
+## EVERYTHING BELOW WAS FOR PROGRESS 1 
 
 ## Who is it for?
 
