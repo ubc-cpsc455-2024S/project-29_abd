@@ -226,7 +226,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     dispatch(addDayCard(dayToSave));
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${tripId}`, {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
