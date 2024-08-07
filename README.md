@@ -76,10 +76,11 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 
 - Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done
 - NEED TO ADD HERE, how did we do this, why is it important to our team
+- Our team really sruggled with this part, as we faced many problems with authentication, passing the right user data and ensuring all the right data is synching properly. We are proud of our accomplishment here and we think it really adds to the usability factor of our app.
 
 
 # Next Steps 
-- Moving forward, we would like to complete our last stretch requirnment which is to create personlised travel reccomendations for each user. These would be based on user prefernces that the user would set up in their profile. We would furhter like to develope this and create a general AI bot which would suggest places to travel to any user in certain countries.
+- Moving forward, we would like to complete our last stretch requirnment which is to create personlised travel reccomendations for each user, We would  refractor some of the structure of our project such that we can scale with less barriers. We would start with thorough documentaion such that once we are ready to develop the personal reccomeder system, our enhancements would be based on user prefernces that the user would set up in their profile. We would furhter like to develope this and create a general AI bot which would suggest places to travel to any user in certain countries.
 - The step after this would be to make sure the application is completely mobile friendly, allowing travallers to access the trip itinerary on their phone. This is important to us as it will allow users to access the app when they are on the go.
 
 
@@ -100,9 +101,7 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 ## Daniel 
 
 - Implemented State Management with Redux: I set up and configured Redux for global state management, allowing for efficient state handling and synchronization across various components of the application. This included creating actions, reducers, and using middleware for asynchronous operations.
-
 - Designed and Integrated RESTful APIs: I designed and developed RESTful APIs using Express and Node.js to handle CRUD operations for trips and day cards. This involved creating route handlers, middleware for authentication and validation, and ensuring secure communication between the front-end and back-end.
-
 - Optimized Data Fetching and Performance: I implemented efficient data fetching techniques using useEffect and async/await to manage asynchronous calls to the back-end. I also optimized performance by implementing memoization techniques and leveraging React's built-in hooks to prevent unnecessary re-renders.
 
 
