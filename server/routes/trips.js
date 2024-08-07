@@ -6,14 +6,12 @@ const authMiddleware = require('../middleware/auth');
 // Get all trips for the authenticated user
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const userID = req.user.id;
     const trips = await Trip.find({ userId: req.user.id }); // Filter trips by userId
     res.json(trips);
   } catch (error) {
     res.status(500).send('Server Error');
   }
 });
-
 
 // Add a new trip
 router.post('/', authMiddleware, async (req, res) => {
@@ -31,9 +29,9 @@ router.post('/', authMiddleware, async (req, res) => {
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const updatedTrip = await Trip.findOneAndUpdate(
-        { _id: req.params.id, userId: req.user.id }, // Ensure only trips of the user can be updated
-        req.body,
-        { new: true }
+      { _id: req.params.id, userId: req.user.id }, // Ensure only trips of the user can be updated
+      req.body,
+      { new: true }
     );
     res.json(updatedTrip);
   } catch (error) {

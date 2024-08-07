@@ -72,7 +72,7 @@ const TripsTable = ({ userID, refreshTrips }) => {
 
         getTrips();
         
-    }, [token, userID, refreshTrips]);
+    }, [token, refreshTrips]);
 
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId

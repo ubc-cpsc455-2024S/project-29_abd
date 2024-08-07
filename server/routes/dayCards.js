@@ -19,9 +19,22 @@ router.get('/trip/:tripId', authMiddleware, async (req, res) => {
 router.post('/:tripId', authMiddleware, async (req, res) => {
     try {
         const { tripId } = req.params;
+        const { title, details, country, city, locations, notes, date } = req.body;
+        
+        if (!title || !details || !date) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
         const newDayCard = new DayCard({
-            ...req.body,
-            tripId // Ensure the tripId from the route is used
+            title,
+            details,
+            country,
+            city,
+            locations,
+            notes,
+            date,
+            tripId,
+            userId: req.user.id // Ensure the userId from the authenticated user is used
         });
 
         // Save the new day card
@@ -59,5 +72,3 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
-
-

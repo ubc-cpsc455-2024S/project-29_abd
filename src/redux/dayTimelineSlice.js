@@ -20,10 +20,15 @@ export const fetchDayCards = createAsyncThunk(
             }
 
             const data = await response.json();
-            return data;
+
+            const locations = data.reduce((acc, day) => {
+                return [...acc, ...day.locations];
+            }, []);
+
+            return { dayCards: data, locations };
         } catch (error) {
             console.error('Error fetching day cards:', error);
-            return thunkAPI.rejectWithValue(error.message || 'Failed to fetch day cards')
+            return thunkAPI.rejectWithValue(error.message || 'Failed to fetch day cards');
         }
     }
 );
@@ -32,6 +37,7 @@ const dayTimelineSlice = createSlice({
     name: 'dayTimeline',
     initialState: {
         dayCards: [],
+        locations: [],
         status: 'idle',
         error: null
     },
@@ -59,7 +65,8 @@ const dayTimelineSlice = createSlice({
             })
             .addCase(fetchDayCards.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.dayCards = action.payload;
+                state.dayCards = action.payload.dayCards;
+                state.locations = action.payload.locations;
             })
             .addCase(fetchDayCards.rejected, (state, action) => {
                 state.status = 'failed';
@@ -70,6 +77,3 @@ const dayTimelineSlice = createSlice({
 
 export const { addDayCard, updateDayCard, deleteDayCard, reorderDayCards } = dayTimelineSlice.actions;
 export default dayTimelineSlice.reducer;
-
-
-

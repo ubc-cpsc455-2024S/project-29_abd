@@ -34,6 +34,7 @@ app.use('/users', usersRouter);
 app.use('/api/day-cards', dayCardsRouter);
 app.use('/api/day-cards/locations', dayCardsRouter);
 app.use('/api/trips', tripsRouter);
+app.use('/api/trips/user', tripsRouter);
 app.use('/api/auth', authRouter); 
 
 
