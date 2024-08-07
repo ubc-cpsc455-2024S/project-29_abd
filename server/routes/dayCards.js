@@ -16,40 +16,70 @@ router.get('/trip/:tripId', authMiddleware, async (req, res) => {
 });
 
 // Add a new day card for a trip with tripID
-router.post('/:tripId', authMiddleware, async (req, res) => {
+// router.post('/:tripId', authMiddleware, async (req, res) => {
+//     try {
+//         const { tripId } = req.params;
+//         const { title, details, country, city, locations, notes, date } = req.body;
+//
+//         if (!title || !details || !date) {
+//             return res.status(400).json({ error: 'Missing required fields' });
+//         }
+//
+//         const newDayCard = new DayCard({
+//             title,
+//             details,
+//             country,
+//             city,
+//             locations,
+//             notes,
+//             date,
+//             tripId,
+//             userId: req.user.id // Ensure the userId from the authenticated user is used
+//         });
+//
+//         // Save the new day card
+//         const dayCard = await newDayCard.save();
+//         res.status(201).json(dayCard);
+//     } catch (error) {
+//         console.error('Error saving new day card:', error); // Log the error for debugging
+//         res.status(500).json({ error: 'Failed to save new day card' });
+//     }
+// });
+
+router.post('/', authMiddleware, async (req, res) => {
     try {
-        const { tripId } = req.params;
-        const { title, details, country, city, locations, notes, date } = req.body;
-        
-        if (!title || !details || !date) {
-            return res.status(400).json({ error: 'Missing required fields' });
-        }
-
-        const newDayCard = new DayCard({
-            title,
-            details,
-            country,
-            city,
-            locations,
-            notes,
-            date,
-            tripId,
-            userId: req.user.id // Ensure the userId from the authenticated user is used
-        });
-
-        // Save the new day card
+        console.log('Request body:', req.body);
+        const newDayCard = new DayCard({ ...req.body, userId: req.user.id });
         const dayCard = await newDayCard.save();
-        res.status(201).json(dayCard);
+        res.json(dayCard);
     } catch (error) {
-        console.error('Error saving new day card:', error); // Log the error for debugging
-        res.status(500).json({ error: 'Failed to save new day card' });
+        console.error('Error saving day card:', error);
+        res.status(500).json({ msg: 'Server Error' });
     }
 });
 
+
 // Update a day card
-router.put('/:tripid', authMiddleware, async (req, res) => {
+// router.put('/:tripid', authMiddleware, async (req, res) => {
+//     try {
+//         const updatedDayCard = await DayCard.findByIdAndUpdate(req.params.tripid, req.body, { new: true });
+//         res.json(updatedDayCard);
+//     } catch (error) {
+//         console.error("Error updating day card:", error);
+//         res.status(500).json({ msg: 'Server Error' });
+//     }
+// });
+
+router.put('/:id', authMiddleware, async (req, res) => {
     try {
-        const updatedDayCard = await DayCard.findByIdAndUpdate(req.params.tripid, req.body, { new: true });
+        const updatedDayCard = await DayCard.findOneAndUpdate(
+            { _id: req.params.id, userId: req.user.id },
+            req.body,
+            { new: true }
+        );
+        if (!updatedDayCard) {
+            return res.status(404).json({ msg: 'Day card not found' });
+        }
         res.json(updatedDayCard);
     } catch (error) {
         console.error("Error updating day card:", error);
