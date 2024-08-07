@@ -59,9 +59,9 @@ SoloExplorer is a travel site specifically designed for travallers in their 20s 
 ### Setting Up the Development Environment
 Our project initiated by configuring a robust development environment. We utilized Git for version control, enabling efficient collaboration and tracking changes across our codebase. Command-line tools were essential for managing project dependencies and running scripts, ensuring our setup aligned with best practices from the initial workshops and labs.
 ### Building a Dynamic UI with React
-We leveraged React to build the front-end of our trip management application. React’s component-based architecture allowed us to create reusable and maintainable UI components. We utilized `useState` and `useEffect` hooks for state management and side effects, respectively. React Router facilitated seamless navigation between different views, providing a dynamic user experience. This approach mirrors the techniques and principles covered in the React workshops and assignments.
+We leveraged React to build the front-end of our trip management application. React’s component-based architecture allowed us to create reusable and maintainable UI components. We utilized `useState` and `useEffect` hooks for state management and side effects, respectively intially. React Router facilitated seamless navigation between different views, providing a dynamic user experience. This approach mirrors the techniques and principles covered in the React workshops and assignments.
 ### Developing the Back-End with NodeJS and Express
-The server-side logic of our application is powered by NodeJS, with Express as the web application framework. We developed a RESTful API to handle CRUD operations for trips and day cards. Middleware functions were implemented for authentication, request validation, and error handling, ensuring a robust and secure back-end. Asynchronous programming with `async/await` enabled efficient handling of I/O operations, as emphasized in the NodeJS workshops.
+The server-side logic of our application is powered by NodeJS, with Express as the web application framework. This knowledge also allowed us to devleop react readuux into our application through the navigation of different splice files in order to handel the flow of our webapplication. We developed a RESTful API to handle CRUD operations for trips and day cards. Middleware functions were implemented for authentication, request validation, and error handling, ensuring a robust and secure back-end. Asynchronous programming with `async/await` enabled efficient handling of I/O operations, as emphasized in the NodeJS workshops.
 ### Utilizing MongoDB for Data Management
 MongoDB was chosen as our database due to its flexible schema and scalability. We used Mongoose to define schemas, enforce data validation, and manage relationships between documents. Collections were created for users, trips, and day cards, with appropriate indexing to optimize query performance. This setup aligns with the MongoDB workshops, which highlight the advantages of NoSQL databases for managing hierarchical and dynamic data.
 ### Streamlined Deployment with Render
@@ -74,8 +74,7 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 
 # Above and Beyond 
 
-- Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done
-- NEED TO ADD HERE, how did we do this, why is it important to our team
+- Integrated google maps API which was a new technology to our entire team. This required a lot of research and team coversations on how the implementation would be handeled and done. We initally had a lot of issues with this implementation, it took our team longer than a 2 week sprint to complete. However, when it came to merging across files, this became a larger issue to us and we spent a lot of tiem debugging. Through this process, we learned a lot more about git hub, debugging and how to use research to help us move forward. While we are still working on the full implemenation, our basic rendering and usage of google maps API to pin location and fetch specific locations allows us to build a well rounded application. 
 
 
 # Next Steps 
