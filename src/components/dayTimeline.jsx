@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GooglePlacesAutocomplete from "../services/api/google-places-autocomplete";
 import { Button } from "./ui/button";
@@ -93,7 +93,7 @@ const DayTimeline = ({ tripId }) => {
         city,
         locations,
         notes,
-        date: new Date(date).toISOString(), // Convert date back to ISO string for saving
+        date
       };
       try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/${currentCard._id}`, {
@@ -288,8 +288,8 @@ const DayTimeline = ({ tripId }) => {
           <div className="mt-4">
             <h4>Countries</h4>
             <div className="flex flex-wrap gap-2">
-              {newDay.country.map((country) => (
-                <Badge key={country} variant="outline">
+              {newDay.country.map((country, index) => (
+                <Badge key={`country-${index}`} variant="outline">
                   {country}
                 </Badge>
               ))}
@@ -298,8 +298,8 @@ const DayTimeline = ({ tripId }) => {
           <div className="mt-4">
             <h4>Cities</h4>
             <div className="flex flex-wrap gap-2">
-              {newDay.city.map((city) => (
-                <Badge key={city} variant="outline">
+              {newDay.city.map((city, index) => (
+                <Badge key={`city-${index}`} variant="outline">
                   {city}
                 </Badge>
               ))}
