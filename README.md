@@ -54,7 +54,7 @@ SoloExplorer is a travel site specifically designed for travallers in their 20s 
 
 - Develop a basic system to provide personalized travel recommendations based on user preferences and past trips. (Done)
 
-#Tech used 
+# Tech used 
 
 ### Setting Up the Development Environment
 Our project initiated by configuring a robust development environment. We utilized Git for version control, enabling efficient collaboration and tracking changes across our codebase. Command-line tools were essential for managing project dependencies and running scripts, ensuring our setup aligned with best practices from the initial workshops and labs.
@@ -91,6 +91,12 @@ Our project integrates the full MERN stack, adhering to best practices and utili
 - From the begining of the project, I helped out with the design of the front end
 
 ## Daniel 
+
+- Implemented State Management with Redux: I set up and configured Redux for global state management, allowing for efficient state handling and synchronization across various components of the application. This included creating actions, reducers, and using middleware for asynchronous operations.
+
+- Designed and Integrated RESTful APIs: I designed and developed RESTful APIs using Express and Node.js to handle CRUD operations for trips and day cards. This involved creating route handlers, middleware for authentication and validation, and ensuring secure communication between the front-end and back-end.
+
+- Optimized Data Fetching and Performance: I implemented efficient data fetching techniques using useEffect and async/await to manage asynchronous calls to the back-end. I also optimized performance by implementing memoization techniques and leveraging React's built-in hooks to prevent unnecessary re-renders.
 
 
 
