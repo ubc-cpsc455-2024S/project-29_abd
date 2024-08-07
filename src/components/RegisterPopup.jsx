@@ -5,11 +5,11 @@ import { Input } from "./ui/input";
 import { Form } from "./ui/form";
 import { Button } from "./ui/button";
 
-const RegisterPopup = ({ onClose }) => {
+const RegisterPopup = ({ onClose, openLoginPopup }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
-    const { user, loading, error } = useSelector((state) => state.auth);
+    const { loading, error } = useSelector((state) => state.auth);
     const [registerSuccess, setRegisterSuccess] = useState(false);
 
     const handleSubmit = (e) => {
@@ -18,14 +18,20 @@ const RegisterPopup = ({ onClose }) => {
     };
 
     useEffect(() => {
-        if (user) {
-            setRegisterSuccess(true);
+        if (registerSuccess) {
             setTimeout(() => {
                 setRegisterSuccess(false);
                 onClose();
+                openLoginPopup(); // Open the login popup after successful registration
             }, 2000); // Close the popup after 2 seconds
         }
-    }, [user, onClose]);
+    }, [registerSuccess, onClose, openLoginPopup]);
+
+    useEffect(() => {
+        if (!loading && !error && !registerSuccess) {
+            setRegisterSuccess(true);
+        }
+    }, [loading, error, registerSuccess]);
 
     return (
         <div className="register-popup fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
@@ -59,7 +65,7 @@ const RegisterPopup = ({ onClose }) => {
                         {loading ? "Registering..." : "Register"}
                     </Button>
                     {error && <p className="text-red-500 mt-2">{error}</p>}
-                    {registerSuccess && <p className="text-green-500 mt-2">Registration successful!</p>}
+                    {registerSuccess && <p className="text-green-500 mt-2">Registration successful! Please log in.</p>}
                 </Form>
             </div>
         </div>
