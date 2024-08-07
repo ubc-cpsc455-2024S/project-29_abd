@@ -66,7 +66,7 @@ export const registerUser = createAsyncThunk(
             if (data.success) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                return { user: data.user, token: data.token };
+                return { user: data.user, token: data.token};
             } else {
                 return thunkAPI.rejectWithValue(data.msg || 'Registration failed');
             }

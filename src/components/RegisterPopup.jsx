@@ -28,10 +28,18 @@ const RegisterPopup = ({ onClose, openLoginPopup }) => {
     }, [registerSuccess, onClose, openLoginPopup]);
 
     useEffect(() => {
-        if (!loading && !error && !registerSuccess) {
+        if (!loading && !error && registerSuccess) {
             setRegisterSuccess(true);
         }
-    }, [loading, error, registerSuccess]);
+    }, [loading, error]);
+
+    useEffect(() => {
+        // Clear input fields and success message on close
+        if (!registerSuccess) {
+            setEmail("");
+            setPassword("");
+        }``
+    }, [registerSuccess]);
 
     return (
         <div className="register-popup fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
