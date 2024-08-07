@@ -2,6 +2,8 @@
 
 # Project Description:
 
+Deployment Link: https://project-29-abd-frontend.onrender.com/
+
 SoloExplorer is a travel site specifically designed for travallers in their 20s and 30s, seeking a streamlined and engaging way to plan their adventures. The platform supports users in creating, managing, and sharing detailed travel itineraries for multi-country, long-term trips. SoloExplorer stores user profiles, trip itineraries. Users can create and manage detailed itineraries, document and share their travel experiences.
 
 # GOALS: 
