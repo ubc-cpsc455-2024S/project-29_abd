@@ -38,13 +38,12 @@ const DayCard = ({
 
   return (
     <div
-      className={`${
-        expandedCards.includes(day.id)
+      className={`${expandedCards.includes(day._id)
           ? styles.cardExpanded
           : styles.cardCollapsed
-      } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
-  
-      onClick={() => handleCardClick(day.id)}
+        } cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300`}
+
+      onClick={() => handleCardClick(day._id)}
     >
       <Card>
         <CardHeader className={styles.cardHeader}>
@@ -68,17 +67,16 @@ const DayCard = ({
           </Tooltip.Root>
         </CardHeader>
         <CardContent
-          className={`${styles.cardContent} ${
-            expandedCards.includes(day.id)
+          className={`${styles.cardContent} ${expandedCards.includes(day._id)
               ? styles.cardContentVisible
               : styles.cardContentHidden
-          }`}
+            }`}
         >
           <div>
             <div className="flex items-center">
-              {flags[day.id] && (
+              {flags[day._id] && (
                 <img
-                  src={flags[day.id]}
+                  src={flags[day._id]}
                   alt={`${day.country} flag`}
                   className={styles.flag}
                 />
@@ -87,12 +85,14 @@ const DayCard = ({
                 {day.country} {day.city.join(", ")}
               </span>
             </div>
-            {expandedCards.includes(day.id) && (
+            {expandedCards.includes(day._id) && (
               <>
                 <div
                   className="markdown-content"
                   dangerouslySetInnerHTML={{ __html: converter.makeHtml(day.details) }}
                 />
+                <span className={styles.notes}>{day.notes}</span>{" "}
+
                 <div className="flex flex-wrap gap-2 mt-2">
                   {uniqueCountries.map((country) => (
                     <Badge key={country} variant="outline">
@@ -105,7 +105,6 @@ const DayCard = ({
                     </Badge>
                   ))}
                 </div>
-                <span className={styles.notes}>{day.notes}</span>{" "}
               </>
             )}
           </div>

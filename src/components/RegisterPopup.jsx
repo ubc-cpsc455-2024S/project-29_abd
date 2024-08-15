@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { registerUser } from "../redux/authSlice";
+import { clearTrips } from "../redux/tripSlice";
 import { Input } from "./ui/input";
 import { Form } from "./ui/form";
 import { Button } from "./ui/button";
 
-const RegisterPopup = ({ onClose, openLoginPopup }) => {
+const RegisterPopup = ({ onClose }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
+<<<<<<< Updated upstream
     const { loading, error } = useSelector((state) => state.auth);
+=======
+    const { loading, error, user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+>>>>>>> Stashed changes
     const [registerSuccess, setRegisterSuccess] = useState(false);
 
     const handleSubmit = (e) => {
@@ -18,13 +25,16 @@ const RegisterPopup = ({ onClose, openLoginPopup }) => {
     };
 
     useEffect(() => {
-        if (registerSuccess) {
+        if (user && user.id) {
+            setRegisterSuccess(true);
             setTimeout(() => {
+                dispatch(clearTrips());
                 setRegisterSuccess(false);
                 onClose();
-                openLoginPopup(); // Open the login popup after successful registration
-            }, 2000); // Close the popup after 2 seconds
+                navigate('/profile');
+            }, 2000); // Close the popup and navigate after 2 seconds
         }
+<<<<<<< Updated upstream
     }, [registerSuccess, onClose, openLoginPopup]);
 
     useEffect(() => {
@@ -32,6 +42,9 @@ const RegisterPopup = ({ onClose, openLoginPopup }) => {
             setRegisterSuccess(true);
         }
     }, [loading, error]);
+=======
+    }, [user, onClose, navigate, dispatch]);
+>>>>>>> Stashed changes
 
     useEffect(() => {
         // Clear input fields and success message on close
@@ -73,7 +86,7 @@ const RegisterPopup = ({ onClose, openLoginPopup }) => {
                         {loading ? "Registering..." : "Register"}
                     </Button>
                     {error && <p className="text-red-500 mt-2">{error}</p>}
-                    {registerSuccess && <p className="text-green-500 mt-2">Registration successful! Please log in.</p>}
+                    {registerSuccess && <p className="text-green-500 mt-2">Registration successful! Redirecting...</p>}
                 </Form>
             </div>
         </div>

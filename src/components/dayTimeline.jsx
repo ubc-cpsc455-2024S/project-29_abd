@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import GooglePlacesAutocomplete from "../services/api/google-places-autocomplete";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Label } from "./ui/label";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Showdown from "showdown";
@@ -17,14 +18,13 @@ import ConfirmationModal from "./ConfirmationModal";
 import DayCard from "./ui/dayCard";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { CollapseAllSwitch } from './ui/collapse-all-switch';
 
 const converter = new Showdown.Converter();
 
 const fetchCountryFlag = async (country) => {
   if (!country) return "";
-  const response = await fetch(
-      `https://restcountries.com/v3.1/name/${country}`
-  );
+  const response = await fetch(`https://restcountries.com/v3.1/name/${country}?fields=flags`);
   const data = await response.json();
   return data[0]?.flags?.svg || "";
 };
@@ -39,6 +39,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
   const [expandedCards, setExpandedCards] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [flags, setFlags] = useState({});
+  const [isCollapseAllChecked, setIsCollapseAllChecked] = useState(false);
   const [newDay, setNewDay] = useState({
     title: "",
     details: "",
@@ -58,10 +59,10 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
   useEffect(() => {
     const fetchFlags = async () => {
       const newFlags = await Promise.all(
-          dayCards.map(async (day) => {
-            const flag = await fetchCountryFlag(day.country);
-            return { [day._id]: flag };
-          })
+        dayCards.map(async (day) => {
+          const flag = await fetchCountryFlag(day.country);
+          return { [day._id]: flag };
+        })
       );
       setFlags(Object.assign({}, ...newFlags));
     };
@@ -70,9 +71,9 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
 
   const handleCardClick = (id) => {
     setExpandedCards((prevState) =>
-        prevState.includes(id)
-            ? prevState.filter((cardId) => cardId !== id)
-            : [...prevState, id]
+      prevState.includes(id)
+        ? prevState.filter((cardId) => cardId !== id)
+        : [...prevState, id]
     );
   };
 
@@ -175,12 +176,13 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     setNewDay((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLocationSelect = (location, index) => {
+  const handleLocationSelect = async (location, index) => {
     setNewDay((prev) => {
       const newLocations = [...prev.locations];
       newLocations[index] = location;
       const newCountry = Array.from(new Set(newLocations.map((loc) => loc.country)));
       const newCity = Array.from(new Set(newLocations.map((loc) => loc.city)));
+
       return {
         ...prev,
         locations: newLocations,
@@ -188,7 +190,14 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
         city: newCity,
       };
     });
+
+    const flag = await fetchCountryFlag(location.country);
+    setFlags((prevFlags) => ({
+      ...prevFlags,
+      [location.country]: flag,
+    }));
   };
+
 
   const handleAddLocation = () => {
     setNewDay((prev) => ({
@@ -224,7 +233,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     };
 
     dispatch(addDayCard(dayToSave));
-    
+
     try {
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/day-cards/`, {
         method: 'POST',
@@ -258,8 +267,18 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
     }
   };
 
+  const toggleCollapseAll = (checked) => {
+    setIsCollapseAllChecked(checked);
+    if (checked) {
+      setExpandedCards(dayCards.map((day) => day._id));
+    } else {
+      setExpandedCards([]);
+    }
+  };
+
   return (
     <div className="day-timeline space-y-4 p-4">
+
       {isAdding ? (
         <div className="space-y-4 p-4 border rounded shadow-lg">
           <Input
@@ -314,6 +333,7 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
             <div className="flex flex-wrap gap-2">
               {newDay.country.map((country, index) => (
                 <Badge key={`country-${index}`} variant="outline">
+                  {flags[country] && <img src={flags[country]} alt={`${country} flag`} className="w-6 h-4 mr-2" />}
                   {country}
                 </Badge>
               ))}
@@ -331,10 +351,18 @@ const DayTimeline = ({ tripId, onDaysUpdated }) => {
           </div>
         </div>
       ) : (
-        <Button onClick={handleAddNewDay} className="mb-4">
-          Add Day
-        </Button>
+
+        <div className="flex flex-col items-end space-y-2 p-4">
+          <Button onClick={handleAddNewDay} className="mb-4">
+            Add Day
+          </Button>
+          <div className="flex items-center space-x-2">
+            <Label>Expand All</Label>
+            <CollapseAllSwitch isChecked={isCollapseAllChecked} onToggle={toggleCollapseAll} />
+          </div>
+        </div>
       )}
+
       <div className="space-y-4">
         {Array.from(dayCards)
           .sort((a, b) => new Date(a.date) - new Date(b.date))

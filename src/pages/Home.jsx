@@ -34,13 +34,13 @@ const Home = () => {
                                 className="login-button"
                                 onClick={() => setShowLoginPopup(true)}
                             >
-                                login
+                                Login
                             </Button>
                             <Button
                                 className="login-button"
                                 onClick={() => setShowRegisterPopup(true)}
                             >
-                                sign up
+                                Sign Up
                             </Button>
                         </>
                     )}

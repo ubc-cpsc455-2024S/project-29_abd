@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import React, { useState, useEffect } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> Stashed changes
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -56,13 +60,18 @@ const deleteTrip = async (tripId, token) => {
     }
 };
 
+<<<<<<< Updated upstream
 const TripsTable = () => {
     const [trips, setTrips] = useState([]);
+=======
+const TripsTable = ({ trips, refreshTrips }) => {
+>>>>>>> Stashed changes
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tripToDelete, setTripToDelete] = useState(null);
     const token = useSelector((state) => state.auth.token); // Get token from state
     const navigate = useNavigate();
 
+<<<<<<< Updated upstream
     useEffect(() => {
         const getTrips = async () => {
             const tripsList = await fetchTrips(token);
@@ -72,6 +81,8 @@ const TripsTable = () => {
         getTrips();
     }, [token]);
 
+=======
+>>>>>>> Stashed changes
     const handleViewClick = (tripId) => {
         navigate(`/trips/${tripId}`); // Navigate to AddTrip with tripId
     };
@@ -85,7 +96,11 @@ const TripsTable = () => {
         if (tripToDelete) {
             try {
                 await deleteTrip(tripToDelete, token);
+<<<<<<< Updated upstream
                 setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
+=======
+                refreshTrips(); // Refresh the trips list
+>>>>>>> Stashed changes
                 setIsModalOpen(false);
                 setTripToDelete(null);
             } catch (error) {

@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
-import { useSelector } from "react-redux";
-import TripsTable from '../components/tripsTable';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTrips, clearTrips } from '../redux/tripSlice';
 import { ScrollArea } from "../components/ui/scroll-area";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import CreateTripModal from '../components/createTripModal';
 import { Button } from '../components/ui/button';
 import { Pencil2Icon } from '@radix-ui/react-icons';
+import TripsTable from '../components/tripsTable';
 
 const Profile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [refreshTrips, setRefreshTrips] = useState(false);
-    const { user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const { user, token } = useSelector((state) => state.auth);
+    const { trips } = useSelector((state) => state.trip);
+
+    const refreshTrips = useCallback(() => {
+        if (user && token) {
+            dispatch(clearTrips());
+            dispatch(fetchTrips());
+        }
+    }, [user, token, dispatch]);
+
+    useEffect(() => {
+        refreshTrips();
+    }, [refreshTrips]);
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -18,11 +31,10 @@ const Profile = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setRefreshTrips(prevState => !prevState); // Toggle state to refresh trips
     };
 
     if (!user) {
-        return <p>Please log in to view your trips.</p>; // Show this message if the user is not logged in
+        return <p>Please log in to view your trips.</p>;
     }
 
     return (
@@ -37,10 +49,14 @@ const Profile = () => {
                                     <Pencil2Icon className="mr-2 h-4 w-4" />Create New Trip
                                 </Button>
                             </div>
+<<<<<<< Updated upstream
                             {
                             // TODO Uncomment when auth is working, show message if not logged in
                             // user &&
                             <TripsTable/>}
+=======
+                            <TripsTable trips={trips} refreshTrips={refreshTrips} />
+>>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>
@@ -51,3 +67,4 @@ const Profile = () => {
 };
 
 export default Profile;
+    

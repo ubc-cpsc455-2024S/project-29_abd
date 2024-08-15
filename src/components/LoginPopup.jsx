@@ -70,14 +70,13 @@
 // export default LoginPopup;
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/authSlice";
 import { Input } from "./ui/input";
 import { Form } from "./ui/form";
 import { Button } from "./ui/button";
 import './LoginPopup.css';
 
-const LoginPopup = ({ onClose }) => {
+const LoginPopup = ({ onClose, onSuccess }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
@@ -90,17 +89,27 @@ const LoginPopup = ({ onClose }) => {
     };
 
     useEffect(() => {
+<<<<<<< Updated upstream
         console.log("useEffect called with user:", user);
         if (user && user._id) {
             console.log("User state detected with ID:", user._id);
             setLoginSuccess(true);
+=======
+        if (user && user.id) {
+>>>>>>> Stashed changes
             setTimeout(() => {
-                setLoginSuccess(false);
                 onClose();
+<<<<<<< Updated upstream
                 navigate('/profile')
             }, 2000); // Close the popup after 2 seconds
         }
     }, [user, onClose]);
+=======
+                onSuccess();
+            }, 1000); 
+        }
+    }, [user, onClose, onSuccess]);
+>>>>>>> Stashed changes
 
     return (
         <div className="login-popup fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
@@ -133,8 +142,14 @@ const LoginPopup = ({ onClose }) => {
                     <Button type="submit" disabled={loading} className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
                         {loading ? "Logging in..." : "Login"}
                     </Button>
+<<<<<<< Updated upstream
                     {error && <p className="text-red-500 mt-2">{error}</p>}
                     {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
+=======
+                    {error && <p className="error">{error}</p>}
+                    {successMessage && <p className="success">{successMessage}</p>}
+                    {user && user._id && <p className="success">Login successful!</p>}
+>>>>>>> Stashed changes
                 </Form>
             </div>
         </div>
