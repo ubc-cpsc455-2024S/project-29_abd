@@ -49,14 +49,7 @@ const Profile = () => {
                                     <Pencil2Icon className="mr-2 h-4 w-4" />Create New Trip
                                 </Button>
                             </div>
-<<<<<<< Updated upstream
-                            {
-                            // TODO Uncomment when auth is working, show message if not logged in
-                            // user &&
-                            <TripsTable/>}
-=======
                             <TripsTable trips={trips} refreshTrips={refreshTrips} />
->>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>

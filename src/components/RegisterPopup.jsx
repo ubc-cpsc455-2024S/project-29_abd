@@ -7,16 +7,12 @@ import { Input } from "./ui/input";
 import { Form } from "./ui/form";
 import { Button } from "./ui/button";
 
-const RegisterPopup = ({ onClose }) => {
+const RegisterPopup = ({ onClose, openLoginPopup }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
-<<<<<<< Updated upstream
-    const { loading, error } = useSelector((state) => state.auth);
-=======
-    const { loading, error, user } = useSelector((state) => state.auth);
-    const navigate = useNavigate();
->>>>>>> Stashed changes
+    const navigate = useNavigate(); // Use useNavigate to get the navigate function
+    const { loading, error, user } = useSelector((state) => state.auth); // Added user from state
     const [registerSuccess, setRegisterSuccess] = useState(false);
 
     const handleSubmit = (e) => {
@@ -25,33 +21,32 @@ const RegisterPopup = ({ onClose }) => {
     };
 
     useEffect(() => {
-        if (user && user.id) {
+        if (user && user.id) { // Corrected user check
             setRegisterSuccess(true);
             setTimeout(() => {
                 dispatch(clearTrips());
                 setRegisterSuccess(false);
                 onClose();
                 navigate('/profile');
+                if (typeof openLoginPopup === 'function') {
+                    openLoginPopup(); 
+                }
             }, 2000); // Close the popup and navigate after 2 seconds
         }
-<<<<<<< Updated upstream
-    }, [registerSuccess, onClose, openLoginPopup]);
+    }, [user, onClose, navigate, dispatch, openLoginPopup]); 
 
     useEffect(() => {
         if (!loading && !error && registerSuccess) {
             setRegisterSuccess(true);
         }
-    }, [loading, error]);
-=======
-    }, [user, onClose, navigate, dispatch]);
->>>>>>> Stashed changes
+    }, [loading, error, registerSuccess]);
 
     useEffect(() => {
         // Clear input fields and success message on close
         if (!registerSuccess) {
             setEmail("");
             setPassword("");
-        }``
+        }
     }, [registerSuccess]);
 
     return (
