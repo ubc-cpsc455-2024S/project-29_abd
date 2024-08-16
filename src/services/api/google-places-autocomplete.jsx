@@ -17,7 +17,7 @@ const GooglePlacesAutocomplete = ({ onSelect, defaultValue = "" }) => {
     const autoComplete = new window.google.maps.places.Autocomplete(
       autoCompleteRef.current,
       {
-        types: ["address"],
+        // types: ["address"],
         // componentRestrictions: { country: "ca" },
       }
     );
