@@ -71,14 +71,27 @@ const TripsTable = ({ trips, refreshTrips }) => {
         setIsModalOpen(true);
     };
 
+    // const handleConfirmDelete = async () => {
+    //     if (tripToDelete) {
+    //         try {
+    //             await deleteTrip(tripToDelete, token);
+    //             setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
+    //             refreshTrips(); // Refresh the trips list
+    //             setIsModalOpen(false);
+    //             setTripToDelete(null);
+    //         } catch (error) {
+    //             console.error('Failed to delete trip:', error);
+    //         }
+    //     }
+    // };
+
     const handleConfirmDelete = async () => {
         if (tripToDelete) {
             try {
                 await deleteTrip(tripToDelete, token);
-                setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripToDelete));
-                refreshTrips(); // Refresh the trips list
                 setIsModalOpen(false);
                 setTripToDelete(null);
+                refreshTrips();
             } catch (error) {
                 console.error('Failed to delete trip:', error);
             }

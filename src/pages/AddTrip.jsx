@@ -66,7 +66,7 @@ const AddTrip = () => {
                   Plan Your Trip
                 </h2>
                 <Button onClick={handlePrint} className="mb-4">
-                  Print Day Cards
+                  Share Trip
                 </Button>
               </div>
               <Tabs
