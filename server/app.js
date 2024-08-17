@@ -24,8 +24,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(cors());
 app.use(cors({
-    //origin: 'http://localhost:5173', // frontend's origin
-    origin: "*",
+    origin: 'https://project-29-abd-frontend-6fte.onrender.com/', // frontend's origin
+    // origin: "*",
     credentials: true // Enable sending cookies with CORS requests
 }));
 app.use(express.static(path.join(__dirname, 'public')));
