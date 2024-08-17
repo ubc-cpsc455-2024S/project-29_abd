@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import GooglePlacesAutocomplete from "../services/api/google-places-autocomplete";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Label } from "./ui/label";
+import { Label } from "./ui/label.jsx";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Showdown from "showdown";
