@@ -1,20 +1,57 @@
 // tripSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+// export const fetchTrips = createAsyncThunk(
+//     'trips/fetchTrips',
+//     async (_, { getState }) => {
+//         const token = getState().auth.token;
+//         const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`, {
+//             headers: {
+//                 'x-auth-token': token,
+//             },
+//             credentials: 'include',
+//         });
+//         const data = await response.json();
+//         return data;
+//     }
+// );
+
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 export const fetchTrips = createAsyncThunk(
     'trips/fetchTrips',
-    async (_, { getState }) => {
+    async (_, { getState, rejectWithValue }) => {
         const token = getState().auth.token;
-        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`, {
-            headers: {
-                'x-auth-token': token,
-            },
-            credentials: 'include',
-        });
-        const data = await response.json();
-        return data;
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`, {
+                method: 'GET',
+                headers: {
+                    'x-auth-token': token,
+                    'Content-Type': 'application/json', // Explicitly set content type
+                },
+                credentials: 'include', // Ensure credentials are included
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    // Handle unauthorized access, e.g., by rejecting with an appropriate message
+                    return rejectWithValue('Unauthorized. Please log in again.');
+                }
+                // Handle other response statuses as needed
+                return rejectWithValue('Failed to fetch trips. Please try again later.');
+            }
+
+            const data = await response.json();
+            return data;
+
+        } catch (error) {
+            // Handle network errors or other unexpected errors
+            return rejectWithValue('Network error. Please check your connection.');
+        }
     }
 );
+
 
 export const addTrip = createAsyncThunk(
     'trips/addTrip',
