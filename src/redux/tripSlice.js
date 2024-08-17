@@ -26,11 +26,13 @@ export const fetchTrips = createAsyncThunk(
         try {
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/trips`, {
                 method: 'GET',
+                credentials: 'include',
                 headers: {
                     'x-auth-token': token,
+                    // 'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json', // Explicitly set content type
                 },
-                credentials: 'include', // Ensure credentials are included
+                // credentials: 'include', // Ensure credentials are included
             });
 
             if (!response.ok) {
