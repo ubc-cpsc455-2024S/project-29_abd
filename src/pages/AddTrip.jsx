@@ -43,17 +43,37 @@ const AddTrip = () => {
     }
   }, [dayCards]);
 
-  const handlePrint = () => {
-    setTimeout(() => {
-      const printContent = printRef.current.innerHTML;
-      const originalContent = document.body.innerHTML;
+  // const handlePrint = () => {
+  //   setTimeout(() => {
+  //     const printContent = printRef.current.innerHTML;
+  //     const originalContent = document.body.innerHTML;
+  //
+  //     document.body.innerHTML = printContent;
+  //     window.print();
+  //     document.body.innerHTML = originalContent;
+  //     window.location.reload(); // Reload the page to restore the original content
+  //   }, 500);
+  // };
 
-      document.body.innerHTML = printContent;
-      window.print();
-      document.body.innerHTML = originalContent;
-      window.location.reload(); // Reload the page to restore the original content
-    }, 500);
+  const handlePrint = () => {
+    // Get the element you want to print
+    const printContent = printRef.current;
+    const originalContent = document.body.innerHTML;
+
+    // Create a clone of the print content to avoid altering the original element
+    const printClone = printContent.cloneNode(true);
+
+    // Hide all content except for the element you want to print
+    document.body.innerHTML = '';
+    document.body.appendChild(printClone);
+
+    // Trigger the print dialog
+    window.print();
+
+    // Restore the original content after printing
+    document.body.innerHTML = originalContent;
   };
+
 
   return (
     <ScrollArea className="flex flex-col h-full w-full">
