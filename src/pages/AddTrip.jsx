@@ -65,8 +65,16 @@ const AddTrip = () => {
 
     const printWindow = window.open('', '_blank'); // Open a new window
     printWindow.document.write('<html><head><title>Print</title>');
-    // Optional: Include your custom styles for printing
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; } .day-timeline { margin: 20px; } </style>');
+
+    // Include existing stylesheets
+    const stylesheets = document.querySelectorAll('link[rel="stylesheet"], style');
+    stylesheets.forEach((stylesheet) => {
+      printWindow.document.write(stylesheet.outerHTML);
+    });
+
+    // Optional: Add any additional inline styles for printing
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; } .day-timeline { margin: 20px; }</style>');
+
     printWindow.document.write('</head><body>');
     printWindow.document.write(printContent.outerHTML); // Write the element's HTML to the new window
     printWindow.document.write('</body></html>');
