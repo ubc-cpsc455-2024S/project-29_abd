@@ -40,7 +40,7 @@ app.use('/api/trips', tripsRouter);
 app.use('/api/auth', authRouter);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+    res.sendFile(path.join(__dirname, 'build/index.html'));
 });
 
 module.exports = app;
