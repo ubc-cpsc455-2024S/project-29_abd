@@ -57,7 +57,7 @@ const AddTrip = () => {
 
   const handlePrint = () => {
     const originalDisplayStyles = [];
-    const printContent = printRef.current;
+    const printContent = printRef.current.innerHTML;
 
     // Hide all content except for the element you want to print
     Array.from(document.body.children).forEach((child, index) => {
