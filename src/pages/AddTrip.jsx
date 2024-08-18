@@ -56,23 +56,28 @@ const AddTrip = () => {
   // };
 
   const handlePrint = () => {
-    // Get the element you want to print
+    const originalDisplayStyles = [];
     const printContent = printRef.current;
-    const originalContent = document.body.innerHTML;
-
-    // Create a clone of the print content to avoid altering the original element
-    const printClone = printContent.cloneNode(true);
 
     // Hide all content except for the element you want to print
-    document.body.innerHTML = '';
-    document.body.appendChild(printClone);
+    Array.from(document.body.children).forEach((child, index) => {
+      if (child !== printContent) {
+        originalDisplayStyles[index] = child.style.display;
+        child.style.display = 'none';
+      }
+    });
 
     // Trigger the print dialog
     window.print();
 
-    // Restore the original content after printing
-    document.body.innerHTML = originalContent;
+    // Restore the original display styles
+    Array.from(document.body.children).forEach((child, index) => {
+      if (child !== printContent) {
+        child.style.display = originalDisplayStyles[index];
+      }
+    });
   };
+
 
 
   return (
