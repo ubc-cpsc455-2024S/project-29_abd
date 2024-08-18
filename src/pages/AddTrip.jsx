@@ -56,27 +56,19 @@ const AddTrip = () => {
   // };
 
   const handlePrint = () => {
-    const originalDisplayStyles = [];
-    const printContent = printRef.current.innerHTML;
+    const printContent = printRef.current.innerHTML; // Get the inner HTML of the element to print
+    const originalContent = document.body.innerHTML; // Store the original HTML of the page
 
-    // Hide all content except for the element you want to print
-    Array.from(document.body.children).forEach((child, index) => {
-      if (child !== printContent) {
-        originalDisplayStyles[index] = child.style.display;
-        child.style.display = 'none';
-      }
-    });
+    // Temporarily replace the page content with the print content
+    document.body.innerHTML = printContent;
 
     // Trigger the print dialog
     window.print();
 
-    // Restore the original display styles
-    Array.from(document.body.children).forEach((child, index) => {
-      if (child !== printContent) {
-        child.style.display = originalDisplayStyles[index];
-      }
-    });
+    // Restore the original page content after printing
+    document.body.innerHTML = originalContent;
   };
+
 
 
 
