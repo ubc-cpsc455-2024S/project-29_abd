@@ -28,7 +28,9 @@ app.use(cors({
     // origin: "*",
     credentials: true // Enable sending cookies with CORS requests
 }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
