@@ -56,18 +56,27 @@ const AddTrip = () => {
   // };
 
   const handlePrint = () => {
-    const printContent = printRef.current.innerHTML; // Get the inner HTML of the element to print
-    const originalContent = document.body.innerHTML; // Store the original HTML of the page
+    const printContent = printRef.current;
+    const originalBody = document.body;
 
-    // Temporarily replace the page content with the print content
-    document.body.innerHTML = printContent;
+    // Create a new element to hold the print content
+    const printContainer = document.createElement('div');
+    printContainer.innerHTML = printContent.innerHTML;
+
+    // Hide the original body
+    originalBody.style.display = 'none';
+
+    // Append the print container to the body
+    document.body.appendChild(printContainer);
 
     // Trigger the print dialog
     window.print();
 
-    // Restore the original page content after printing
-    document.body.innerHTML = originalContent;
+    // After printing, remove the print container and restore the original body
+    document.body.removeChild(printContainer);
+    originalBody.style.display = 'block';
   };
+
 
 
 
