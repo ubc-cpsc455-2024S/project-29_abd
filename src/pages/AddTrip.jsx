@@ -56,34 +56,39 @@ const AddTrip = () => {
   // };
 
   const handlePrint = () => {
-    const printContent = document.querySelector('.day-timeline.space-y-4.p-4'); // Select the specific element you want to print
+    const printContent = document.querySelector('.day-timeline'); // Select the specific element you want to print
+    if (!printContent) return; // If the element doesn't exist, exit the function
 
-    if (!printContent) {
-      console.error('Print content not found.');
-      return;
-    }
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    printWindow.document.open();
 
-    const printWindow = window.open('', '_blank'); // Open a new window
-    printWindow.document.write('<html><head><title>Print</title>');
+    // Collect all stylesheets and inline styles
+    const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+        .map(stylesheet => stylesheet.outerHTML)
+        .join('\n');
 
-    // Include existing stylesheets
-    const stylesheets = document.querySelectorAll('link[rel="stylesheet"], style');
-    stylesheets.forEach((stylesheet) => {
-      printWindow.document.write(stylesheet.outerHTML);
-    });
+    // Add HTML structure and content
+    printWindow.document.write(`
+    <html>
+      <head>
+        <title>Print Day Timeline</title>
+        ${stylesheets}
+      </head>
+      <body>
+        ${printContent.outerHTML}
+      </body>
+    </html>
+  `);
 
-    // Optional: Add any additional inline styles for printing
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; } .day-timeline { margin: 20px; }</style>');
+    printWindow.document.close(); // Close the document to finish loading
+    printWindow.focus(); // Focus the new window
 
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(printContent.outerHTML); // Write the element's HTML to the new window
-    printWindow.document.write('</body></html>');
-
-    printWindow.document.close(); // Close the document
-    printWindow.focus(); // Focus on the new window
-    printWindow.print(); // Trigger the print dialog
-    printWindow.close(); // Close the print window after printing
+    printWindow.onload = function () {
+      printWindow.print(); // Trigger the print dialog
+      printWindow.close(); // Close the print window after printing
+    };
   };
+
 
 
   return (
