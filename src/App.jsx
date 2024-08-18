@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import Explore from './pages/Explore';
 import AddTrip from './pages/AddTrip';
 import { setUser } from './redux/authSlice';
+import { store } from './redux/store';
 
 const App = () => {
     const dispatch = useDispatch();
