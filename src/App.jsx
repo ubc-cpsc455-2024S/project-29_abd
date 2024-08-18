@@ -17,6 +17,8 @@ const App = () => {
         if (token && user) {
             dispatch(setUser({ user, token }));
         }
+
+        console.log('Persisted state:', store.getState());
     }, [dispatch]);
 
     return (
