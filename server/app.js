@@ -39,6 +39,10 @@ app.use('/api/day-cards/locations', dayCardsRouter);
 app.use('/api/trips', tripsRouter);
 app.use('/api/auth', authRouter);
 
+app.get('/index.html', (req, res) => {
+    res.redirect('/');
+});
+
 app.get('/profile', (req, res) => {
     res.send('Profile route hit');
 });
