@@ -21,14 +21,14 @@ const Profile = () => {
         }
     }, [user, token, dispatch]);
 
-    // useEffect(() => {
-    //     refreshTrips();
-    // }, [refreshTrips]);
-
     useEffect(() => {
         refreshTrips();
-        console.log('Persisted state on Profile page:', { user, token, trips });
-    }, [refreshTrips, user, token, trips]);
+    }, [refreshTrips]);
+
+    // useEffect(() => {
+    //     refreshTrips();
+    //     console.log('Persisted state on Profile page:', { user, token, trips });
+    // }, [refreshTrips, user, token, trips]);
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
