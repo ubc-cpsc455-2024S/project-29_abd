@@ -63,33 +63,19 @@ const AddTrip = () => {
       return;
     }
 
-    const originalBody = document.body;
-    const originalStyles = document.head.innerHTML;
+    const printWindow = window.open('', '_blank'); // Open a new window
+    printWindow.document.write('<html><head><title>Print</title>');
+    // Optional: Include your custom styles for printing
+    printWindow.document.write('<style>body { font-family: Arial, sans-serif; } .day-timeline { margin: 20px; } </style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContent.outerHTML); // Write the element's HTML to the new window
+    printWindow.document.write('</body></html>');
 
-    // Create a clone of the content you want to print
-    const printContainer = document.createElement('div');
-    printContainer.appendChild(printContent.cloneNode(true));
-
-    // Hide the original body
-    originalBody.style.display = 'none';
-
-    // Append the print container to the body
-    document.body.appendChild(printContainer);
-
-    // Trigger the print dialog
-    window.print();
-
-    // After printing, remove the print container and restore the original body
-    document.body.removeChild(printContainer);
-    originalBody.style.display = 'block';
-
-    // Restore original styles
-    document.head.innerHTML = originalStyles;
+    printWindow.document.close(); // Close the document
+    printWindow.focus(); // Focus on the new window
+    printWindow.print(); // Trigger the print dialog
+    printWindow.close(); // Close the print window after printing
   };
-
-
-
-
 
 
   return (
