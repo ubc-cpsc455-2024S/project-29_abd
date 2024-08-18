@@ -30,7 +30,7 @@ app.use(cors({
 }));
 
 //app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -40,7 +40,7 @@ app.use('/api/trips', tripsRouter);
 app.use('/api/auth', authRouter);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 module.exports = app;
