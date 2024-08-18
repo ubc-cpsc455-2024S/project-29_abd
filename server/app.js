@@ -35,7 +35,10 @@ app.use('/users', usersRouter);
 app.use('/api/day-cards', dayCardsRouter);
 app.use('/api/day-cards/locations', dayCardsRouter);
 app.use('/api/trips', tripsRouter);
-app.use('/api/auth', authRouter); 
+app.use('/api/auth', authRouter);
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
 
 module.exports = app;
