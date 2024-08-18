@@ -56,12 +56,19 @@ const AddTrip = () => {
   // };
 
   const handlePrint = () => {
-    const printContent = printRef.current;
-    const originalBody = document.body;
+    const printContent = document.querySelector('.day-timeline.space-y-4.p-4'); // Select the specific element you want to print
 
-    // Create a new element to hold the print content
+    if (!printContent) {
+      console.error('Print content not found.');
+      return;
+    }
+
+    const originalBody = document.body;
+    const originalStyles = document.head.innerHTML;
+
+    // Create a clone of the content you want to print
     const printContainer = document.createElement('div');
-    printContainer.innerHTML = printContent.innerHTML;
+    printContainer.appendChild(printContent.cloneNode(true));
 
     // Hide the original body
     originalBody.style.display = 'none';
@@ -75,7 +82,11 @@ const AddTrip = () => {
     // After printing, remove the print container and restore the original body
     document.body.removeChild(printContainer);
     originalBody.style.display = 'block';
+
+    // Restore original styles
+    document.head.innerHTML = originalStyles;
   };
+
 
 
 
