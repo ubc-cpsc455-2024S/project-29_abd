@@ -39,7 +39,12 @@ app.use('/api/day-cards/locations', dayCardsRouter);
 app.use('/api/trips', tripsRouter);
 app.use('/api/auth', authRouter);
 
+app.get('/profile', (req, res) => {
+    res.send('Profile route hit');
+});
+
 app.get('*', (req, res) => {
+    console.log(`Serving file for route: ${req.path}`);
     res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 

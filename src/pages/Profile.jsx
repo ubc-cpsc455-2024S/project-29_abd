@@ -25,10 +25,6 @@ const Profile = () => {
         refreshTrips();
     }, [refreshTrips]);
 
-    // useEffect(() => {
-    //     refreshTrips();
-    //     console.log('Persisted state on Profile page:', { user, token, trips });
-    // }, [refreshTrips, user, token, trips]);
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
