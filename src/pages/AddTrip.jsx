@@ -236,42 +236,82 @@ const AddTrip = () => {
     }
   }, [dayCards]);
 
+  // const handlePrint = () => {
+  //   if (dayTimelineRef.current) {
+  //     dayTimelineRef.current.expandAll(); // Trigger expand all before printing
+  //   }
+  //
+  //   const printContent = document.querySelector('.day-timeline'); // Select the specific element you want to print
+  //   if (!printContent) return; // If the element doesn't exist, exit the function
+  //
+  //   const printWindow = window.open('', '_blank', 'width=800,height=600');
+  //   printWindow.document.open();
+  //
+  //   // Collect all stylesheets and inline styles
+  //   const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+  //       .map(stylesheet => stylesheet.outerHTML)
+  //       .join('\n');
+  //
+  //   // Add HTML structure and content
+  //   printWindow.document.write(`
+  //   <html>
+  //     <head>
+  //       <title>Print Day Timeline</title>
+  //       ${stylesheets}
+  //     </head>
+  //     <body>
+  //       ${printContent.outerHTML}
+  //     </body>
+  //   </html>
+  // `);
+  //
+  //   printWindow.document.close(); // Close the document to finish loading
+  //   printWindow.focus(); // Focus the new window
+  //
+  //   printWindow.onload = function () {
+  //     printWindow.print(); // Trigger the print dialog
+  //     printWindow.close(); // Close the print window after printing
+  //   };
+  // };
+
   const handlePrint = () => {
     if (dayTimelineRef.current) {
       dayTimelineRef.current.expandAll(); // Trigger expand all before printing
     }
 
-    const printContent = document.querySelector('.day-timeline'); // Select the specific element you want to print
-    if (!printContent) return; // If the element doesn't exist, exit the function
+    setTimeout(() => {
+      const printContent = document.querySelector('.day-timeline'); // Select the specific element you want to print
+      if (!printContent) return; // If the element doesn't exist, exit the function
 
-    const printWindow = window.open('', '_blank', 'width=800,height=600');
-    printWindow.document.open();
+      const printWindow = window.open('', '_blank', 'width=800,height=600');
+      printWindow.document.open();
 
-    // Collect all stylesheets and inline styles
-    const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
-        .map(stylesheet => stylesheet.outerHTML)
-        .join('\n');
+      // Collect all stylesheets and inline styles
+      const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+          .map(stylesheet => stylesheet.outerHTML)
+          .join('\n');
 
-    // Add HTML structure and content
-    printWindow.document.write(`
-    <html>
-      <head>
-        <title>Print Day Timeline</title>
-        ${stylesheets}
-      </head>
-      <body>
-        ${printContent.outerHTML}
-      </body>
-    </html>
-  `);
+      // Add HTML structure and content
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Day Timeline</title>
+          ${stylesheets}
+        </head>
+        <body>
+          ${printContent.outerHTML}
+        </body>
+      </html>
+    `);
 
-    printWindow.document.close(); // Close the document to finish loading
-    printWindow.focus(); // Focus the new window
+      printWindow.document.close(); // Close the document to finish loading
+      printWindow.focus(); // Focus the new window
 
-    printWindow.onload = function () {
-      printWindow.print(); // Trigger the print dialog
-      printWindow.close(); // Close the print window after printing
-    };
+      printWindow.onload = function () {
+        printWindow.print(); // Trigger the print dialog
+        printWindow.close(); // Close the print window after printing
+      };
+    }, 500); // Add a 500ms delay before printing
   };
 
   return (
