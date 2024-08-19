@@ -197,7 +197,7 @@ import {
 } from "../components/ui/card";
 import MapWithMarkers from "../services/api/map-template";
 import DayTimeline from "../components/dayTimeline";
-import { fetchDayCards } from "../redux/dayTimelineSlice";
+import { fetchDayCards, clearDayCards } from "../redux/dayTimelineSlice";
 import { Button } from "../components/ui/button";
 
 const AddTrip = () => {
@@ -208,9 +208,13 @@ const AddTrip = () => {
   const [allLocations, setAllLocations] = useState([]);
   const [activeTab, setActiveTab] = useState("overview"); // Track the active tab
   const printRef = useRef(); // Reference for the day cards section
+  const dayTimelineRef = useRef(); // Ref to DayTimeline
 
   useEffect(() => {
     if (tripId && token) {
+      // Clear dayCards and allLocations when tripId changes
+      setAllLocations([]);
+      dispatch(clearDayCards()); // Clear the existing day cards
       dispatch(fetchDayCards({ tripId, token }));
     }
   }, [dispatch, tripId, token]);
@@ -221,19 +225,49 @@ const AddTrip = () => {
         return [...acc, ...day.locations];
       }, []);
       setAllLocations(locations);
+    } else {
+      setAllLocations([]); // Ensure locations are cleared if there are no dayCards
     }
   }, [dayCards]);
 
   const handlePrint = () => {
-    setTimeout(() => {
-      const printContent = printRef.current.innerHTML;
-      const originalContent = document.body.innerHTML;
+    if (dayTimelineRef.current) {
+      dayTimelineRef.current.expandAll(); // Trigger expand all before printing
+    }
 
-      document.body.innerHTML = printContent;
-      window.print();
-      document.body.innerHTML = originalContent;
-      window.location.reload(); // Reload the page to restore the original content
-    }, 500);
+    setTimeout(() => {
+      const printContent = document.querySelector('.day-timeline'); // Select the specific element you want to print
+      if (!printContent) return; // If the element doesn't exist, exit the function
+
+      const printWindow = window.open('', '_blank', 'width=800,height=600');
+      printWindow.document.open();
+
+      // Collect all stylesheets and inline styles
+      const stylesheets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+          .map(stylesheet => stylesheet.outerHTML)
+          .join('\n');
+
+      // Add HTML structure and content
+      printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Day Timeline</title>
+          ${stylesheets}
+        </head>
+        <body>
+          ${printContent.outerHTML}
+        </body>
+      </html>
+    `);
+
+      printWindow.document.close(); // Close the document to finish loading
+      printWindow.focus(); // Focus the new window
+
+      printWindow.onload = function () {
+        printWindow.print(); // Trigger the print dialog
+        printWindow.close(); // Close the print window after printing
+      };
+    }, 500); // Add a 500ms delay before printing
   };
 
   return (
@@ -288,6 +322,7 @@ const AddTrip = () => {
                         <DayTimeline
                             className="h-full"
                             tripId={tripId}
+                            ref={dayTimelineRef} // Pass the ref to DayTimeline
                             onDaysUpdated={() =>
                                 dispatch(fetchDayCards({ tripId, token }))
                             }
