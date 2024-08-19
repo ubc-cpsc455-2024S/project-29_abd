@@ -40,10 +40,16 @@ const dayTimelineSlice = createSlice({
         addDayCard: (state, action) => {
             state.dayCards.push(action.payload);
         },
+        // updateDayCard: (state, action) => {
+        //     const index = state.dayCards.findIndex(dayCard => dayCard._id === action.payload._id);
+        //     if (index !== -1) {
+        //         state.dayCards[index] = action.payload;
+        //     }
+
         updateDayCard: (state, action) => {
             const index = state.dayCards.findIndex(dayCard => dayCard._id === action.payload._id);
             if (index !== -1) {
-                state.dayCards[index] = action.payload;
+                state.dayCards[index] = { ...state.dayCards[index], ...action.payload };
             }
         },
         deleteDayCard: (state, action) => {
