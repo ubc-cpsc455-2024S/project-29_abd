@@ -195,12 +195,21 @@ const Modal = ({
     ]);
   };
 
-  const handleRemoveLocation = (index) => {
-    setLocations((prev) => {
-      const updatedLocations = prev.filter((_, i) => i !== index);
+  // const handleRemoveLocation = (index) => {
+  //   setLocations((prev) => {
+  //     const updatedLocations = prev.filter((_, i) => i !== index);
+  //     return updatedLocations;
+  //   });
+  // };
+
+  const handleRemoveLocation = (indexToRemove) => {
+    setLocations((prevLocations) => {
+      // Filter out the location that matches the index to remove
+      const updatedLocations = prevLocations.filter((_, index) => index !== indexToRemove);
       return updatedLocations;
     });
   };
+
 
   const handleSave = () => {
     onSave(details, locations, notes, date);
