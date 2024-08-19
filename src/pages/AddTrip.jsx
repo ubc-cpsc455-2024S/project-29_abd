@@ -17,7 +17,8 @@ import {
 } from "../components/ui/card";
 import MapWithMarkers from "../services/api/map-template";
 import DayTimeline from "../components/dayTimeline";
-import { fetchDayCards } from "../redux/dayTimelineSlice";
+//import { fetchDayCards } from "../redux/dayTimelineSlice";
+import { fetchDayCards, clearDayCards } from "../redux/dayTimelineSlice";
 import { Button } from "../components/ui/button";
 
 const AddTrip = () => {
@@ -28,8 +29,26 @@ const AddTrip = () => {
   const [allLocations, setAllLocations] = useState([]);
   const printRef = useRef(); // Reference for the day cards section
 
+  // useEffect(() => {
+  //   if (tripId && token) {
+  //     dispatch(fetchDayCards({ tripId, token }));
+  //   }
+  // }, [dispatch, tripId, token]);
+  //
+  // useEffect(() => {
+  //   if (dayCards.length > 0) {
+  //     const locations = dayCards.reduce((acc, day) => {
+  //       return [...acc, ...day.locations];
+  //     }, []);
+  //     setAllLocations(locations);
+  //   }
+  // }, [dayCards]);
+
   useEffect(() => {
     if (tripId && token) {
+      // Clear dayCards and allLocations when tripId changes
+      setAllLocations([]);
+      dispatch(clearDayCards()); // Clear the existing day cards
       dispatch(fetchDayCards({ tripId, token }));
     }
   }, [dispatch, tripId, token]);
@@ -40,6 +59,8 @@ const AddTrip = () => {
         return [...acc, ...day.locations];
       }, []);
       setAllLocations(locations);
+    } else {
+      setAllLocations([]); // Ensure locations are cleared if there are no dayCards
     }
   }, [dayCards]);
 
